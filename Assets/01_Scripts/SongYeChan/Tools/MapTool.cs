@@ -80,9 +80,6 @@ public class MapTool : EditorWindow
                 CSVLoad();
             }
         }
-        
-
-
     }
 
     private void MapShow()
