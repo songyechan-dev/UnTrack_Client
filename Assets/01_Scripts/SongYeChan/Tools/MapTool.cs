@@ -1,5 +1,7 @@
+using Google.Protobuf.WellKnownTypes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,13 +9,19 @@ public class MapTool : EditorWindow
 {
     private int width;
     private int height;
+    private int mapY;
+    private int mapX;
+
     private float objScale;
     private Vector3 startPosition;
 
-    private GameObject testPrefab;
+    private GameObject planPrefab;
+    private GameObject obPrefab;
     private Transform mapParent;
 
-    private bool isRandomCreate;
+    private List<List<int>> mapInfo = new List<List<int>>();
+
+    private GameObject createdObject = null;
 
     [MenuItem("Tools/Map Tool")]
     public static void MapToolEditor()
@@ -28,42 +36,54 @@ public class MapTool : EditorWindow
         height = EditorGUILayout.IntField("맵 전체 세로길이:", height);
         objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
         mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
-        testPrefab = (GameObject)EditorGUILayout.ObjectField("Test Prefab:", testPrefab, typeof(GameObject), false);
+        planPrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planPrefab, typeof(GameObject), false);
+        obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
         startPosition = EditorGUILayout.Vector3Field("Start Position", startPosition);
 
-        if (GUILayout.Button("Create") && width != 0 && height != 0 && !string.IsNullOrEmpty(width.ToString()))
+        if (GUILayout.Button("MapShow") && mapInfo.Count > 0)
         {
-            TestCreate();
+            MapShow();
         }
 
         if (GUILayout.Button("Delete"))
         {
-            TestDestroy();
+            MapDestroy();
+        }
+
+        if (GUILayout.Button("TestCSVLoad"))
+        {
+            CSVLoad();
         }
     }
 
-    private void TestCreate()
+    private void MapShow()
     {
         float originX = startPosition.x;
         
         float x = startPosition.x;
         float y = startPosition.y;
         float z = startPosition.z;
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < mapY; i++)
         {
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < mapX; j++)
             {
-                GameObject gameObject = Instantiate(testPrefab, mapParent);
-                gameObject.transform.position = new Vector3(x * objScale *10,y,z * objScale * 10);
-                gameObject.transform.localScale = new Vector3(objScale,objScale,objScale);
+                createdObject = Instantiate(planPrefab, mapParent);
+                createdObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
+                createdObject.transform.localScale = new Vector3(objScale, objScale, objScale);
+                if (mapInfo[i][j] == 1)
+                {
+                    createdObject = Instantiate(obPrefab, mapParent);
+                    createdObject.transform.position = new Vector3(x * objScale * 10, y + 0.5f, z * objScale * 10);
+                    createdObject.transform.localScale = new Vector3(objScale *10, objScale * 10, objScale * 10);
+                }
                 x++;
             }
             x = originX;
-            z++;
+            z--;
         }
     }
 
-    private void TestDestroy()
+    private void MapDestroy()
     {
         List<Transform> children = new List<Transform>();
         foreach (Transform child in mapParent)
@@ -75,4 +95,27 @@ public class MapTool : EditorWindow
             DestroyImmediate(child.gameObject);
         }
     }
+
+    private void CSVLoad()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("MapData");
+        mapInfo.Clear();
+        if (textAsset != null)
+        {
+            string[] lines = textAsset.text.Split('\n');
+            foreach (string line in lines)
+            {
+                List<int> row = new List<int>(); 
+                string[] values = line.Split(',');
+                foreach (string value in values)
+                {
+                    row.Add(int.Parse(value));
+                }
+                mapInfo.Add(row);
+            }
+        }
+        mapY = mapInfo.Count;
+        mapX = mapInfo[0].Count;
+    }
+
 }
