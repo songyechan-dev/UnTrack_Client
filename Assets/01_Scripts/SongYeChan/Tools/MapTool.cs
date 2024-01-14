@@ -1,6 +1,7 @@
 using Google.Protobuf.WellKnownTypes;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -36,7 +37,7 @@ public class MapTool : EditorWindow
     private GameObject obObject = null;
     private TextAsset mapCSV;
 
-
+    public string csvFileName;
 
     [MenuItem("Tools/Map Tool")]
     public static void MapToolEditor()
@@ -52,9 +53,10 @@ public class MapTool : EditorWindow
         {
             width = EditorGUILayout.IntField("맵 전체 가로길이:", width);
             height = EditorGUILayout.IntField("맵 전체 세로길이:", height);
+            csvFileName = EditorGUILayout.TextField("MapData FileName", csvFileName);
             if (GUILayout.Button("Map Data Create"))
             {
-                Debug.Log("생성");
+                MapDataCreate();
             }
         }
         else
@@ -169,4 +171,70 @@ public class MapTool : EditorWindow
 
     }
 
+    private void MapDataCreate()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, csvFileName);
+        string content = "";
+        string mapInfo = "0";
+
+        int randomXcount = 0;
+        int originX = 0;
+        int originY = 0;
+        int randomYcount = 0;
+        bool isCreatedOb = false;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                mapInfo = "0";
+                // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
+                if (!isCreatedOb)
+                {
+                    int randomCount = Random.Range(0, 50);
+                    randomXcount = Random.Range(3, 7);
+                    randomYcount = Random.Range(3, 7);
+                    if (randomCount < 1)
+                    {
+                        isCreatedOb = true;
+                        originX = x;
+                        originY = y;
+                    }
+                }
+
+                if (isCreatedOb)
+                {
+                    if (y > (randomYcount + originY))
+                    {
+                        randomXcount = 0;
+                        randomYcount = 0;
+                        originX = 0;
+                        originY = 0;
+                        isCreatedOb = false;
+                    }
+                    else if (x <= (randomXcount + originX) && x >= originX)
+                    {
+                        mapInfo = "1";
+                    }
+                }
+
+                if (x == 0)
+                {
+                    content += mapInfo;
+                }
+                else
+                {
+                    content += $",{mapInfo}";
+                }
+            }
+            if (y < height - 1)
+            {
+                content += "\n";
+            }
+        }
+
+        File.WriteAllText(filePath, content);
+        AssetDatabase.Refresh();
+    }
+
 }
+
