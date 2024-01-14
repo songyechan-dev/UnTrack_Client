@@ -122,6 +122,9 @@ public class MapTool : EditorWindow
             x = originX;
             z--;
         }
+        EditorUtility.SetDirty(mapParent.gameObject);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     private void MapDestroy()
