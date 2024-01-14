@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class TrackManager : MonoBehaviour
 {
-    // 시작
-    void Start()
+    public string planeTagName = "Plane";
+    public GameObject trackPrefab;
+    public void TrackCreate(Ray _ray)
     {
-        
-    }
-
-    // 업데이트
-    void Update()
-    {
-        
+        RaycastHit hit;
+        Ray ray = _ray;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.CompareTag(planeTagName))
+            {
+                GameObject track = Instantiate(trackPrefab);
+                track.transform.position = hit.transform.position + new Vector3(0, trackPrefab.transform.localScale.y / 2, 0);
+            }
+        }
     }
 }

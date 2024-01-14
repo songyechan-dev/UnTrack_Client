@@ -29,13 +29,25 @@ public class MapTool : EditorWindow
 
     private GameObject planPrefab;
     private GameObject obPrefab;
+    private GameObject trackPrefab;
+
     private Transform mapParent;
 
     private List<List<int>> mapInfo = new List<List<int>>();
 
     private GameObject planObject = null;
     private GameObject obObject = null;
+    private GameObject trackObject = null;
     private TextAsset mapCSV;
+
+    private int defaultStartTrackZ;
+    private int defaultStartTrackX;
+
+    private int defaultEndTrackZ;
+    private int defaultEndTrackX;
+
+
+
 
     public string csvFileName;
 
@@ -53,6 +65,12 @@ public class MapTool : EditorWindow
         {
             width = EditorGUILayout.IntField("맵 전체 가로길이:", width);
             height = EditorGUILayout.IntField("맵 전체 세로길이:", height);
+            defaultStartTrackZ = EditorGUILayout.IntField("Default Track Start Z:", defaultStartTrackZ);
+            defaultStartTrackX = EditorGUILayout.IntField("Default Track Start X:", defaultStartTrackX);
+
+            defaultEndTrackZ = EditorGUILayout.IntField("Default Track End Z:", defaultEndTrackZ);
+            defaultEndTrackX = EditorGUILayout.IntField("Default Track End X:", defaultEndTrackX);
+
             csvFileName = EditorGUILayout.TextField("MapData FileName", csvFileName);
             if (GUILayout.Button("Map Data Create"))
             {
@@ -66,6 +84,7 @@ public class MapTool : EditorWindow
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planPrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planPrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
+            trackPrefab = (GameObject)EditorGUILayout.ObjectField("Track Prefab:", trackPrefab, typeof(GameObject), false);
             if (GUILayout.Button("MapShow"))
             {
                 MapDestroy();
@@ -103,6 +122,7 @@ public class MapTool : EditorWindow
             for (int j = 0; j < mapX; j++)
             {
                 planObject = Instantiate(planPrefab, mapParent);
+                planObject.tag = "Plane";
                 planObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
                 planObject.transform.localScale = new Vector3(objScale, objScale, objScale);
                 if (mapInfo[i][j] == 1)
@@ -112,10 +132,17 @@ public class MapTool : EditorWindow
                     for (int k = 0; k < yCount; k++) 
                     {
                         obObject = Instantiate(obPrefab, mapParent);
-                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10); ;
+                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
                         obObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                         prevCreatedYPos = obObject.transform.position.y;
                     }
+                }
+                else if (mapInfo[i][j] == 3)
+                {
+                    trackObject = Instantiate(trackPrefab, mapParent);
+                    trackObject.tag = "Track";
+                    trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
+                    trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
                 }
                 x++;
             }
@@ -219,6 +246,11 @@ public class MapTool : EditorWindow
                         mapInfo = "1";
                     }
                 }
+                if ((x >= defaultStartTrackX && x <= defaultEndTrackX) && (y >= defaultStartTrackZ && y <= defaultEndTrackZ))
+                {
+                    mapInfo = "3";
+                }
+
 
                 if (x == 0)
                 {
