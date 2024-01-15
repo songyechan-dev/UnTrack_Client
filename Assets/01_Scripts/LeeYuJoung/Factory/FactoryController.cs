@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class FactoryController : MonoBehaviour
 {
-    // 시작
-    void Start()
+    private void Start()
     {
         
     }
 
-    // 업데이트
-    void Update()
+    private void Update()
     {
         
     }

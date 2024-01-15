@@ -15,12 +15,14 @@ public class ObstacleManager : MonoBehaviour
     private float workTime;
     private float currentTime = 0;
 
-    // 현재 Obstacle을 플레이어가 작업 중인지 확인
+    // 현재 Obstacle을 Player가 작업 중인지 확인
     public bool isWorking = false;
 
     void Start()
     {
-        JsonLoad(dataPath);
+        ObstacleJsonLoad(dataPath);
+
+        // Playe에서 실행해야 할 함수
         ObstacleWorking("Ax");
     }
 
@@ -42,6 +44,7 @@ public class ObstacleManager : MonoBehaviour
     {
         // 점점 작아지는 효과 구현하기
 
+
         int loopNum = 0;
 
         while (isWorking)
@@ -59,6 +62,7 @@ public class ObstacleManager : MonoBehaviour
                 Destroy(gameObject);
             }
 
+            // 무한 루프 방지 예외처리
             if (loopNum++ > 10000)
                 throw new Exception("Infinite Loop");
         }
@@ -72,7 +76,8 @@ public class ObstacleManager : MonoBehaviour
         Instantiate(_item, transform.position, transform.rotation);
     }
 
-    void JsonLoad(string path)
+    //TODO : 이유정 2024.01.15 ObstacleManager.cs ObstacleJsonLoad(string path)
+    void ObstacleJsonLoad(string path)
     {
         TextAsset json = (TextAsset)Resources.Load(path);
         string jsonStr = json.text;
