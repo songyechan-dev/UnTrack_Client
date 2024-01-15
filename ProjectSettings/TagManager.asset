@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Plane
   - Track
+  - DroppedTrack
   layers:
   - Default
   - TransparentFX

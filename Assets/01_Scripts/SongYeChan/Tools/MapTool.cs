@@ -140,6 +140,9 @@ public class MapTool : EditorWindow
                 else if (mapInfo[i][j] == 3)
                 {
                     trackObject = Instantiate(trackPrefab, mapParent);
+                    trackObject.AddComponent<TrackInfo>();
+                    trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.UP);
+                    trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
                     trackObject.tag = "Track";
                     trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
@@ -147,7 +150,7 @@ public class MapTool : EditorWindow
                 x++;
             }
             x = originX;
-            z--;
+            z++;
         }
         EditorUtility.SetDirty(mapParent.gameObject);
         AssetDatabase.SaveAssets();
