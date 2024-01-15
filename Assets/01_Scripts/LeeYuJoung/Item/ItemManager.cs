@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    // 시작
     void Start()
     {
         
     }
 
-    // 업데이트
     void Update()
     {
         

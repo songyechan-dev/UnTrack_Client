@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class FactoryManager : MonoBehaviour
 {
-    // 시작
+    public string dataPath;
+
+
     void Start()
     {
         
     }
 
-    // 업데이트
     void Update()
     {
         

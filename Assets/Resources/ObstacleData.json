@@ -1,0 +1,16 @@
+[
+ {
+  "IDX": 1,
+  "TYPE": "Tree",
+  "EQUIPMENT_TYPE": "Ax",
+  "WORK_TIME": 3,
+  "GENERATE": "Wood"
+ },
+ {
+  "IDX": 2,
+  "TYPE": "Stone",
+  "EQUIPMENT_TYPE": "Pick",
+  "WORK_TIME": 3,
+  "GENERATE": "Steel"
+ }
+]
