@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Plane
   - Track
+  - Bullet
   layers:
   - Default
   - TransparentFX
