@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  factoryType: 0
+  factoryType: 1
   dataPath: FactoryData
   machineType: 0
   currentTime: 0

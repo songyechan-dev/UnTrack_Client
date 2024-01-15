@@ -24,7 +24,7 @@ public class QuestManager : MonoBehaviour
         QuestTextChabge(content, progress, progressGoal);
     }
 
-    // 퀘스트 진행도 업그레이드 → 
+    // 퀘스트 진행도 업그레이드 
     public void UpdateProgress(int amount)
     {
         if(!isCompleted)
