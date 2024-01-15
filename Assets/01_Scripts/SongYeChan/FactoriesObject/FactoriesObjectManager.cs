@@ -31,6 +31,10 @@ public class FactoriesObjectManager : MonoBehaviour
     public float moveSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
     public float fireTime;
+
+    public float rotationSpeed = 10f;
+    public float rotationPerFrame = 1.5f;
+
     Vector3 direction;
 
     private float curTime = 0f;
@@ -59,7 +63,16 @@ public class FactoriesObjectManager : MonoBehaviour
                 if (hit.transform.CompareTag(tagToBeDetected))
                 {
                     Debug.Log("감지됨");
+                    if (hit.transform.GetComponent<TrackInfo>().GetMyRotation().Equals(TrackInfo.MyDirection.LEFT))
+                    {
+                        moveDirection = MoveDirection.LEFT;
+                    }
+                    else if (hit.transform.GetComponent<TrackInfo>().GetMyRotation().Equals(TrackInfo.MyDirection.RIGHT))
+                    {
+                        moveDirection = MoveDirection.RIGHT;
+                    }
                     myState = MyState.MOVE;
+                    
                 }
                 else
                 {
@@ -83,7 +96,25 @@ public class FactoriesObjectManager : MonoBehaviour
         if (myState.Equals(MyState.MOVE))
         {
             curTime = 0; //TODO : 초기화 시킬건지 상의 필요(2024.01.14) - 송예찬 FactoriesObjectManager.cs
-            transform.Translate(direction * moveSpeed * Time.deltaTime);
+            if (moveDirection.Equals(MoveDirection.FORWORD))
+            {
+                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            }
+            else if (moveDirection.Equals(MoveDirection.LEFT))
+            {
+                transform.Translate(Vector3.forward * 0.2f * Time.deltaTime);
+                transform.Rotate((new Vector3(0, -rotationPerFrame, 0)) * rotationSpeed * Time.deltaTime);
+                if (transform.eulerAngles.y <= 90f)
+                {
+                    moveDirection = MoveDirection.FORWORD;
+                    return;
+                }
+            }
+            else if (moveDirection.Equals(MoveDirection.RIGHT))
+            {
+
+                moveDirection = MoveDirection.FORWORD;
+            }
         }
         else
         {
@@ -96,7 +127,7 @@ public class FactoriesObjectManager : MonoBehaviour
         curTime += Time.deltaTime;
         if (curTime > fireTime)
         {
-            Debug.Log("파이어!!!");
+            //Debug.Log("파이어!!!");
         }
     }
 

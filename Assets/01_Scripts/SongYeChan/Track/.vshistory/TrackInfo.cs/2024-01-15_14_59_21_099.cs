@@ -1,0 +1,69 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static TrackInfo;
+
+public class TrackInfo : MonoBehaviour
+{
+    public enum MyDirection
+    {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+    }
+
+    public MyDirection myDirection;
+    public bool isElectricityFlowing = false;
+
+    public void ChangeMyDirection(MyDirection _myDirection)
+    {
+        switch (_myDirection)
+        {
+            case MyDirection.UP:
+                transform.localEulerAngles = new Vector3(0, 0, 0);
+                myDirection = MyDirection.UP;
+                break;
+            case MyDirection.DOWN:
+                transform.localEulerAngles = new Vector3(0, 180f, 0);
+                myDirection = MyDirection.DOWN;
+                break;
+            case MyDirection.LEFT:
+                transform.localEulerAngles = new Vector3(0, -90f, 0);
+                NormalizeRotation();
+                Debug.Log("변경됨 LEFT!");
+                break;
+            case MyDirection.RIGHT:
+                transform.localEulerAngles = new Vector3(0, 90f, 0);
+                NormalizeRotation();
+                Debug.Log("변경됨 RIGHT");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void NormalizeRotation()
+    {
+        Vector3 currentRotation = transform.localEulerAngles;
+        currentRotation.y = Mathf.Repeat(currentRotation.y, 360f);
+        transform.localEulerAngles = currentRotation;
+    }
+
+    public MyDirection GetMyRotation()
+    {
+        switch ((transform.localRotation).eulerAngles.y)    
+        {
+            case 0:
+                return MyDirection.UP;
+            case 180f:
+                return MyDirection.DOWN;
+            case -90f:
+                return MyDirection.LEFT;
+            case 90f:
+                return MyDirection.RIGHT;
+            default:
+                return 0;
+        }
+    }
+}
