@@ -12,7 +12,6 @@ public class TrackManager : MonoBehaviour
     public Material droppedTrackPrefabMaterial;
     public float maxDistance = 1f;
     public bool isChangedDistance = false;
-    public Vector3 electricityObjectDirection;
     public void TrackCreate(Ray _ray)
     {
         RaycastHit hit;
@@ -34,7 +33,7 @@ public class TrackManager : MonoBehaviour
                     {
                         TrackInfo leftTrackInfo = leftHit.transform.GetComponent<TrackInfo>();
                         leftTrackInfo.SetMyDirection(TrackInfo.MyDirection.RIGHT);
-                        _trackInfo.SetMyDirection(TrackInfo.MyDirection.RIGHT);
+                        _trackInfo.SetMyDirection(TrackInfo.MyDirection.UP);
                         _trackInfo.isElectricityFlowing = true;
                         if (!leftTrackInfo.isElectricityFlowing)
                         {
@@ -49,7 +48,7 @@ public class TrackManager : MonoBehaviour
                     {
                         TrackInfo rightTrackInfo = rightHit.transform.GetComponent<TrackInfo>();
                         rightTrackInfo.SetMyDirection(TrackInfo.MyDirection.LEFT);
-                        _trackInfo.SetMyDirection(TrackInfo.MyDirection.LEFT);
+                        _trackInfo.SetMyDirection(TrackInfo.MyDirection.UP);
                         _trackInfo.isElectricityFlowing = true;
                         if (!rightTrackInfo.isElectricityFlowing)
                         {

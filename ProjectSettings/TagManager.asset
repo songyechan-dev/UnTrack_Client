@@ -3,12 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Plane
+  - Track
+  - Obstacle
+  - Player
+  - Item
+  - Factory
+  - DroppedTrack
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - DroppedTrack
+  - FactoriesObject
   - Water
   - UI
   - 
