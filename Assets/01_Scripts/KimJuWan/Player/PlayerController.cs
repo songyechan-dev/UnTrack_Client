@@ -13,8 +13,9 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     PlayerManager playerManager;
     public InventoryManager inventoryManager; 
-    private bool isPick;
-    public GameObject nearObject;
+    public bool isPick;
+    public GameObject grabedObject;
+    
 
 
     // 시작
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
         Drop();
     }
 
+    //플레이어 이동
     public void PlayerMove()
     {
         float h = Input.GetAxis("Horizontal");
@@ -48,38 +50,29 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Item"))
-        {
-            nearObject = other.gameObject;
-        }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Item"))
-        {
-            nearObject = null;
-        }
-    }
-
+    
     void Pick()
     {
-        if (Input.GetKeyDown(KeyCode.Z) && nearObject != null)
+        if (isPick)
         {
-            nearObject.transform.parent = transform;
-            
-            isPick = true;
-            if(nearObject.name == "Wood")
+            if (Input.GetKeyDown(KeyCode.Z) && grabedObject !=null)
             {
-                inventoryManager.PlayerInventoryWood();
-            }
-            if(nearObject.name == "Steel")
-            {
-                inventoryManager.PlayerInventorySteel();
+                //아이템을 플레이어의 자식 객체로 포함
+                grabedObject.transform.parent = transform;
+
+
+                isPick = true;
+                //플레이어가 집은 아이템이 재료인 경우에만 인벤토리에 데이터 저장(01.16 수정)
+                if (grabedObject.name == "Wood" || grabedObject.name == "Steel")
+                {
+                    inventoryManager.SaveInventory();
+                    
+                }
+
             }
         }
+        
     }
 
     void Drop()
@@ -87,7 +80,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && isPick)
         {
 
-            nearObject.transform.parent = null;
+            transform.DetachChildren();
+            grabedObject = null;
             isPick = false;
 
 

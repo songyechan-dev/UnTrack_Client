@@ -3,47 +3,103 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public enum ITEMTYPE
+{
+    WOOD = 1,
+    STEEL,
+
+    TRACK
+}
 
 public class InventoryManager : MonoBehaviour
 {
-    public Dictionary<string, List<GameObject>> materials = new Dictionary<string, List<GameObject>>();
-    public Dictionary<string, List<GameObject>> craft = new Dictionary<string, List<GameObject>> ();
-
-    public GameObject railPrefab;
     
+    public Dictionary<ITEMTYPE, GameObject> ingredients = new Dictionary<ITEMTYPE, GameObject>();
+    
+    public Dictionary<string, int> storage = new Dictionary<string, int>();
+    //public GameObject railPrefab;
     public PlayerController playerController;
+    
+
+
     void Start()
     {
-        
+        int woodItemCnt = 0;
+        int steelItemCnt = 0;
+        storage.Add("Woods", woodItemCnt);
+        storage.Add("Steels", steelItemCnt);
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    // ÏóÖÎç∞Ïù¥Ìä∏
-    void Update()
+    void FixedUpdate()
     {
         
+        Debug.Log($"{ingredients.Count}");
+
+        Debug.Log(storage["Woods"]);
+        Debug.Log(storage["Steels"]);
+        
+        
+
     }
 
-    public void PlayerInventoryWood()
+    //Player∞° ¡˝¿∫ ø¿∫Í¡ß∆Æ∞° ¿Á∑· æ∆¿Ã≈€¿Œ ∞ÊøÏ ¿˙¿Âº“ø° ¿˙¿Â
+    public void SaveInventory()
     {
-        materials.Add("Wood", new List<GameObject> { playerController.nearObject });      
-    }
-
-    public void PlayerInventorySteel()
-    {
-        materials.Add("Steel", new List<GameObject> { playerController.nearObject});
-    }
-
-    public void FactoryInventoryRail() 
-    {
-        if (materials["Wood"].Count >=2 && materials["Steel"].Count>=3)
+        
+        if (playerController.grabedObject != null)
         {
-            
-            craft.Add("Rail", new List<GameObject> { railPrefab });
-            
-        }
+            string itemName = playerController.grabedObject.name;
 
+            if (itemName == "Wood")
+            {
+                ITEMTYPE itemType = ITEMTYPE.WOOD;
+
+                // «√∑π¿ÃæÓ∞° ≥™π´∏¶ ¡˝¿∫ ∞ÊøÏ
+                if (ingredients.ContainsKey(itemType))
+                {
+                    ingredients[itemType] = playerController.grabedObject;
+                }
+                else
+                {
+                    ingredients.Add(itemType, playerController.grabedObject);
+                }
+
+                storage["Woods"]++;
+                
+            }
+            else if (itemName == "Steel")
+            {
+                ITEMTYPE itemType = ITEMTYPE.STEEL;
+
+                // «√∑π¿ÃæÓ∞° √∂¿ª ¡˝¿∫ ∞ÊøÏ
+                if (ingredients.ContainsKey(itemType))
+                {
+                    ingredients[itemType] = playerController.grabedObject;
+                }
+                else
+                {
+                    ingredients.Add(itemType, playerController.grabedObject);
+                }
+
+                storage["Steels"]++;
+            }
+        }
+    }
+
+    //¿Œ∫•≈‰∏Æø° ¿˙¿Âµ» ¿Á∑·øÕ ¿Á∑·¿« ºˆ∏¶ factory∑Œ ∫∏≥ø
+    public void UseInventory(string _ingredient, int _amount)
+    {
+        storage[_ingredient] = _amount;
         
     }
-        
-    
+
 }
+
+    
+
+
+
+
+
+
