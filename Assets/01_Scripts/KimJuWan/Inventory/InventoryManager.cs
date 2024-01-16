@@ -43,7 +43,7 @@ public class InventoryManager : MonoBehaviour
 
     }
 
-    //Player°¡ ÁıÀº ¿ÀºêÁ§Æ®°¡ Àç·á ¾ÆÀÌÅÛÀÎ °æ¿ì ÀúÀå¼Ò¿¡ ÀúÀå
+    //Playerê°€ ì§‘ì€ ì˜¤ë¸Œì íŠ¸ê°€ ì¬ë£Œ ì•„ì´í…œì¸ ê²½ìš° ì €ì¥ì†Œì— ì €ì¥
     public void SaveInventory()
     {
         
@@ -55,7 +55,7 @@ public class InventoryManager : MonoBehaviour
             {
                 ITEMTYPE itemType = ITEMTYPE.WOOD;
 
-                // ÇÃ·¹ÀÌ¾î°¡ ³ª¹«¸¦ ÁıÀº °æ¿ì
+                // í”Œë ˆì´ì–´ê°€ ë‚˜ë¬´ë¥¼ ì§‘ì€ ê²½ìš°
                 if (ingredients.ContainsKey(itemType))
                 {
                     ingredients[itemType] = playerController.grabedObject;
@@ -72,7 +72,7 @@ public class InventoryManager : MonoBehaviour
             {
                 ITEMTYPE itemType = ITEMTYPE.STEEL;
 
-                // ÇÃ·¹ÀÌ¾î°¡ Ã¶À» ÁıÀº °æ¿ì
+                // í”Œë ˆì´ì–´ê°€ ì² ì„ ì§‘ì€ ê²½ìš°
                 if (ingredients.ContainsKey(itemType))
                 {
                     ingredients[itemType] = playerController.grabedObject;
@@ -87,7 +87,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    //ÀÎº¥Åä¸®¿¡ ÀúÀåµÈ Àç·á¿Í Àç·áÀÇ ¼ö¸¦ factory·Î º¸³¿
+    //ì¸ë²¤í† ë¦¬ì— ì €ì¥ëœ ì¬ë£Œì™€ ì¬ë£Œì˜ ìˆ˜ë¥¼ factoryë¡œ ë³´ëƒ„
     public void UseInventory(string _ingredient, int _amount)
     {
         storage[_ingredient] = _amount;

@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEditor;
 using SimpleJSON;
+using System;
 
 public class ObstacleManager : MonoBehaviour
 {
@@ -27,9 +27,9 @@ public class ObstacleManager : MonoBehaviour
     }
 
     // 현재 Obstacle의 작업 가능 여부 확인
-    public void ObstacleWorking(string equipment)
+    public void ObstacleWorking(string _equipment)
     {
-        if (isWorking || !equipmentType.Equals(equipment))
+        if (isWorking || !equipmentType.Equals(_equipment))
         {
             Debug.Log("::: 이미 작업 중 이거나 장비가 맞지 않음 :::");
             return;
@@ -73,13 +73,14 @@ public class ObstacleManager : MonoBehaviour
     {
         Debug.Log("Generate ::: " + generateItem);
         GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
-        Instantiate(_item, transform.position, transform.rotation);
+        GameObject _object =  Instantiate(_item, transform.position, transform.rotation);
+        _object.name = generateItem;
     }
 
-    //TODO : 이유정 2024.01.15 ObstacleManager.cs ObstacleJsonLoad(string path)
-    void ObstacleJsonLoad(string path)
+    // TODO : 이유정 2024.01.15 ObstacleManager.cs ObstacleJsonLoad(string path)
+    void ObstacleJsonLoad(string _path)
     {
-        TextAsset json = (TextAsset)Resources.Load(path);
+        TextAsset json = (TextAsset)Resources.Load(_path);
         string jsonStr = json.text;
 
         var jsonData = JSON.Parse(jsonStr);
