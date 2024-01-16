@@ -16,18 +16,19 @@ public class FactoryManager : MonoBehaviour
     public FACTORYTYPE factoryType;
 
     private FactoryController factoryController;
+    public Dictionary<string, int> storages = new Dictionary<string, int>();
 
     public string dataPath;
     public int machineType;
 
-    private string ingredient_1;
-    private int amount_1;
-    private string ingredient_2;
-    private int amount_2;
-    private float generateTime;
-    private string generateItem;
+    public string ingredient_1;
+    public int amount_1;
+    public string ingredient_2;
+    public int amount_2;
+    public float generateTime;
+    public string generateItem;
 
-    public float currentTime = 0;
+    public const int maxVolume = 5;
 
     void Start()
     {
@@ -35,89 +36,105 @@ public class FactoryManager : MonoBehaviour
             FactoryJsonLoad(dataPath);
 
         factoryController = GetComponent<FactoryController>();
-
-        // 재료 확인 작업 
-        IngredientCheck();
     }
 
-    // 엔진 일정 시간마다 불나는 이벤트
-    public void EngineOverheating()
+    // ::::: UI 확인용 버튼 :::::
+    public void OnWoodAddButton()
     {
-
+        IngredientAdd("Wood", 1);
     }
 
-    // Storage에 플레이어가 재료를 저장할 때 효과 구현 및 Inevntory.cs 저장 함수 실행
-    public void IngredientSave(string _ingredient, int _amount)
+    // ::::: UI 확인용 버튼 :::::
+    public void OnSteelAddButton()
     {
-        GameObject.Find("InventoryManager").GetComponent<InventoryManager>().UseInventory(_ingredient, _amount);
-
-        // 재료 저장 효과 구현
-
+        IngredientAdd("Steel", 1);
     }
 
-    // Storage에 재료가 충분한지 확인
-    public void IngredientCheck()
+    // Storage 내에 자원 저장
+    public void IngredientAdd(string _ingredient, int _amount)
     {
-        if (ingredient_1.Equals(ingredient_2))
+        if (!storages.ContainsKey(_ingredient))
         {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1 + amount_2)
-            {
-                StartCoroutine(ItemProduction());
-                IngredientSave(ingredient_1, amount_1 + amount_2);
-            }
-            else
-            {
-                Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-            }
+            storages.Add(_ingredient, 0);
         }
-        else
-        {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1)
-            {
-                if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_2] >= amount_2)
-                {
-                    StartCoroutine(ItemProduction());
-                    IngredientSave(ingredient_1, amount_1);
-                    IngredientSave(ingredient_2, amount_2);
-                }
-                else
-                {
-                    Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-                }
-            }
-            else
-            {
-                Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-            }
-        }
+
+        storages[_ingredient] += _amount;
+        GetAllMachine();
+
+        Debug.Log($":::: 저장소에 재료를 저장 :::: {_ingredient} :: {storages[_ingredient]}");
     }
 
-    // 아이템 제작 실행
-    IEnumerator ItemProduction()
+    // Storage 내의 자원 사용
+    public void IngredientUse(string _ingredient, int _amount)
     {
-        int loopNum = 0;
-
-        while (true)
+        if (!storages.ContainsKey(_ingredient))
         {
-            // 아이템 제작 효과 구현
+            storages.Add(_ingredient, 0);
+        }
 
-            yield return new WaitForEndOfFrame();
-            Debug.Log("CurrentTime ::: " + currentTime);
-            currentTime += Time.deltaTime;
+        if (storages[_ingredient] <= 0)
+            return;
 
-            if (currentTime > generateTime)
+        storages[_ingredient] -= _amount;
+    }
+
+    // Machine에서 아이템 생성 시 저장 개수 증가
+    public void MachineStorageAdd()
+    {
+        if (!storages.ContainsKey(generateItem))
+        {
+            storages.Add(generateItem, 0);
+        }
+
+        storages[generateItem] += 1;
+    }
+
+    // Machine의 아이템 사용 → Player.cs에서 아이템을 가져가려 할 때 실행 
+    public void MachineStorageUse()
+    {
+        if (!storages.ContainsKey(generateItem))
+        {
+            storages.Add(generateItem, 0);
+        }
+
+        if (storages[generateItem] <= 0)
+            return;
+
+        // 아이템 플레이어 손에 생성 메서드 실행
+        factoryController.ItemGenerate(generateItem);
+        storages[generateItem] -= 1;
+    }
+
+    public void OnIngredientCheck()
+    {
+        if (!storages.ContainsKey(generateItem))
+        {
+            storages.Add(generateItem, 0);
+        }
+
+        factoryController.IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2);
+    }
+
+    public void GetAllMachine()
+    {
+        Debug.Log(":::: 확인 시작 ::::");
+        GameObject[] _machines = GameObject.FindGameObjectsWithTag("Factory");
+
+        for (int i = 0; i < _machines.Length; i++)
+        {
+            FactoryManager _fm = _machines[i].GetComponent<FactoryManager>();
+            Debug.Log($"{_fm.factoryType}");
+
+            if (_fm.factoryType == FACTORYTYPE.STORAGE)
+                return;
+
+            if (_fm.storages[_fm.generateItem] >= maxVolume)
             {
-                // 아이템 제작 완료
-                Debug.Log("Generate ::: " + generateItem);
-                currentTime = 0;
-                GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/SongYeChan/{generateItem}.prefab", typeof(GameObject)) as GameObject;
-                GameObject _object = Instantiate(_item, transform.position - new Vector3(0.0f, 0.5f, 0.0f), transform.rotation);
-                _object.name = generateItem;
+                Debug.Log(":::: 용량이 다 찼습니다 ::::");
+                return;
             }
 
-            // 무한 루프 방지 예외처리
-            if (loopNum++ > 10000)
-                throw new Exception("Infinite Loop");
+            _fm.OnIngredientCheck();
         }
     }
 
