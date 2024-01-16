@@ -14,6 +14,11 @@ public class InventoryManager : MonoBehaviour
     public PlayerController playerController;
     void Start()
     {
+
+    }
+
+    private void Awake()
+    {
         storage.Add("Wood", 2);
         storage.Add("Steel", 1);
     }

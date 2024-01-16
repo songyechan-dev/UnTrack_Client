@@ -6,7 +6,7 @@
   "AMOUNT_1": 1,
   "INGREDIENT_2": "Steel",
   "AMOUNT_2": 1,
-  "GENERATE_TIME": 20,
+  "GENERATE_TIME": 10,
   "GENERATE": "Track"
  },
  {
@@ -16,7 +16,7 @@
   "AMOUNT_1": 1,
   "INGREDIENT_2": "Steel",
   "AMOUNT_2": 1,
-  "GENERATE_TIME": 35,
+  "GENERATE_TIME": 20,
   "GENERATE": "Dynamite"
  }
 ]
