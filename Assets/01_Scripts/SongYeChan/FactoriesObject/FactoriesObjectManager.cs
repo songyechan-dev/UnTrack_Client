@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -14,7 +16,7 @@ public class FactoriesObjectManager : MonoBehaviour
     }
     enum MoveDirection
     {
-        FORWORD = 0,
+        FORWARD = 0,
         BACK =1,
         LEFT=2,
         RIGHT=3,
@@ -31,62 +33,98 @@ public class FactoriesObjectManager : MonoBehaviour
     public float moveSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
     public float fireTime;
-
+    [SerializeField, Range(0f, 100f)]
     public float rotationSpeed = 10f;
+    [SerializeField, Range(0f, 500f)]
     public float rotationPerFrame = 1.5f;
+    [SerializeField, Range(0f, 100f)]
+    public float rotationForwardSpeed = 0.1f;
 
-    Vector3 direction;
+    float originMoveSpeed = -1f;
+    public bool isStop = false;
+    public bool isChangedRotation = false;
+
+    private bool isChangedOrigineMoveSpeed = false;
+
+    MoveDirection changedRotateAngle;
+    Transform sensorTransform;
+    RaycastHit hit;
+    Transform targetTransform;
+
+    RaycastHit setLockedRayCastHit;
 
     private float curTime = 0f;
     // 시작
     void Start()
     {
-        SetMoveDirection();
+        float num = 0.15f;
+        for (int i = 1; i < 16; i++)
+        {
+            Debug.Log(num +=0.33f);
+        }
+        
         myState = MyState.STOP;
+        sensorTransform = transform.Find("Sensor");
     }
-
     // 업데이트
     void Update()
     {
-        SensorDetect();
+        if (!isStop)
+        {
+            SensorDetect();
+        }
     }
-
+    /// <summary>
+    /// 센서 감지를 통해 센서 Ray에 감지된 Track의 속성값으로 이동하는 방향 변경하는 함수
+    /// </summary>
     void SensorDetect()
     {
-        Transform sensorTransform = transform.Find("Sensor");
         if (sensorTransform != null)
         {
+            if (isStop)
+            {
+                return;
+            }
             Ray ray = new Ray(sensorTransform.position, -sensorTransform.up);
-            RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
                 if (hit.transform.CompareTag(tagToBeDetected))
                 {
-                    Debug.Log("감지됨");
-                    if (hit.transform.GetComponent<TrackInfo>().GetMyRotation().Equals(TrackInfo.MyDirection.LEFT))
+                    if (hit.transform.GetComponent<TrackInfo>().myDirection == TrackInfo.MyDirection.LEFT)
                     {
                         moveDirection = MoveDirection.LEFT;
                     }
-                    else if (hit.transform.GetComponent<TrackInfo>().GetMyRotation().Equals(TrackInfo.MyDirection.RIGHT))
+                    else if (hit.transform.GetComponent<TrackInfo>().myDirection == TrackInfo.MyDirection.RIGHT)
                     {
                         moveDirection = MoveDirection.RIGHT;
                     }
+                    else
+                    {
+                        moveDirection = MoveDirection.FORWARD;
+                    }
                     myState = MyState.MOVE;
-                    
                 }
                 else
                 {
-                    myState = MyState.STOP;
+                    if (!isChangedRotation)
+                    {
+                        myState = MyState.STOP;
+                    }
+                    
                 }
             }
             else
             {
-                myState = MyState.STOP;
+                if (!isChangedRotation)
+                {
+                    myState = MyState.STOP;
+                }
             }
         }
         else
         {
             Debug.LogError("Sensor 오브젝트없음");
+
         }
         Move();
     }
@@ -95,31 +133,102 @@ public class FactoriesObjectManager : MonoBehaviour
     {
         if (myState.Equals(MyState.MOVE))
         {
-            curTime = 0; //TODO : 초기화 시킬건지 상의 필요(2024.01.14) - 송예찬 FactoriesObjectManager.cs
-            if (moveDirection.Equals(MoveDirection.FORWORD))
-            {
-                transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-            }
-            else if (moveDirection.Equals(MoveDirection.LEFT))
-            {
-                transform.Translate(Vector3.forward * 0.2f * Time.deltaTime);
-                transform.Rotate((new Vector3(0, -rotationPerFrame, 0)) * rotationSpeed * Time.deltaTime);
-                if (transform.eulerAngles.y <= 90f)
-                {
-                    moveDirection = MoveDirection.FORWORD;
-                    return;
-                }
-            }
-            else if (moveDirection.Equals(MoveDirection.RIGHT))
-            {
-
-                moveDirection = MoveDirection.FORWORD;
-            }
+            RotationToDirection();
         }
         else
         {
             WaitToFire();
         }
+    }
+
+    /// <summary>
+    /// SensorDetect() 함수를 통해 구해진 방향으로 회전
+    /// </summary>
+    void RotationToDirection()
+    {
+        curTime = 0; //TODO : 초기화 시킬건지 상의 필요(2024.01.14) - 송예찬 FactoriesObjectManager.cs
+        if (isChangedRotation)
+        {
+            float np = changedRotateAngle.Equals(MoveDirection.LEFT) ? -1 : 1;
+            float finshedAngle = 90 * np;
+            Debug.Log(transform.position.z + " ," + setLockedRayCastHit.transform.position.z);
+            if ((int)transform.position.z == (int)setLockedRayCastHit.transform.position.z)
+            {
+                rotationForwardSpeed = 0f;
+            }
+            transform.Translate(Vector3.forward * (rotationForwardSpeed) * Time.deltaTime);
+            transform.Rotate((new Vector3(0, rotationPerFrame * np, 0)) * rotationSpeed * Time.deltaTime);
+            if (!isChangedOrigineMoveSpeed)
+            {
+                SetOriginMoveSpeed();
+            }
+            isChangedOrigineMoveSpeed = true;
+            moveSpeed = 0f;
+            if (transform.rotation.eulerAngles.y <= 90f * np || transform.rotation.eulerAngles.y < 270f * -np)
+            {
+                TurnFinsh(finshedAngle);
+            }
+        }
+        else if (moveDirection == MoveDirection.FORWARD)
+        {
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        }
+
+        else if ((moveDirection.Equals(MoveDirection.LEFT) || moveDirection.Equals(MoveDirection.RIGHT)) && !isStop)
+        {
+            isChangedRotation = true;
+            changedRotateAngle = moveDirection.Equals(MoveDirection.LEFT) ? MoveDirection.LEFT : MoveDirection.RIGHT;
+            RaycastHit lockedHit2;
+            if (Physics.Raycast(sensorTransform.position, Vector3.down, out lockedHit2))
+            {
+                if (lockedHit2.transform.CompareTag(tagToBeDetected))
+                {
+                    setLockedRayCastHit = lockedHit2;
+                }
+                else
+                {
+                    setLockedRayCastHit = new RaycastHit();
+                }
+            }
+
+        }
+        else if (moveDirection.Equals(MoveDirection.RIGHT))
+        {
+            moveDirection = MoveDirection.FORWARD;
+        }
+    }
+
+    void SetOriginMoveSpeed()
+    {
+        originMoveSpeed = moveSpeed;
+    }
+
+    /// <summary>
+    /// RotationToDirection() 함수를 통해 회전후 회전이 끝나면 position 보정
+    /// </summary>
+    void TurnFinsh(float _finishedAngle)
+    {
+        RaycastHit lockedHit;
+        if (Physics.Raycast(transform.position, Vector3.down, out lockedHit))
+        {
+            if (lockedHit.transform.CompareTag(tagToBeDetected))
+            {
+                targetTransform = lockedHit.transform;
+            }
+        }
+        else
+        {
+            targetTransform = hit.transform;
+        }
+        transform.position = targetTransform.position + new Vector3(0, targetTransform.localScale.y / 2 + transform.localScale.y / 2, 0);
+        transform.rotation = Quaternion.Euler(0, _finishedAngle, 0);
+        isChangedRotation = false;
+        Debug.Log(originMoveSpeed);
+        moveSpeed = originMoveSpeed;
+        originMoveSpeed = -1f;
+        hit = new RaycastHit();
+        targetTransform = null;
+        isChangedOrigineMoveSpeed = false;
     }
 
     void WaitToFire()
@@ -128,33 +237,6 @@ public class FactoriesObjectManager : MonoBehaviour
         if (curTime > fireTime)
         {
             //Debug.Log("파이어!!!");
-        }
-    }
-
-    void SetMoveDirection()
-    {
-        switch (moveDirection)
-        {
-            case MoveDirection.FORWORD:
-                direction = Vector3.forward;
-                break;
-            case MoveDirection.BACK:
-                direction = Vector3.back;
-                break;
-            case MoveDirection.LEFT:
-                direction = Vector3.left;
-                break;
-            case MoveDirection.RIGHT:
-                direction = Vector3.right;
-                break;
-            case MoveDirection.UP:
-                direction = Vector3.up;
-                break;
-            case MoveDirection.DOWN:
-                direction = Vector3.down;
-                break;
-            default:
-                break;
         }
     }
 

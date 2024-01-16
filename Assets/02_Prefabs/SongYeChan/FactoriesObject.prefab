@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 8261312582292117729}
   - component: {fileID: 3434016436887725201}
   - component: {fileID: 145743830}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FactoriesObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,3 +212,8 @@ MonoBehaviour:
   moveDirection: 0
   moveSpeed: 10
   fireTime: 0
+  rotationSpeed: 10
+  rotationPerFrame: 1.5
+  rotationForwardSpeed: 0.1
+  isStop: 0
+  isChangedRotation: 0
