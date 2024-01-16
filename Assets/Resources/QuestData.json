@@ -87,36 +87,36 @@
   "PROGRESS_GOAL": 240,
   "REWARD_VOLT": 4
  },
- {
-  "ID": 12,
-  "CONTENT": "레일 35개로 도착지에 도달하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Rail",
-  "PROGRESS_GOAL": 35,
-  "REWARD_VOLT": 1
- },
- {
-  "ID": 13,
-  "CONTENT": "레일 25개로 도착지에 도달하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Rail",
-  "PROGRESS_GOAL": 25,
-  "REWARD_VOLT": 2
- },
- {
-  "ID": 14,
-  "CONTENT": "레일 15개로 도착지에 도달하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Rail",
-  "PROGRESS_GOAL": 15,
-  "REWARD_VOLT": 3
- },
- {
-  "ID": 15,
-  "CONTENT": "레일 10개로 도착지에 도달하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Rail",
-  "PROGRESS_GOAL": 10,
-  "REWARD_VOLT": 4
- }
+  {
+    "ID": 12,
+    "CONTENT": "레일 35개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 35,
+    "REWARD_VOLT": 1
+  },
+  {
+    "ID": 13,
+    "CONTENT": "레일 25개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 25,
+    "REWARD_VOLT": 2
+  },
+  {
+    "ID": 14,
+    "CONTENT": "레일 15개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 15,
+    "REWARD_VOLT": 3
+  },
+  {
+    "ID": 15,
+    "CONTENT": "레일 10개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 10,
+    "REWARD_VOLT": 4
+  }
 ]
