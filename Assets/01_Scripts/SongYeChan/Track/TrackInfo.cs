@@ -8,16 +8,16 @@ public class TrackInfo : MonoBehaviour
 {
     public enum MyDirection
     {
-        UP = 0,
-        DOWN = 1,
+        FORWARD = 0,
+        BACK = 1,
         LEFT = 2,
         RIGHT = 3,
     }
 
     public enum ArroundTrackDirection
     {
-        UP = 0,
-        DOWN = 1,
+        FORWARD = 0,
+        BACK = 1,
         LEFT = 2,
         RIGHT = 3,
     }
@@ -40,37 +40,59 @@ public class TrackInfo : MonoBehaviour
     
     public float maxDistance = 1f;
     public string trackTagName = "Track";
+    public string factoriesObjectTagName = "FactoriesObject";
+
+    public Vector3 prevAngle;
 
     public void SetArroundTrackInfo(ArroundTrackDirection _arroundTrackDirection,bool _isElectricityFlowing)
     {
         arroundTrackInfo[_arroundTrackDirection] = _isElectricityFlowing;
     }
 
-    public void SetMyDirection(MyDirection _myDirection)
+    public void SetMyDirection(MyDirection _myDirection,Vector3 _angle)
     {
         switch (_myDirection)
         {
-            case MyDirection.UP:
-                transform.localEulerAngles = new Vector3(0,0,0);
-                myDirection = MyDirection.UP;
+            case MyDirection.FORWARD:
+                transform.localEulerAngles = _angle;
+                myDirection = MyDirection.FORWARD;
                 break;
-            case MyDirection.DOWN:
-                transform.localEulerAngles = new Vector3(0, 180f, 0);
-                myDirection = MyDirection.DOWN;
+            case MyDirection.BACK:
+                transform.localEulerAngles = _angle;
+                myDirection = MyDirection.BACK;
                 break;
             case MyDirection.LEFT:
-                transform.localEulerAngles = new Vector3(0, -90f, 0);
+                transform.localEulerAngles = _angle;
                 myDirection = MyDirection.LEFT;
                 Debug.Log("변경됨 LEFT!");
                 break;
             case MyDirection.RIGHT:
-                transform.localEulerAngles = new Vector3(0, 90f, 0);
+                transform.localEulerAngles = _angle;
                 myDirection = MyDirection.RIGHT;
                 Debug.Log("변경됨 RIGHT");
                 break;
             default:
                 break;
         }
+    }
+
+    public void GetOnFactoriesObject()
+    {
+        Ray ray = new Ray(transform.position, Vector3.up);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform != null && hit.transform.CompareTag(factoriesObjectTagName))
+            {
+                Debug.Log("팩토리스오브젝트가 위에있음");
+                if (hit.transform.localEulerAngles.y != transform.localEulerAngles.y)
+                {
+                    hit.transform.GetComponent<FactoriesObjectManager>().Turn(transform);
+                }
+            }
+        }
+
+
     }
 
     //TODO: 트러블 슈팅 - 각도 이슈(0,90,180,-90 각도가 정확히 나오지가 않아서 수정함)
@@ -80,11 +102,11 @@ public class TrackInfo : MonoBehaviour
 
         if (IsApproximately(yRotation, 0f))
         {
-            return MyDirection.UP;
+            return MyDirection.FORWARD;
         }
         else if (IsApproximately(yRotation, 180f))
         {
-            return MyDirection.DOWN;
+            return MyDirection.BACK;
         }
         else if (IsApproximately(yRotation, -90f) || IsApproximately(yRotation, 270f))
         {
@@ -96,7 +118,7 @@ public class TrackInfo : MonoBehaviour
         }
         else
         {
-            return MyDirection.UP;
+            return MyDirection.FORWARD;
         }
 
         // 각도를 비교할 때 사용할 정밀도를 설정하는 함수
@@ -111,10 +133,10 @@ public class TrackInfo : MonoBehaviour
     {
         switch (_arroundTrackDirection)
         {
-            case ArroundTrackDirection.UP:
+            case ArroundTrackDirection.FORWARD:
                 upTrack = otherTrack;
                 break;
-            case ArroundTrackDirection.DOWN:
+            case ArroundTrackDirection.BACK:
                 downTrack = otherTrack;
                 break;
             case ArroundTrackDirection.LEFT:

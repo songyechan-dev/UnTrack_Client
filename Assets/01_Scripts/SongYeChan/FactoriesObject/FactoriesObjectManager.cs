@@ -33,46 +33,32 @@ public class FactoriesObjectManager : MonoBehaviour
     public float moveSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
     public float fireTime;
-    [SerializeField, Range(0f, 100f)]
-    public float rotationSpeed = 10f;
-    [SerializeField, Range(0f, 500f)]
-    public float rotationPerFrame = 1.5f;
-    [SerializeField, Range(0f, 100f)]
-    public float rotationForwardSpeed = 0.1f;
+    [SerializeField, Range(0f, 5f)]
+    public float rotationTime = 10f;
+    //[SerializeField, Range(0f, 500f)]
+    //public float rotationPerFrame = 1.5f;
+    //[SerializeField, Range(0f, 100f)]
+    //public float rotationForwardSpeed = 0.1f;
 
-    float originMoveSpeed = -1f;
     public bool isStop = false;
     public bool isChangedRotation = false;
 
-    private bool isChangedOrigineMoveSpeed = false;
-
-    MoveDirection changedRotateAngle;
     Transform sensorTransform;
     RaycastHit hit;
-    Transform targetTransform;
 
-    RaycastHit setLockedRayCastHit;
+
+    Coroutine coroutine;
 
     private float curTime = 0f;
     // 시작
     void Start()
     {
-        float num = 0.15f;
-        for (int i = 1; i < 16; i++)
-        {
-            Debug.Log(num +=0.33f);
-        }
-        
-        myState = MyState.STOP;
         sensorTransform = transform.Find("Sensor");
     }
     // 업데이트
     void Update()
     {
-        if (!isStop)
-        {
-            SensorDetect();
-        }
+        SensorDetect();
     }
     /// <summary>
     /// 센서 감지를 통해 센서 Ray에 감지된 Track의 속성값으로 이동하는 방향 변경하는 함수
@@ -90,35 +76,27 @@ public class FactoriesObjectManager : MonoBehaviour
             {
                 if (hit.transform.CompareTag(tagToBeDetected))
                 {
-                    if (hit.transform.GetComponent<TrackInfo>().myDirection == TrackInfo.MyDirection.LEFT)
-                    {
-                        moveDirection = MoveDirection.LEFT;
-                    }
-                    else if (hit.transform.GetComponent<TrackInfo>().myDirection == TrackInfo.MyDirection.RIGHT)
-                    {
-                        moveDirection = MoveDirection.RIGHT;
-                    }
-                    else
-                    {
-                        moveDirection = MoveDirection.FORWARD;
-                    }
                     myState = MyState.MOVE;
+                    if (hit.transform.localRotation.eulerAngles.y != transform.localRotation.eulerAngles.y)
+                    {
+                        if (coroutine == null)
+                        {
+                            Turn(hit.transform);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                 }
                 else
                 {
-                    if (!isChangedRotation)
-                    {
-                        myState = MyState.STOP;
-                    }
-                    
+                    myState = MyState.STOP;
                 }
             }
             else
             {
-                if (!isChangedRotation)
-                {
-                    myState = MyState.STOP;
-                }
+                myState = MyState.STOP;
             }
         }
         else
@@ -128,116 +106,45 @@ public class FactoriesObjectManager : MonoBehaviour
         }
         Move();
     }
-
     void Move()
     {
-        if (myState.Equals(MyState.MOVE))
-        {
-            RotationToDirection();
-        }
-        else
-        {
-            WaitToFire();
-        }
-    }
-
-    /// <summary>
-    /// SensorDetect() 함수를 통해 구해진 방향으로 회전
-    /// </summary>
-    void RotationToDirection()
-    {
-        curTime = 0; //TODO : 초기화 시킬건지 상의 필요(2024.01.14) - 송예찬 FactoriesObjectManager.cs
-        if (isChangedRotation)
-        {
-            float np = changedRotateAngle.Equals(MoveDirection.LEFT) ? -1 : 1;
-            float finshedAngle = 90 * np;
-            Debug.Log(transform.position.z + " ," + setLockedRayCastHit.transform.position.z);
-            if ((int)transform.position.z == (int)setLockedRayCastHit.transform.position.z)
-            {
-                rotationForwardSpeed = 0f;
-            }
-            transform.Translate(Vector3.forward * (rotationForwardSpeed) * Time.deltaTime);
-            transform.Rotate((new Vector3(0, rotationPerFrame * np, 0)) * rotationSpeed * Time.deltaTime);
-            if (!isChangedOrigineMoveSpeed)
-            {
-                SetOriginMoveSpeed();
-            }
-            isChangedOrigineMoveSpeed = true;
-            moveSpeed = 0f;
-            if (transform.rotation.eulerAngles.y <= 90f * np || transform.rotation.eulerAngles.y < 270f * -np)
-            {
-                TurnFinsh(finshedAngle);
-            }
-        }
-        else if (moveDirection == MoveDirection.FORWARD)
+        if (myState == MyState.MOVE)
         {
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
-
-        else if ((moveDirection.Equals(MoveDirection.LEFT) || moveDirection.Equals(MoveDirection.RIGHT)) && !isStop)
-        {
-            isChangedRotation = true;
-            changedRotateAngle = moveDirection.Equals(MoveDirection.LEFT) ? MoveDirection.LEFT : MoveDirection.RIGHT;
-            RaycastHit lockedHit2;
-            if (Physics.Raycast(sensorTransform.position, Vector3.down, out lockedHit2))
-            {
-                if (lockedHit2.transform.CompareTag(tagToBeDetected))
-                {
-                    setLockedRayCastHit = lockedHit2;
-                }
-                else
-                {
-                    setLockedRayCastHit = new RaycastHit();
-                }
-            }
-
-        }
-        else if (moveDirection.Equals(MoveDirection.RIGHT))
-        {
-            moveDirection = MoveDirection.FORWARD;
-        }
     }
 
-    void SetOriginMoveSpeed()
+    public void Turn(Transform _targetTransform)
     {
-        originMoveSpeed = moveSpeed;
+        coroutine = StartCoroutine(TurnCoroutine(_targetTransform));
     }
+
 
     /// <summary>
-    /// RotationToDirection() 함수를 통해 회전후 회전이 끝나면 position 보정
+    /// FactoriesObject의 각도가 현재 센서가 감지한 각도랑 일치하지 않을시 회전 및 포지션 변경
     /// </summary>
-    void TurnFinsh(float _finishedAngle)
+    /// <param name="_targetTransform">센서가 감지한 트랙의 Transform</param>
+    /// <returns>yield return null</returns>
+    IEnumerator TurnCoroutine(Transform _targetTransform)
     {
-        RaycastHit lockedHit;
-        if (Physics.Raycast(transform.position, Vector3.down, out lockedHit))
-        {
-            if (lockedHit.transform.CompareTag(tagToBeDetected))
-            {
-                targetTransform = lockedHit.transform;
-            }
-        }
-        else
-        {
-            targetTransform = hit.transform;
-        }
-        transform.position = targetTransform.position + new Vector3(0, targetTransform.localScale.y / 2 + transform.localScale.y / 2, 0);
-        transform.rotation = Quaternion.Euler(0, _finishedAngle, 0);
-        isChangedRotation = false;
-        Debug.Log(originMoveSpeed);
-        moveSpeed = originMoveSpeed;
-        originMoveSpeed = -1f;
-        hit = new RaycastHit();
-        targetTransform = null;
-        isChangedOrigineMoveSpeed = false;
-    }
+        Debug.Log("호출됨");
+        float duration = rotationTime;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0, _targetTransform.eulerAngles.y, 0);
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = _targetTransform.position + new Vector3(0, _targetTransform.localScale.y / 2 + transform.localScale.y / 2, 0);
+        float elapsedTime = 0f;
 
-    void WaitToFire()
-    {
-        curTime += Time.deltaTime;
-        if (curTime > fireTime)
+        while (elapsedTime < duration)
         {
-            //Debug.Log("파이어!!!");
+            float t = elapsedTime / duration;
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+        transform.rotation = targetRotation;
+        coroutine = null;
     }
 
 
