@@ -1,4 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
+using GoogleSheetsToUnity.ThirdPary;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -38,6 +39,7 @@ public class MapTool : EditorWindow
     private GameObject planObject = null;
     private GameObject obObject = null;
     private GameObject trackObject = null;
+    private GameObject factoriesObjectPrefab = null;
     private TextAsset mapCSV;
 
     private int defaultStartTrackZ;
@@ -45,6 +47,8 @@ public class MapTool : EditorWindow
 
     private int defaultEndTrackZ;
     private int defaultEndTrackX;
+
+    private TrackManager trackManager;
 
 
 
@@ -79,12 +83,14 @@ public class MapTool : EditorWindow
         }
         else
         {
+            trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
             objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
             mapCSV = (TextAsset)EditorGUILayout.ObjectField("Map Data:", mapCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planPrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planPrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
             trackPrefab = (GameObject)EditorGUILayout.ObjectField("Track Prefab:", trackPrefab, typeof(GameObject), false);
+            factoriesObjectPrefab = (GameObject)EditorGUILayout.ObjectField("factoriesObjectPrefab:", factoriesObjectPrefab, typeof(GameObject), false);
             if (GUILayout.Button("MapShow"))
             {
                 MapDestroy();
@@ -141,11 +147,12 @@ public class MapTool : EditorWindow
                 {
                     trackObject = Instantiate(trackPrefab, mapParent);
                     trackObject.AddComponent<TrackInfo>();
-                    trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.UP);
+                    trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
                     trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
                     trackObject.tag = "Track";
                     trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
+                    trackManager.finalTrack = trackObject;
                 }
                 x++;
             }

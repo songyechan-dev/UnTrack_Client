@@ -11,12 +11,12 @@ TagManager:
   - Item
   - Factory
   - DroppedTrack
+  - FactoriesObject
   - Storage
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - DroppedTrack
   - Water
   - UI
   - UI

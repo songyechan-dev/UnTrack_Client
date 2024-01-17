@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1391494196919348609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.39999998, z: 0.515}
-  m_LocalScale: {x: 1, y: 0.2, z: 0.03}
+  m_LocalPosition: {x: 0.000000030733645, y: 0.39999992, z: 0.7499998}
+  m_LocalScale: {x: 1, y: 0.2, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8254098764900743039}
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 145743830}
   m_Layer: 3
   m_Name: FactoriesObject
-  m_TagString: Untagged
+  m_TagString: FactoriesObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,12 +208,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e99ca8a3e1c952b44aeed8ed8ec9e68d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tagToBeDetected: 
+  tagToBeDetected: Track
   moveDirection: 0
-  moveSpeed: 10
-  fireTime: 0
-  rotationSpeed: 10
-  rotationPerFrame: 1.5
-  rotationForwardSpeed: 0.1
+  moveSpeed: 5.1
+  fireTime: 28
+  rotationTime: 1.5
   isStop: 0
   isChangedRotation: 0
