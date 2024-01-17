@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FishNetManager : MonoBehaviour
+public class TestClick : MonoBehaviour
 {
     // 시작
     void Start()
