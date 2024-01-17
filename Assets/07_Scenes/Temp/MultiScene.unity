@@ -239,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 1432108022769067442, guid: f983d6dd3d1bd5c43aa7755d9ddc9ef1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 923753799}
     - target: {fileID: 1432108022769067442, guid: f983d6dd3d1bd5c43aa7755d9ddc9ef1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeTeam
@@ -251,7 +251,7 @@ PrefabInstance:
     - target: {fileID: 1432108022887270022, guid: f983d6dd3d1bd5c43aa7755d9ddc9ef1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 923753799}
     - target: {fileID: 1432108022887270022, guid: f983d6dd3d1bd5c43aa7755d9ddc9ef1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeTeam

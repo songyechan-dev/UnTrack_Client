@@ -107,9 +107,6 @@ public class FactoriesObjectManager : MonoBehaviour
         }
         Move();
     }
-    /// <summary>
-    /// FactoriesObject 이동 메서드
-    /// </summary>
     void Move()
     {
         if (myState == MyState.MOVE)
@@ -118,10 +115,6 @@ public class FactoriesObjectManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// FactoriesObject의 각도가 현재 센서가 감지한 각도랑 일치하지 않을시 회전 및 포지션 변경하는 코루틴 호출
-    /// </summary>
-    /// <param name="_targetTransform"></param>
     public void Turn(Transform _targetTransform)
     {
         coroutine = StartCoroutine(TurnCoroutine(_targetTransform));
@@ -156,32 +149,22 @@ public class FactoriesObjectManager : MonoBehaviour
     }
 
 
-    ///
-    //TODO : gameManager Round 및 미터 가져와서 비교 2024.01.17 송예찬
+    //TODO : gameManager Round 및 미터 가져와서 비교 임시로 round 변수 생성() 2024.01.17 송예찬
     float increasingSpeed = 0.33f;
-    float firstMoveSpeed = 0.15f;
-    /// <summary>
-    /// FactoriesObject Init
-    /// </summary>
-    /// <param name="round">현재난이도</param>
-    /// <param name="meter">현재 미터</param>
-    public void Init(int round, float meter)
+    void Init(int step, int round, float meter)
     {
-        int step = 0;
+        step = 0;
         if (meter < 0.3f)
         {
-            if (round == 1)
-            {
-                moveSpeed = firstMoveSpeed;
-                return;
-            }
-            moveSpeed = round * increasingSpeed;
+            Debug.Log("속도 증가 안됨");
         }
         else
         {
             step = (int)(meter / 0.3f);
-            moveSpeed = step * increasingSpeed * round;
         }
+        moveSpeed = step * 0.33f * round;
+
+
     }
 
 

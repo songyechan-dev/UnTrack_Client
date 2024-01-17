@@ -118,10 +118,6 @@ public class FactoriesObjectManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// FactoriesObject의 각도가 현재 센서가 감지한 각도랑 일치하지 않을시 회전 및 포지션 변경하는 코루틴 호출
-    /// </summary>
-    /// <param name="_targetTransform"></param>
     public void Turn(Transform _targetTransform)
     {
         coroutine = StartCoroutine(TurnCoroutine(_targetTransform));
@@ -156,15 +152,9 @@ public class FactoriesObjectManager : MonoBehaviour
     }
 
 
-    ///
     //TODO : gameManager Round 및 미터 가져와서 비교 2024.01.17 송예찬
     float increasingSpeed = 0.33f;
     float firstMoveSpeed = 0.15f;
-    /// <summary>
-    /// FactoriesObject Init
-    /// </summary>
-    /// <param name="round">현재난이도</param>
-    /// <param name="meter">현재 미터</param>
     public void Init(int round, float meter)
     {
         int step = 0;
