@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,5 +15,15 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void UIRayCast()
+    {
+        RaycastHit hit;
+
+        if(Physics.Raycast(transform.position, transform.up, out hit))
+        {
+
+        }
     }
 }

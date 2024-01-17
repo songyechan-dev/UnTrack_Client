@@ -47,7 +47,7 @@ public class InventoryManager : MonoBehaviour
     public void SavePlayerInventory()
     {
         
-        if (playerController.nearObject != null || playerController.nearObject != null)
+        if (playerController.nearObject != null)
         {
             
                 string itemName = playerController.nearObject.name;
