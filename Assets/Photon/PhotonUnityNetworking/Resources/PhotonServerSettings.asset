@@ -39,6 +39,14 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - OnRoomListUpdate
+  - SetName
+  - SyncChangeTeam
+  - SyncKillCount
+  - SyncRemoveTeam
+  - SyncTeamList
+  - SyncTeamSet
+  - TeamListChange
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
-  DevRegionSetOnce: 0
+  ShowSettings: 1
+  DevRegionSetOnce: 1
