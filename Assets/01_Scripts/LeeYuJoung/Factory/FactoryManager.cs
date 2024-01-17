@@ -15,9 +15,6 @@ public class FactoryManager : MonoBehaviour
     }
     public FACTORYTYPE factoryType;
 
-    private FactoryController factoryController;
-    public Dictionary<string, int> storages = new Dictionary<string, int>();
-
     public string dataPath;
     public int machineType;
 
@@ -28,114 +25,89 @@ public class FactoryManager : MonoBehaviour
     public float generateTime;
     public string generateItem;
 
-    public const int maxVolume = 5;
+    public float currentTime = 0;
+    public int currentItemNum = 0;
+    public const int itemMaxVolume = 5;
+    public bool isWorking = false;
 
     void Start()
     {
         if (factoryType == FACTORYTYPE.MACHINE)
             FactoryJsonLoad(dataPath);
-
-        factoryController = GetComponent<FactoryController>();
     }
 
-    // ::::: UI 확인용 버튼 :::::
-    public void OnWoodAddButton()
+    // 엔진이 일정 시간마다 불나는 이벤트
+    public void EngineOverheating()
     {
-        IngredientAdd("Wood", 1);
+
     }
 
-    // ::::: UI 확인용 버튼 :::::
-    public void OnSteelAddButton()
+    // 아이템 제작할 수 있는지 확인
+    public void ItemProductionCheck()
     {
-        IngredientAdd("Steel", 1);
-    }
-
-    // Storage 내에 자원 저장
-    public void IngredientAdd(string _ingredient, int _amount)
-    {
-        if (!storages.ContainsKey(_ingredient))
+        if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
         {
-            storages.Add(_ingredient, 0);
+            Debug.Log($":::: {generateItem} 제작 시작 ::::");
+            StartCoroutine(ItemProduction());
+        }
+    }
+
+    // 아이템 제작 실행
+    IEnumerator ItemProduction()
+    {
+        int loopNum = 0;
+        isWorking = true;
+
+        while (true)
+        {
+            // 아이템 제작 효과 구현
+
+            yield return new WaitForEndOfFrame();
+            currentTime += Time.deltaTime;
+
+            if (currentTime > generateTime)
+            {
+                currentTime = 0;
+                isWorking = false;
+                break;
+            }
+
+            // 무한 루프 방지 예외처리
+            if (loopNum++ > 10000)
+                throw new Exception("Infinite Loop");
         }
 
-        storages[_ingredient] += _amount;
-        GetAllMachine();
-
-        Debug.Log($":::: 저장소에 재료를 저장 :::: {_ingredient} :: {storages[_ingredient]}");
-    }
-
-    // Storage 내의 자원 사용
-    public void IngredientUse(string _ingredient, int _amount)
-    {
-        if (!storages.ContainsKey(_ingredient))
-        {
-            storages.Add(_ingredient, 0);
-        }
-
-        if (storages[_ingredient] <= 0)
-            return;
-
-        storages[_ingredient] -= _amount;
+        // 아이템 제작 완료
+        Debug.Log($"{gameObject.name} Generate ::: " + generateItem);
+        ItemAdd();
+        ItemProductionCheck();
     }
 
     // Machine에서 아이템 생성 시 저장 개수 증가
-    public void MachineStorageAdd()
+    public void ItemAdd()
     {
-        if (!storages.ContainsKey(generateItem))
-        {
-            storages.Add(generateItem, 0);
-        }
-
-        storages[generateItem] += 1;
+        currentItemNum++;
     }
 
-    // Machine의 아이템 사용 → Player.cs에서 아이템을 가져가려 할 때 실행 
-    public void MachineStorageUse()
+    // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 
+    public void ItemUse()
     {
-        if (!storages.ContainsKey(generateItem))
+        if(currentItemNum <= 0)
         {
-            storages.Add(generateItem, 0);
-        }
-
-        if (storages[generateItem] <= 0)
+            Debug.Log($"{gameObject.name} 아이템이 없습니다....");
             return;
-
-        // 아이템 플레이어 손에 생성 메서드 실행
-        factoryController.ItemGenerate(generateItem);
-        storages[generateItem] -= 1;
-    }
-
-    public void OnIngredientCheck()
-    {
-        if (!storages.ContainsKey(generateItem))
-        {
-            storages.Add(generateItem, 0);
         }
 
-        factoryController.IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2);
+        currentItemNum--;
+        ItemGenerate();
     }
 
-    public void GetAllMachine()
+    // 아이템 생성 → 플레이어 손에 생성
+    public void ItemGenerate()
     {
-        Debug.Log(":::: 확인 시작 ::::");
-        GameObject[] _machines = GameObject.FindGameObjectsWithTag("Factory");
-
-        for (int i = 0; i < _machines.Length; i++)
-        {
-            FactoryManager _fm = _machines[i].GetComponent<FactoryManager>();
-            Debug.Log($"{_fm.factoryType}");
-
-            if (_fm.factoryType == FACTORYTYPE.STORAGE)
-                return;
-
-            if (_fm.storages[_fm.generateItem] >= maxVolume)
-            {
-                Debug.Log(":::: 용량이 다 찼습니다 ::::");
-                return;
-            }
-
-            _fm.OnIngredientCheck();
-        }
+        GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/SongYeChan/{generateItem}.prefab", typeof(GameObject)) as GameObject;
+        GameObject _object = Instantiate(_item, transform.position - new Vector3(0.0f, 0.5f, 0.0f), transform.rotation);
+        _object.name = generateItem;
     }
 
     // TODO : 이유정 2024.01.15 FactoryManager.cs FactoryJsonLoad(string path)
