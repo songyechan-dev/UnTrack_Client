@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int engineUpgradePrice;
+    public int storageUpgradePrice;
+    public int machineUpgradePrice;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
+
+    // 엔진 업그레이드
+
+
+    // 저장소 업그레이드
+
+
+    // 기계 업그레이드
+
+
+    // 기계 추가 구매
+
 }

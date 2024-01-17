@@ -15,110 +15,131 @@ public class FactoryManager : MonoBehaviour
     }
     public FACTORYTYPE factoryType;
 
-    private FactoryController factoryController;
-
     public string dataPath;
     public int machineType;
 
-    private string ingredient_1;
-    private int amount_1;
-    private string ingredient_2;
-    private int amount_2;
-    private float generateTime;
-    private string generateItem;
+    public string ingredient_1;
+    public int amount_1;
+    public string ingredient_2;
+    public int amount_2;
+    public float generateTime;
+    public string generateItem;
 
     public float currentTime = 0;
+    public int currentItemNum = 0;
+    public const int itemMaxVolume = 5;
+    public bool isWorking = false;
 
     void Start()
     {
         if (factoryType == FACTORYTYPE.MACHINE)
             FactoryJsonLoad(dataPath);
-
-        factoryController = GetComponent<FactoryController>();
-
-        // 재료 확인 작업 
-        IngredientCheck();
     }
 
-    // 엔진 일정 시간마다 불나는 이벤트
+    // 엔진이 일정 시간마다 불나는 이벤트
     public void EngineOverheating()
     {
 
     }
 
-    // Storage에 플레이어가 재료를 저장할 때 효과 구현 및 Inevntory.cs 저장 함수 실행
-    public void IngredientSave(string _ingredient, int _amount)
+    // 아이템 제작할 수 있는지 확인
+    public void ItemProductionCheck()
     {
-        GameObject.Find("InventoryManager").GetComponent<InventoryManager>().UseInventory(_ingredient, _amount);
+//         if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
+//         {
 
-        // 재료 저장 효과 구현
+//             if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1 + amount_2)
+//             {
+//                 StartCoroutine(ItemProduction());
+//                 IngredientSave(ingredient_1, amount_1 + amount_2);
+//             }
+//             else
+//             {
+//                 Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//             }
+//         }
+//         else
+//         {
+//             if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1)
+//             {
+//                 if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_2] >= amount_2)
+//                 {
+//                     StartCoroutine(ItemProduction());
+//                     IngredientSave(ingredient_1, amount_1);
+//                     IngredientSave(ingredient_2, amount_2);
+//                 }
+//                 else
+//                 {
+//                     Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//                 }
+//             }
+//             else
+//             {
+//                 Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//             }
 
-    }
+//             Debug.Log($":::: {generateItem} 제작 시작 ::::");
+//             StartCoroutine(ItemProduction());
 
-    // Storage에 재료가 충분한지 확인
-    public void IngredientCheck()
-    {
-        if (ingredient_1.Equals(ingredient_2))
-        {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1 + amount_2)
-            {
-                StartCoroutine(ItemProduction());
-                IngredientSave(ingredient_1, amount_1 + amount_2);
-            }
-            else
-            {
-                Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-            }
-        }
-        else
-        {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1)
-            {
-                if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_2] >= amount_2)
-                {
-                    StartCoroutine(ItemProduction());
-                    IngredientSave(ingredient_1, amount_1);
-                    IngredientSave(ingredient_2, amount_2);
-                }
-                else
-                {
-                    Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-                }
-            }
-            else
-            {
-                Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
-            }
-        }
+//        }
     }
 
     // 아이템 제작 실행
     IEnumerator ItemProduction()
     {
         int loopNum = 0;
+        isWorking = true;
 
         while (true)
         {
             // 아이템 제작 효과 구현
 
             yield return new WaitForEndOfFrame();
-            Debug.Log("CurrentTime ::: " + currentTime);
             currentTime += Time.deltaTime;
 
             if (currentTime > generateTime)
             {
-                // 아이템 제작 완료
-                Debug.Log("Generate ::: " + generateItem);
                 currentTime = 0;
-                GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/SongYeChan/{generateItem}.prefab", typeof(GameObject)) as GameObject;
-                GameObject _object = Instantiate(_item, transform.position - new Vector3(0.0f, 0.5f, 0.0f), transform.rotation);
-                _object.name = generateItem;
+                isWorking = false;
+                break;
             }
 
             // 무한 루프 방지 예외처리
             if (loopNum++ > 10000)
                 throw new Exception("Infinite Loop");
         }
+
+        // 아이템 제작 완료
+        Debug.Log($"{gameObject.name} Generate ::: " + generateItem);
+        ItemAdd();
+        ItemProductionCheck();
+    }
+
+    // Machine에서 아이템 생성 시 저장 개수 증가
+    public void ItemAdd()
+    {
+        currentItemNum++;
+    }
+
+    // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 
+    public void ItemUse()
+    {
+        if(currentItemNum <= 0)
+        {
+            Debug.Log($"{gameObject.name} 아이템이 없습니다....");
+            return;
+        }
+
+        currentItemNum--;
+        ItemGenerate();
+    }
+
+    // 아이템 생성 → 플레이어 손에 생성
+    public void ItemGenerate()
+    {
+        GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/SongYeChan/{generateItem}.prefab", typeof(GameObject)) as GameObject;
+        GameObject _object = Instantiate(_item, transform.position - new Vector3(0.0f, 0.5f, 0.0f), transform.rotation);
+        _object.name = generateItem;
     }
 
     // TODO : 이유정 2024.01.15 FactoryManager.cs FactoryJsonLoad(string path)

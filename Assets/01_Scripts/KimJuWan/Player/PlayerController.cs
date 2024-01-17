@@ -4,17 +4,32 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Jobs;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum PLAYERSTATE
+    {
+        IDLE = 0,
+        WALK,
+        PICKUP,
+        AX,
+        PICK
+    }
     private float moveSpeed = 6f;
     
     Vector3 moveDirection;
     Rigidbody rb;
     PlayerManager playerManager;
     public InventoryManager inventoryManager; 
-    public bool isPick;
-    public GameObject grabedObject;
+    public bool isPickWood;
+    public bool isPickSteel;
+    public bool isDrop;
+    public List<GameObject> pickedWoods = new List<GameObject>(); 
+    public List<GameObject> pickedSteels = new List<GameObject>();
+    public GameObject nearObject;
+    
+    
     
 
 
@@ -23,14 +38,24 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         playerManager = GetComponent<PlayerManager>();
+        
     }
 
     // 업데이트
     void FixedUpdate()
     {
         PlayerMove();
-        Pick();
-        Drop();
+        if(isPickWood)
+        {
+            PickWoods();
+            isPickSteel = false;
+        }
+        if(isPickSteel)
+        {
+            PickSteels();
+            isPickWood = false;
+        }
+        
     }
 
     //플레이어 이동
@@ -49,42 +74,55 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-
-
     
-    void Pick()
+    public void PickWoods()
     {
-        if (isPick)
-        {
-            if (Input.GetKeyDown(KeyCode.Z) && grabedObject !=null)
+        
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 //아이템을 플레이어의 자식 객체로 포함
-                grabedObject.transform.parent = transform;
+                if(nearObject.name == "Wood")
+                    pickedWoods.Add(nearObject);
+                
 
-
-                isPick = true;
-                //플레이어가 집은 아이템이 재료인 경우에만 인벤토리에 데이터 저장(01.16 수정)
-                if (grabedObject.name == "Wood" || grabedObject.name == "Steel")
+                for (int i = 0; i < pickedWoods.Count; i++)
                 {
-                    inventoryManager.SaveInventory();
-                    
+                    pickedWoods[i].transform.parent = transform;
+                    pickedWoods[i].transform.position = transform.localPosition;
                 }
 
+                inventoryManager.SavePlayerInventory();
+
+
             }
-        }
+        nearObject = null;
         
     }
 
-    void Drop()
+    public void PickSteels()
     {
-        if (Input.GetKeyDown(KeyCode.C) && isPick)
-        {
+        
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                //아이템을 플레이어의 자식 객체로 포함
+                if(nearObject.name == "Steel")
+                    pickedSteels.Add(nearObject);
 
-            transform.DetachChildren();
-            grabedObject = null;
-            isPick = false;
+                for (int i = 0; i < pickedSteels.Count; i++)
+                {
+                    pickedSteels[i].transform.parent = transform;
+                    pickedSteels[i].transform.position = transform.localPosition;
+                }
 
-
-        }
+                inventoryManager.SavePlayerInventory();
+            }
+        nearObject = null;
+        
     }
+
+    public void Drop()
+    {            
+      transform.DetachChildren();
+    }
+    
 }
