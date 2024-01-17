@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6632435566270772146
+--- !u!1 &3934003489838394548
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6632435566270772150}
-  - component: {fileID: 6632435566270772145}
-  - component: {fileID: 6632435566270772144}
-  - component: {fileID: 6632435566270772147}
-  - component: {fileID: 6632435566270772151}
+  - component: {fileID: 3934003489838394575}
+  - component: {fileID: 3934003489838394568}
+  - component: {fileID: 3934003489838394569}
+  - component: {fileID: 3934003489838394570}
+  - component: {fileID: 3934003489838394571}
   m_Layer: 0
-  m_Name: Tree
-  m_TagString: Obstacle
+  m_Name: WaterTank
+  m_TagString: Factory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6632435566270772150
+  m_IsActive: 1
+--- !u!4 &3934003489838394575
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6632435566270772146}
+  m_GameObject: {fileID: 3934003489838394548}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8, y: 0.5, z: 5}
+  m_LocalPosition: {x: 6, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6632435566270772145
+--- !u!33 &3934003489838394568
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6632435566270772146}
+  m_GameObject: {fileID: 3934003489838394548}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6632435566270772144
+--- !u!23 &3934003489838394569
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6632435566270772146}
+  m_GameObject: {fileID: 3934003489838394548}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8447b8226f7312743b6573baaac7a8dc, type: 2}
+  - {fileID: 2100000, guid: 78c4c5dc19cec524bb655816596eb1ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,31 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6632435566270772147
+--- !u!65 &3934003489838394570
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6632435566270772146}
+  m_GameObject: {fileID: 3934003489838394548}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6632435566270772151
+--- !u!114 &3934003489838394571
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6632435566270772146}
+  m_GameObject: {fileID: 3934003489838394548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7aa9f4214993419dced723c86071b, type: 3}
+  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataPath: ObstacleData
-  obstacleType: 0
+  factoryType: 2
+  dataPath: FactoryData
+  machineType: 2
+  ingredient_1: 
+  amount_1: 0
+  ingredient_2: 
+  amount_2: 0
+  generateTime: 0
+  generateItem: 
+  currentTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
   isWorking: 0

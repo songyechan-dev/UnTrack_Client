@@ -18,5 +18,15 @@
   "AMOUNT_2": 1,
   "GENERATE_TIME": 20,
   "GENERATE": "Dynamite"
+ },
+ {
+  "IDX": 3,
+  "TYPE": "WaterTank",
+  "INGREDIENT_1": "Wood",
+  "AMOUNT_1": 1,
+  "INGREDIENT_2": "Wood",
+  "AMOUNT_2": 1,
+  "GENERATE_TIME": 10,
+  "GENERATE": "Bucket"
  }
 ]

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    void Start()
+    public enum ITEMTYPE
     {
-        
+        WOOD,      // ¸ñÀç
+        STEEL,     // Ã¶Àç
+        BUCKET,    // ¹°Åë
+        DYNAMITE,  // ÆøÅº
+        AX,        // µµ³¢
+        PICK       // °î±ªÀÌ
     }
-
-    void Update()
-    {
-        
-    }
+    public ITEMTYPE itemType;
 }
