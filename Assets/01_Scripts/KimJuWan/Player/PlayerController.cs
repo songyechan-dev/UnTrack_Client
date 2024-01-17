@@ -21,40 +21,30 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDirection;
     Rigidbody rb;
     PlayerManager playerManager;
-    public InventoryManager inventoryManager; 
-    public bool isPickWood;
-    public bool isPickSteel;
+    //public InventoryManager inventoryManager; 
+    public bool isPick;
+    
     public bool isDrop;
-    public List<GameObject> pickedWoods = new List<GameObject>(); 
-    public List<GameObject> pickedSteels = new List<GameObject>();
+    public Transform pickSlot;
+    public Stack<GameObject> items;
     public GameObject nearObject;
-    
-    
-    
-
+    //public ItemManager itemManager;
 
     // 시작
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerManager = GetComponent<PlayerManager>();
-        
+        pickSlot = transform.GetChild(0).transform;
+        pickSlot.localPosition = transform.position;
     }
 
     // 업데이트
     void FixedUpdate()
     {
         PlayerMove();
-        if(isPickWood)
-        {
-            PickWoods();
-            isPickSteel = false;
-        }
-        if(isPickSteel)
-        {
-            PickSteels();
-            isPickWood = false;
-        }
+        if (isPick)
+            Pick(nearObject);
         
     }
 
@@ -75,54 +65,22 @@ public class PlayerController : MonoBehaviour
         
     }
     
-    public void PickWoods()
+    public void Pick(GameObject pickedObject)
     {
         
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                //아이템을 플레이어의 자식 객체로 포함
-                if(nearObject.name == "Wood")
-                    pickedWoods.Add(nearObject);
-                
-
-                for (int i = 0; i < pickedWoods.Count; i++)
-                {
-                    pickedWoods[i].transform.parent = transform;
-                    pickedWoods[i].transform.position = transform.localPosition;
-                }
-
-                inventoryManager.SavePlayerInventory();
-
-
-            }
-        nearObject = null;
-        
+       if (Input.GetButtonDown("Pick"))
+       {    //테스트
+            items.Push(pickedObject);
+            
+       }
+          
     }
 
-    public void PickSteels()
-    {
-        
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                //아이템을 플레이어의 자식 객체로 포함
-                if(nearObject.name == "Steel")
-                    pickedSteels.Add(nearObject);
-
-                for (int i = 0; i < pickedSteels.Count; i++)
-                {
-                    pickedSteels[i].transform.parent = transform;
-                    pickedSteels[i].transform.position = transform.localPosition;
-                }
-
-                inventoryManager.SavePlayerInventory();
-            }
-        nearObject = null;
-        
-    }
+    
 
     public void Drop()
-    {            
-      transform.DetachChildren();
+    {
+        isPick = false;
     }
     
 }
