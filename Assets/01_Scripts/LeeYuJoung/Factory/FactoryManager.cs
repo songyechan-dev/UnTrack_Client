@@ -45,11 +45,43 @@ public class FactoryManager : MonoBehaviour
     // 아이템 제작할 수 있는지 확인
     public void ItemProductionCheck()
     {
-        if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
-        {
-            Debug.Log($":::: {generateItem} 제작 시작 ::::");
-            StartCoroutine(ItemProduction());
-        }
+//         if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
+//         {
+
+//             if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1 + amount_2)
+//             {
+//                 StartCoroutine(ItemProduction());
+//                 IngredientSave(ingredient_1, amount_1 + amount_2);
+//             }
+//             else
+//             {
+//                 Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//             }
+//         }
+//         else
+//         {
+//             if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1)
+//             {
+//                 if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_2] >= amount_2)
+//                 {
+//                     StartCoroutine(ItemProduction());
+//                     IngredientSave(ingredient_1, amount_1);
+//                     IngredientSave(ingredient_2, amount_2);
+//                 }
+//                 else
+//                 {
+//                     Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//                 }
+//             }
+//             else
+//             {
+//                 Debug.Log(":::: 재료가 부족하여 아이템을 생성할 수 없습니다 ::::");
+//             }
+
+//             Debug.Log($":::: {generateItem} 제작 시작 ::::");
+//             StartCoroutine(ItemProduction());
+
+//        }
     }
 
     // 아이템 제작 실행
