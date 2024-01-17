@@ -60,7 +60,7 @@ public class FactoryManager : MonoBehaviour
     {
         if (ingredient_1.Equals(ingredient_2))
         {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1 + amount_2)
+            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1 + amount_2)
             {
                 StartCoroutine(ItemProduction());
                 IngredientSave(ingredient_1, amount_1 + amount_2);
@@ -72,9 +72,9 @@ public class FactoryManager : MonoBehaviour
         }
         else
         {
-            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_1] >= amount_1)
+            if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_1] >= amount_1)
             {
-                if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().storage[ingredient_2] >= amount_2)
+                if (GameObject.Find("InventoryManager").GetComponent<InventoryManager>().playerStorage[ingredient_2] >= amount_2)
                 {
                     StartCoroutine(ItemProduction());
                     IngredientSave(ingredient_1, amount_1);
