@@ -67,7 +67,7 @@ public class StateManager : MonoBehaviour
     // :::::: UI 확인용 버튼 나중에 삭제 ::::::
     public void OnUIExample(int _num)
     {
-        storageText.text = $"STORAGE\n TOTALVOLUME {_num} / 10";
+        storageText.text = $"STORAGE TOTALVOLUME {_num} / 10";
         woodText.text = $"Wood : {storages["Wood"]}";
         steelText.text = $"Steel : {storages["Steel"]}";
     }
