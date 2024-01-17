@@ -25,10 +25,15 @@ public class FactoryManager : MonoBehaviour
     public float generateTime;
     public string generateItem;
 
-    public float currentTime = 0;
+    public float heatingDeadTime = 45;
+    public float currentHeatingTime = 0;
+    public float currentGenerateTime = 0;
+
     public int currentItemNum = 0;
-    public const int itemMaxVolume = 5;
+    public int itemMaxVolume = 5;
+
     public bool isWorking = false;
+    public bool isHeating = false;
 
     void Start()
     {
@@ -39,7 +44,35 @@ public class FactoryManager : MonoBehaviour
     // 엔진이 일정 시간마다 불나는 이벤트
     public void EngineOverheating()
     {
+        Debug.Log($":::: {gameObject.name}에 불이 났습니다 ::::");
+        StartCoroutine(FactoryInFire());
+    }
 
+    IEnumerator FactoryInFire()
+    {
+        int loopNum = 0;
+        isHeating = true;
+
+        while (true)
+        {
+            // 아이템 제작 효과 구현
+
+            yield return new WaitForEndOfFrame();
+            currentHeatingTime += Time.deltaTime;
+
+            if (currentHeatingTime > heatingDeadTime)
+            {
+                // GameOver 처리
+                Debug.Log("::::: GAME OVER :::::");
+                currentHeatingTime = 0;
+                isHeating = false;
+                break;
+            }
+
+            // 무한 루프 방지 예외처리
+            if (loopNum++ > 10000)
+                throw new Exception("Infinite Loop");
+        }
     }
 
     // 아이템 제작할 수 있는지 확인
@@ -63,11 +96,11 @@ public class FactoryManager : MonoBehaviour
             // 아이템 제작 효과 구현
 
             yield return new WaitForEndOfFrame();
-            currentTime += Time.deltaTime;
+            currentGenerateTime += Time.deltaTime;
 
-            if (currentTime > generateTime)
+            if (currentGenerateTime > generateTime)
             {
-                currentTime = 0;
+                currentGenerateTime = 0;
                 isWorking = false;
                 break;
             }
