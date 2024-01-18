@@ -24,9 +24,9 @@ public class PlayerController : MonoBehaviour
     //public InventoryManager inventoryManager; 
     public bool isPick;
     
-    public bool isDrop;
-    public Transform pickSlot;
-    public Stack<GameObject> items;
+    
+    
+    public Stack<GameObject> items = new Stack<GameObject>();
     public GameObject nearObject;
     //public ItemManager itemManager;
 
@@ -35,17 +35,23 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         playerManager = GetComponent<PlayerManager>();
-        pickSlot = transform.GetChild(0).transform;
-        pickSlot.localPosition = transform.position;
+        
+        
     }
 
     // 업데이트
     void FixedUpdate()
     {
         PlayerMove();
-        if (isPick)
-            Pick(nearObject);
-        
+        if (Input.GetButtonDown("Pick"))
+        {    //테스트
+            PickCheck();
+            
+            playerManager.CollectIngredient();
+
+            nearObject.transform.parent = transform;
+        }
+        Debug.Log(items.Count);
     }
 
     //플레이어 이동
@@ -65,22 +71,14 @@ public class PlayerController : MonoBehaviour
         
     }
     
-    public void Pick(GameObject pickedObject)
+   void PickCheck()
     {
-        
-       if (Input.GetButtonDown("Pick"))
-       {    //테스트
-            items.Push(pickedObject);
+        if(items.Count >=1)
+        {
             
-       }
-          
-    }
-
-    
-
-    public void Drop()
-    {
-        isPick = false;
+            
+        }
+        return;
     }
     
 }
