@@ -50,6 +50,9 @@ public class MapTool : EditorWindow
 
     private TrackManager trackManager;
 
+
+
+
     public string csvFileName;
 
     [MenuItem("Tools/Map Tool")]

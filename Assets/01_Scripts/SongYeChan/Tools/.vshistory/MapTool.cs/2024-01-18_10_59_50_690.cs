@@ -50,6 +50,19 @@ public class MapTool : EditorWindow
 
     private TrackManager trackManager;
 
+
+    public void Example()
+    {
+        int y = 0;
+        int x = 0;
+        if (y == 0 && x == 0)
+        {
+            GameObject go = Instantiate(factoriesObjectPrefab);
+            go.AddComponent<FactoryManager>();
+            go.GetComponent<FactoryManager>().Init();
+        }
+    }
+
     public string csvFileName;
 
     [MenuItem("Tools/Map Tool")]

@@ -50,6 +50,9 @@ public class MapTool : EditorWindow
 
     private TrackManager trackManager;
 
+
+
+
     public string csvFileName;
 
     [MenuItem("Tools/Map Tool")]
@@ -175,6 +178,7 @@ public class MapTool : EditorWindow
                 DestroyImmediate(child.gameObject);
             }
         }
+        
     }
 
     private void CSVLoad()
