@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 using UnityEngine.UI;
+using LeeYuJoung;
 
 public class QuestManager : MonoBehaviour
 {
