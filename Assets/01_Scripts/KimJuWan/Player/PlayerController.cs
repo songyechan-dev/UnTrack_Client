@@ -23,12 +23,12 @@ public class PlayerController : MonoBehaviour
     PlayerManager playerManager;
     //public InventoryManager inventoryManager; 
     public bool isPick;
-    
-    
-    
-    public Stack<GameObject> items = new Stack<GameObject>();
-    public GameObject nearObject;
-    //public ItemManager itemManager;
+
+    public float currentTime = 0;
+    public float spaceTime = 1.5f;
+
+
+
 
     // 시작
     void Start()
@@ -43,15 +43,17 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMove();
-        if (Input.GetButtonDown("Pick"))
-        {    //테스트
-            PickCheck();
-            
-            playerManager.CollectIngredient();
-
-            nearObject.transform.parent = transform;
+        if (Input.GetButton("Pick"))
+        {
+            currentTime += Time.deltaTime;
         }
-        Debug.Log(items.Count);
+        if (Input.GetButtonUp("Pick"))
+        {
+            playerManager.CollectIngredient();
+            currentTime = 0;
+        }
+
+        
     }
 
     //플레이어 이동
@@ -71,14 +73,6 @@ public class PlayerController : MonoBehaviour
         
     }
     
-   void PickCheck()
-    {
-        if(items.Count >=1)
-        {
-            
-            
-        }
-        return;
-    }
+   
     
 }
