@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapInfo : MonoBehaviour
+public static class MapInfo
 {
-    // 시작
-    void Start()
+    enum Type
     {
-        
+        PLANE = 0,
+        OBSTACLE = 1,
+        PLAYER = 2,
+        TRACK = 3,
+        FiNISH_TRACK = 4,
+        FACTORY = 5,
+        STORAGE = 6,
+        ENGINE = 7
     }
-
-    // 업데이트
-    void Update()
-    {
-        
-    }
+    public static string mapDataCsvName = "MapData";
+    public static float objScale = 0.1f;
+    public static Vector3 startPosition = Vector3.zero;
+    public static Vector3 endPosition = Vector3.zero;
+    public static Vector3 startTrackRotation;
+    public static Vector3 endTrackRotation;
+    public static string startTrackYRotationInfoFileName = "StartTrackYRotationInfo";
 }

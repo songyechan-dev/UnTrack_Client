@@ -54,7 +54,7 @@ public class TrackManager : MonoBehaviour
                         leftTrackInfo.SetMyDirection(TrackInfo.MyDirection.RIGHT, new Vector3(0, 90f, 0));
                         _trackInfo.SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 90f, 0));
                         _trackInfo.isElectricityFlowing = true;
-                        if (leftTrackInfo.isElectricityFlowing)
+                        if (leftTrackInfo.isElectricityFlowing && !leftTrackInfo.isFinishedTrack)
                         {
                             electricityFlowingList.Add(leftHit.transform);
                         }
@@ -75,7 +75,7 @@ public class TrackManager : MonoBehaviour
                         _trackInfo.SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, -90f, 0));
                         _trackInfo.isElectricityFlowing = true;
 
-                        if (rightTrackInfo.isElectricityFlowing)
+                        if (rightTrackInfo.isElectricityFlowing && !rightTrackInfo.isFinishedTrack)
                         {
                             electricityFlowingList.Add(rightHit.transform);
                         }
@@ -96,7 +96,7 @@ public class TrackManager : MonoBehaviour
                         _trackInfo.SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 180f, 0));
                         _trackInfo.isElectricityFlowing = true;
 
-                        if (forwardTrackInfo.isElectricityFlowing)
+                        if (forwardTrackInfo.isElectricityFlowing && !forwardTrackInfo.isFinishedTrack)
                         {
                             electricityFlowingList.Add(forwardHit.transform);
                         }
@@ -117,7 +117,7 @@ public class TrackManager : MonoBehaviour
                         _trackInfo.SetMyDirection(TrackInfo.MyDirection.BACK, new Vector3(0, 0, 0));
                         _trackInfo.isElectricityFlowing = true;
 
-                        if (backTrackInfo.isElectricityFlowing)
+                        if (backTrackInfo.isElectricityFlowing && !backTrackInfo.isFinishedTrack)
                         {
                             electricityFlowingList.Add(backTrackInfo.transform);
                         }
