@@ -41,9 +41,9 @@ public class MapTool : EditorWindow
     private GameObject trackObject = null;
     private GameObject factoriesObjectPrefab = null;
     private TextAsset mapCSV;
-    private TextAsset trackYRotationInfoCSV;
+    private TextAsset startTrackYRotationInfoCSV;
 
-    private Dictionary<string, float> rotationInfoDict = new Dictionary<string, float>();
+    private Dictionary<int, int> rotationInfoDict = new Dictionary<int, int>();
 
     private int defaultStartTrackZ;
     private int defaultStartTrackX;
@@ -62,9 +62,6 @@ public class MapTool : EditorWindow
 
     private float startTrackYRotation_CSV;
     private float endTrackYRotation_CSV;
-
-    private string startTrackYRotationKeyName = "startTrackYRotation";
-    private string endTrackYRotationKeyName = "endTrackYRotation";
 
     private TrackManager trackManager;
 
@@ -113,7 +110,7 @@ public class MapTool : EditorWindow
             trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
             objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
             mapCSV = (TextAsset)EditorGUILayout.ObjectField("Map Data:", mapCSV, typeof(TextAsset), false);
-            trackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("Track Y Rotation Info CSV:", trackYRotationInfoCSV, typeof(TextAsset), false);
+            startTrackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("startTrackYRotationInfoCSV:", startTrackYRotationInfoCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planePrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planePrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
@@ -182,12 +179,12 @@ public class MapTool : EditorWindow
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
                     if (mapInfo[i][j] == 3)
                     {
-                        trackObject.transform.localEulerAngles= new Vector3(0, rotationInfoDict["startTrackYRotation"],0);
+                        trackObject.transform.localEulerAngles= new Vector3(0,startTrackYRotation,0);
                         trackManager.finalTrack = trackObject;
                     }
                     else
                     {
-                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict["endTrackYRotation"], 0);
+                        Debug.Log("호출됨");
                         trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
                     }
                 }
@@ -243,21 +240,32 @@ public class MapTool : EditorWindow
 #endif
             return;
         }
-        rotationInfoDict.Clear();
-        string[] rotationLines = trackYRotationInfoCSV.text.Split('\n');
-        for (int i = 0; i < rotationLines.Length; i++)
+
+        if (startTrackYRotationInfoCSV != null)
         {
-            string[] values = rotationLines[i].Split(',');
-            if (values.Length >= 2)
+            rotationInfoDict.Clear();
+            string[] lines = startTrackYRotationInfoCSV.text.Split('\n');
+            foreach (string line in lines)
             {
-                string key = values[0];
-                float value = float.Parse(values[1]);
-                rotationInfoDict.Add(key, value);
+                string[] values = line.Split(',');
+                if (values.Length >= 2)
+                {
+                    int startRotation = int.Parse(values[0]);
+                    int endRotation = int.Parse(values[1]);
+                    rotationInfoDict.Add(startRotation, endRotation);
+                }
+                else
+                {
+                    Debug.LogError("Invalid CSV format: " + line);
+                }
             }
-            else
-            {
-                Debug.LogError("CSV Format 이상함: " + rotationLines[i]);
-            }
+        }
+        else
+        {
+#if UNITY_EDITOR
+            EditorUtility.DisplayDialog("오류!", "MapData 파일을 불러와 주세요.", "OK");
+#endif
+            return;
         }
     }
 

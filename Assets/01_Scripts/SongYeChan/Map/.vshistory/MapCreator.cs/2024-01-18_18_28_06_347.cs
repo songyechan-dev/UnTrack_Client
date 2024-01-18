@@ -21,9 +21,6 @@ public class MapCreator : MonoBehaviour
     private Vector3 startTrackRotation = MapInfo.startTrackRotation;
     private Vector3 endTrackRotation = MapInfo.endTrackRotation;
 
-    public static string startTrackYRotationKeyName = MapInfo.startTrackYRotationKeyName;
-    public static string endTrackYRotationKeyName = MapInfo.endTrackYRotationKeyName;
-
     private int round =1;
 
     [Header("Prefabs")]
