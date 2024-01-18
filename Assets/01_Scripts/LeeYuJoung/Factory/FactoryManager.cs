@@ -35,7 +35,7 @@ public class FactoryManager : MonoBehaviour
     public bool isWorking = false;
     public bool isHeating = false;
 
-    void Start()
+    public void Init()
     {
         if (factoryType == FACTORYTYPE.MACHINE)
             FactoryJsonLoad(dataPath);
