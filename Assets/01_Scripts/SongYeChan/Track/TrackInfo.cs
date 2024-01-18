@@ -22,6 +22,8 @@ public class TrackInfo : MonoBehaviour
         RIGHT = 3,
     }
 
+    public bool isFinishedTrack = false;
+
     [Header("")]
     [SerializeField]
     public Transform leftTrack;
@@ -91,8 +93,6 @@ public class TrackInfo : MonoBehaviour
                 }
             }
         }
-
-
     }
 
     //TODO: 트러블 슈팅 - 각도 이슈(0,90,180,-90 각도가 정확히 나오지가 않아서 수정함)

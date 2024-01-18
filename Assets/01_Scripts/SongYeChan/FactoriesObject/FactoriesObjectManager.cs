@@ -77,18 +77,27 @@ public class FactoriesObjectManager : MonoBehaviour
             {
                 if (hit.transform.CompareTag(tagToBeDetected))
                 {
-                    myState = MyState.MOVE;
-                    if (hit.transform.localRotation.eulerAngles.y != transform.localRotation.eulerAngles.y)
+                    if (hit.transform.GetComponent<TrackInfo>().isFinishedTrack)
                     {
-                        if (coroutine == null)
+                        myState = MyState.STOP;
+                        GameManager.Instance().GameClear();
+                    }
+                    else
+                    {
+                        myState = MyState.MOVE;
+                        if (hit.transform.localRotation.eulerAngles.y != transform.localRotation.eulerAngles.y)
                         {
-                            Turn(hit.transform);
-                        }
-                        else
-                        {
-                            return;
+                            if (coroutine == null)
+                            {
+                                Turn(hit.transform);
+                            }
+                            else
+                            {
+                                return;
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -165,9 +174,11 @@ public class FactoriesObjectManager : MonoBehaviour
     /// </summary>
     /// <param name="round">현재난이도</param>
     /// <param name="meter">현재 미터</param>
-    public void Init(int round, float meter)
+    public void Init()
     {
         int step = 0;
+        int meter = GameManager.Instance().GetRound();
+        int round = GameManager.Instance().GetRound();
         if (meter < 0.3f)
         {
             if (round == 1)

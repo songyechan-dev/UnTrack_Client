@@ -28,7 +28,7 @@ public class MapTool : EditorWindow
     private float objScale;
     private Vector3 startPosition;
 
-    private GameObject planPrefab;
+    private GameObject planePrefab;
     private GameObject obPrefab;
     private GameObject trackPrefab;
 
@@ -36,7 +36,7 @@ public class MapTool : EditorWindow
 
     private List<List<int>> mapInfo = new List<List<int>>();
 
-    private GameObject planObject = null;
+    private GameObject planeObject = null;
     private GameObject obObject = null;
     private GameObject trackObject = null;
     private GameObject factoriesObjectPrefab = null;
@@ -48,9 +48,19 @@ public class MapTool : EditorWindow
     private int defaultEndTrackZ;
     private int defaultEndTrackX;
 
+    private int finishStartTrackZ;
+    private int finishStartTrackX;
+
+    private int finishEndTrackZ;
+    private int finishEndTrackX;
+
+    private float startTrackYRotation;
+    private float endTrackYRotation;
+
     private TrackManager trackManager;
 
-    public string csvFileName;
+    private string csvFileName;
+    private string rotationInfoFileName;
 
     [MenuItem("Tools/Map Tool")]
     public static void MapToolEditor()
@@ -66,13 +76,24 @@ public class MapTool : EditorWindow
         {
             width = EditorGUILayout.IntField("맵 전체 가로길이:", width);
             height = EditorGUILayout.IntField("맵 전체 세로길이:", height);
+            EditorGUILayout.Space();
             defaultStartTrackZ = EditorGUILayout.IntField("Default Track Start Z:", defaultStartTrackZ);
             defaultStartTrackX = EditorGUILayout.IntField("Default Track Start X:", defaultStartTrackX);
 
             defaultEndTrackZ = EditorGUILayout.IntField("Default Track End Z:", defaultEndTrackZ);
             defaultEndTrackX = EditorGUILayout.IntField("Default Track End X:", defaultEndTrackX);
+            EditorGUILayout.Space();
+            finishStartTrackZ = EditorGUILayout.IntField("Finish Track Start Z:", finishStartTrackZ);
+            finishStartTrackX = EditorGUILayout.IntField("Finish Track Start X:", finishStartTrackX);
 
+            finishEndTrackZ = EditorGUILayout.IntField("Finish Track End Z:", finishEndTrackZ);
+            finishEndTrackX = EditorGUILayout.IntField("Finish Track End X:", finishEndTrackX);
+            EditorGUILayout.Space();
+            startTrackYRotation = EditorGUILayout.FloatField("Start TrackY Rotation:", startTrackYRotation);
+            endTrackYRotation = EditorGUILayout.FloatField("End TrackY Rotation:", endTrackYRotation);
+            EditorGUILayout.Space();
             csvFileName = EditorGUILayout.TextField("MapData FileName", csvFileName);
+            rotationInfoFileName = EditorGUILayout.TextField("rotationInfoFileName", rotationInfoFileName);
             if (GUILayout.Button("Map Data Create"))
             {
                 MapDataCreate();
@@ -84,7 +105,7 @@ public class MapTool : EditorWindow
             objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
             mapCSV = (TextAsset)EditorGUILayout.ObjectField("Map Data:", mapCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
-            planPrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planPrefab, typeof(GameObject), false);
+            planePrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planePrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
             trackPrefab = (GameObject)EditorGUILayout.ObjectField("Track Prefab:", trackPrefab, typeof(GameObject), false);
             factoriesObjectPrefab = (GameObject)EditorGUILayout.ObjectField("factoriesObjectPrefab:", factoriesObjectPrefab, typeof(GameObject), false);
@@ -124,10 +145,10 @@ public class MapTool : EditorWindow
         {
             for (int j = 0; j < mapX; j++)
             {
-                planObject = Instantiate(planPrefab, mapParent);
-                planObject.tag = "Plane";
-                planObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
-                planObject.transform.localScale = new Vector3(objScale, objScale, objScale);
+                planeObject = Instantiate(planePrefab, mapParent);
+                planeObject.tag = "Plane";
+                planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
+                planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
                 if (mapInfo[i][j] == 1)
                 {
                     prevCreatedYPos = 0;
@@ -135,12 +156,12 @@ public class MapTool : EditorWindow
                     for (int k = 0; k < yCount; k++) 
                     {
                         obObject = Instantiate(obPrefab, mapParent);
-                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
+                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
                         obObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                         prevCreatedYPos = obObject.transform.position.y;
                     }
                 }
-                else if (mapInfo[i][j] == 3)
+                else if (mapInfo[i][j] == 3 || mapInfo[i][j] == 4)
                 {
                     trackObject = Instantiate(trackPrefab, mapParent);
                     trackObject.AddComponent<TrackInfo>();
@@ -149,7 +170,15 @@ public class MapTool : EditorWindow
                     trackObject.tag = "Track";
                     trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
-                    trackManager.finalTrack = trackObject;
+                    if (mapInfo[i][j] == 3)
+                    {
+                        trackManager.finalTrack = trackObject;
+                    }
+                    else
+                    {
+                        Debug.Log("호출됨");
+                        trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
+                    }
                 }
                 x++;
             }
@@ -203,14 +232,14 @@ public class MapTool : EditorWindow
 #endif
             return;
         }
-
-
     }
 
     private void MapDataCreate()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, csvFileName);
+        string mapDataFilePath = Path.Combine(Application.streamingAssetsPath, csvFileName);
+        string startTrackRotationInfoFilePath = Path.Combine(Application.streamingAssetsPath, rotationInfoFileName);
         string content = "";
+        string rotationInfo = $"startTrackYRotation,{startTrackYRotation}\nendTrackYRotation,{endTrackYRotation}";
         string mapInfo = "0";
 
         int randomXcount = 0;
@@ -252,12 +281,17 @@ public class MapTool : EditorWindow
                         mapInfo = "1";
                     }
                 }
+                //출발Track
                 if ((x >= defaultStartTrackX && x <= defaultEndTrackX) && (y >= defaultStartTrackZ && y <= defaultEndTrackZ))
                 {
                     mapInfo = "3";
                 }
 
-
+                //도착Track
+                if ((x >= finishStartTrackX && x <= finishEndTrackX) && (y >= finishStartTrackZ && y <= finishEndTrackZ))
+                {
+                    mapInfo = "4";
+                }
                 if (x == 0)
                 {
                     content += mapInfo;
@@ -273,7 +307,8 @@ public class MapTool : EditorWindow
             }
         }
 
-        File.WriteAllText(filePath, content);
+        File.WriteAllText(mapDataFilePath, content);
+        File.WriteAllText(startTrackRotationInfoFilePath, rotationInfo);
         AssetDatabase.Refresh();
     }
 
