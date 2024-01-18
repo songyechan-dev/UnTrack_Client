@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
         IDLE = 0,
         WALK,
         PICKUP,
+        DROP,
         AX,
         PICK
     }
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     //public InventoryManager inventoryManager; 
     public bool isPick;
 
-    public float currentTime = 0;
+    public float currentTime = 0f;
     public float spaceTime = 1.5f;
 
 
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMove();
+        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정)
         if (Input.GetButton("Pick"))
         {
             currentTime += Time.deltaTime;

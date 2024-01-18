@@ -36,14 +36,13 @@ public class InventoryManager : MonoBehaviour
 
         if(items.Count > 0)
             _item.transform.position = items.Peek().transform.position + Vector3.up;
-        if(items.Count <= 0)
-            _item.transform.position = transform.position;
+        
         items.Push(_item);
     }
 
-    public void DroppedSlotout()
+    public GameObject DroppedSlotout()
     {
-        //TODO
+        return items.Pop();
     }
 }
 
