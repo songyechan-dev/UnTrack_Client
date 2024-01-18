@@ -113,7 +113,7 @@ public class MapTool : EditorWindow
             trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
             objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
             mapCSV = (TextAsset)EditorGUILayout.ObjectField("Map Data:", mapCSV, typeof(TextAsset), false);
-            trackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("Track Y Rotation Info CSV:", trackYRotationInfoCSV, typeof(TextAsset), false);
+            trackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("startTrackYRotationInfoCSV:", trackYRotationInfoCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planePrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planePrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);

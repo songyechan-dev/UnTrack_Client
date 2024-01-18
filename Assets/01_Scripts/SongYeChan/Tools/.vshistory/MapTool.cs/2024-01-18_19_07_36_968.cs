@@ -41,7 +41,7 @@ public class MapTool : EditorWindow
     private GameObject trackObject = null;
     private GameObject factoriesObjectPrefab = null;
     private TextAsset mapCSV;
-    private TextAsset trackYRotationInfoCSV;
+    private TextAsset startTrackYRotationInfoCSV;
 
     private Dictionary<string, float> rotationInfoDict = new Dictionary<string, float>();
 
@@ -62,9 +62,6 @@ public class MapTool : EditorWindow
 
     private float startTrackYRotation_CSV;
     private float endTrackYRotation_CSV;
-
-    private string startTrackYRotationKeyName = "startTrackYRotation";
-    private string endTrackYRotationKeyName = "endTrackYRotation";
 
     private TrackManager trackManager;
 
@@ -113,7 +110,7 @@ public class MapTool : EditorWindow
             trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
             objScale = EditorGUILayout.FloatField("맵 타일 사이즈 :", objScale);
             mapCSV = (TextAsset)EditorGUILayout.ObjectField("Map Data:", mapCSV, typeof(TextAsset), false);
-            trackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("Track Y Rotation Info CSV:", trackYRotationInfoCSV, typeof(TextAsset), false);
+            startTrackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("startTrackYRotationInfoCSV:", startTrackYRotationInfoCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planePrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planePrefab, typeof(GameObject), false);
             obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
@@ -243,20 +240,25 @@ public class MapTool : EditorWindow
 #endif
             return;
         }
+
         rotationInfoDict.Clear();
-        string[] rotationLines = trackYRotationInfoCSV.text.Split('\n');
-        for (int i = 0; i < rotationLines.Length; i++)
+        string[] lines = startTrackYRotationInfoCSV.text.Split('\n');
+        for (int i = 0; i < lines.Length; i += 2) // 두 개씩 건너뛰면서 처리
         {
-            string[] values = rotationLines[i].Split(',');
-            if (values.Length >= 2)
+            string[] values1 = lines[i].Split(',');
+            string[] values2 = lines[i + 1].Split(',');
+            if (values1.Length >= 2 && values2.Length >= 2)
             {
-                string key = values[0];
-                float value = float.Parse(values[1]);
-                rotationInfoDict.Add(key, value);
+                string startRotationKey1 = "startTrackYRotation";
+                float endRotation1 = float.Parse(values1[1]);
+                string startRotationKey2 = "endTrackYRotation";
+                float endRotation2 = float.Parse(values2[1]);
+                rotationInfoDict.Add(startRotationKey1, endRotation1);
+                rotationInfoDict.Add(startRotationKey2, endRotation2);
             }
             else
             {
-                Debug.LogError("CSV Format 이상함: " + rotationLines[i]);
+                Debug.LogError("Invalid CSV format: " + lines[i]);
             }
         }
     }

@@ -22,6 +22,6 @@ public static class MapInfo
     public static Vector3 startTrackRotation;
     public static Vector3 endTrackRotation;
     public static string startTrackYRotationInfoFileName = "StartTrackYRotationInfo";
-    public static string startTrackYRotationKeyName = "startTrackYRotation";
-    public static string endTrackYRotationKeyName = "endTrackYRotation";
+    private string startTrackYRotationKeyName = "startTrackYRotation";
+    private string endTrackYRotationKeyName = "endTrackYRotation";
 }
