@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using SimpleJSON;
 using System;
+using LeeYuJoung;
 
 public class FactoryManager : MonoBehaviour
 {
@@ -16,8 +17,6 @@ public class FactoryManager : MonoBehaviour
     public FACTORYTYPE factoryType;
 
     public string dataPath;
-    public int machineType;
-
     public string ingredient_1;
     public int amount_1;
     public string ingredient_2;
@@ -35,10 +34,14 @@ public class FactoryManager : MonoBehaviour
     public bool isWorking = false;
     public bool isHeating = false;
 
+    public void Start()
+    {
+        Init();
+    }
+
     public void Init()
     {
-        if (factoryType == FACTORYTYPE.MACHINE)
-            FactoryJsonLoad(dataPath);
+        FactoryJsonLoad(dataPath);
     }
 
     // 엔진이 일정 시간마다 불나는 이벤트
@@ -151,11 +154,19 @@ public class FactoryManager : MonoBehaviour
 
         var jsonData = JSON.Parse(jsonStr);
 
-        ingredient_1 = jsonData[machineType]["INGREDIENT_1"];
-        amount_1 = (int)jsonData[machineType]["AMOUNT_1"];
-        ingredient_2 = jsonData[machineType]["INGREDIENT_2"];
-        amount_2 = (int)jsonData[machineType]["AMOUNT_2"];
-        generateTime = (int)jsonData[machineType]["GENERATE_TIME"];
-        generateItem = jsonData[machineType]["GENERATE"];
+        for(int i = 0; i < jsonData.Count; i++)
+        {
+            if (jsonData[i]["TYPE"].Equals(gameObject.name))
+            {
+                ingredient_1 = jsonData[i]["INGREDIENT_1"];
+                amount_1 = (int)jsonData[i]["AMOUNT_1"];
+                ingredient_2 = jsonData[i]["INGREDIENT_2"];
+                amount_2 = (int)jsonData[i]["AMOUNT_2"];
+                generateTime = (int)jsonData[i]["GENERATE_TIME"];
+                generateItem = jsonData[i]["GENERATE"];
+
+                break;
+            }
+        }
     }
 }
