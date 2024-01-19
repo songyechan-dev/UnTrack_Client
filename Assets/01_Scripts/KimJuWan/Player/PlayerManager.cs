@@ -6,13 +6,13 @@ using static UnityEditor.Progress;
 
 public class PlayerManager : MonoBehaviour
 {
-    
+
     PlayerController playerController;
     private InventoryManager inventoryManager;
     public Transform pickSlot;
     public Transform droppedSlotPrefab;
     float castRange = 1f;
-    
+
     public ItemManager itemManager;
 
 
@@ -20,27 +20,21 @@ public class PlayerManager : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         inventoryManager = GetComponentInChildren<InventoryManager>();
-        
+
     }
 
-    // 업데이트
-    void FixedUpdate()
-    {
-        Debug.Log(inventoryManager.items.Count);
-
-        
-    }
+   
 
     //플레이어의 정면에 장애물이 있는 경우 파괴
     public void CollectIngredient()
     {
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("PickSlot"));
         RaycastHit hit;
-        
+
         if (Physics.Raycast(transform.position, transform.forward, out hit, castRange, layerMask))
         {
-            
-            
+
+
             switch (hit.transform.tag)
             {
                 case "Obstacle":
@@ -53,38 +47,30 @@ public class PlayerManager : MonoBehaviour
                         castRange = 2f;
                         inventoryManager.SaveInventory(hit.transform.gameObject);
                         hit.transform.SetParent(pickSlot.transform);
+                        pickSlot.GetChild(0).transform.position = pickSlot.position;
 
                     }
                     else
                     {
-                        if(inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
-                            inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.STEEL))
+                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
+                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                         {
-                            if (inventoryManager.items.Peek().GetComponent<ItemManager>().itemType
-                            .Equals(hit.transform.GetComponent<ItemManager>().itemType))
+                            if (inventoryManager.SaveInventory(hit.transform.gameObject))
                             {
-                                if (inventoryManager.items.Count < 4)
-                                {
-
-                                    inventoryManager.SaveInventory(hit.transform.gameObject);
-                                    hit.transform.position = pickSlot.position + new Vector3(0, 1f, 0);
-                                    hit.transform.SetParent(pickSlot.transform);
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("Can't Carry items!!");
-                                
+                                hit.transform.SetParent(pickSlot.transform);
+                                pickSlot.GetChild(inventoryManager.itemNum-1).transform.position = 
+                                    pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
                             }
                         }
-                        
                             
-                    }  
+                        
+                    }
                     break;
                 case "Factory":
                     break;
                 case "Storage":
-                    if (inventoryManager.items.Count > 0)
+                    if (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
+                        inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                     {
                         playerController.isPick = false;
                         castRange = 1f;
@@ -92,84 +78,63 @@ public class PlayerManager : MonoBehaviour
                         for (int i = 0; i < pickSlot.transform.childCount; i++)
                         {
                             Destroy(pickSlot.transform.GetChild(i).gameObject);
+                            inventoryManager.OutInventory();
                         }
-                        inventoryManager.OutInventory();
+                        
                     }
                     break;
                 case "DroppedTrack":
                     break;
                 case "DroppedSlot":
-                    InventoryManager dropSlot = hit.transform.GetComponent<InventoryManager>();
-                    
-                    if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
+                    InventoryManager droppedSlot = hit.transform.GetComponent<InventoryManager>();
+
+                    if(playerController.currentTime>=playerController.spaceTime && playerController.isPick)
                     {
-                        // 아이템 더미 위에 더 올리기 
-                        Debug.Log("::: 더 올려 놓기 :::");
-                        if (inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(dropSlot.items.Peek().GetComponent<ItemManager>().itemType))
+
+                        //바닥에 놓은 아이템들 위에 쌓기
+                        if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                         {
                             playerController.isPick = false;
-                            castRange = 1.0f;
-                        int num = pickSlot.transform.childCount;
-
-                        for (int i = 0; i < num; i++)
-                        {
-                            dropSlot.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                            pickSlot.transform.GetChild(0).SetParent(dropSlot.transform);
+                            castRange = 1f;
+                            int n = pickSlot.transform.childCount;
+                            for (int i = 0; i < n; i++)
+                            {
+                                droppedSlot.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+                                pickSlot.transform.GetChild(0).SetParent(droppedSlot.transform);
+                                droppedSlot.transform.GetChild(droppedSlot.itemNum - 1).transform.position =
+                                    droppedSlot.transform.position + (Vector3.up * (droppedSlot.itemNum - 1));
+                            }
+                            inventoryManager.OutInventory();
                         }
-
-                        inventoryManager.OutInventory();
                     }
-                        else
-                    {
-                        Debug.Log(":::: 같은 아이템이 아니라 올릴 수 없습니다 ::::");
-                    }
-
-            }
                     else
                     {
-                        // 아이템 더미 위에서 하나 가져오기
-                        Debug.Log("::: 가져 오기 :::");
-                        playerController.isPick = true;
                         if (playerController.isPick)
                         {
-                            if (inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(dropSlot.items.Peek().GetComponent<ItemManager>().itemType))
+                            if(inventoryManager.itemType.Equals(droppedSlot.itemType))
                             {
-                                if (inventoryManager.items.Count < 4)
+                                if (inventoryManager.itemNum < 4)
                                 {
-                                    int num = pickSlot.transform.childCount;
-
-                                    dropSlot.DroppedSlotout().transform.SetParent(pickSlot.transform);
-                                    inventoryManager.SaveInventory(pickSlot.GetChild(num).gameObject);
+                                    inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
+                                    hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
+                                    pickSlot.GetChild(inventoryManager.itemNum - 1).transform.position = pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
+                                    droppedSlot.DroppedSlotOut();
                                 }
-                                else
-                                {
-                                    
-                                }
-                            }
-                            else
-                            {
-                                //TODO 김주완 0118: 다른 종류의 아이템을 들려고 할 때 경고 문구 출력 -> UI추가
                             }
                         }
                         else
                         {
                             playerController.isPick = true;
-                            castRange = 2f;
+                            castRange = 2.0f;
 
-                            if (inventoryManager.items.Count < 4)
-                            {
-                                int num = pickSlot.transform.childCount;
-
-                                dropSlot.DroppedSlotout().transform.SetParent(pickSlot.transform);
-                                inventoryManager.SaveInventory(pickSlot.GetChild(num).gameObject);
-                            }
-                            else{
-                                
-                            }
+                            inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
+                            hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
+                            pickSlot.GetChild(0).transform.position = pickSlot.position;
+                            droppedSlot.DroppedSlotOut();
                         }
+                        if (droppedSlot.itemNum <= 0)
+                            Destroy(hit.transform.gameObject);
                     }
-                    if(dropSlot.items.Count<=0)
-                        Destroy(dropSlot.gameObject);
                     break;
             }
         }
@@ -179,7 +144,7 @@ public class PlayerManager : MonoBehaviour
 
             if (playerController.isPick)
             {
-                if (inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.items.Peek().GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.STEEL))
+                if (pickSlot.GetComponentInChildren<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.WOOD) || pickSlot.GetComponentInChildren<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                 {
                     playerController.isPick = false;
                     castRange = 1.0f;
@@ -192,6 +157,8 @@ public class PlayerManager : MonoBehaviour
                     {
                         _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                         pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
+                        ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
+
                     }
 
                     inventoryManager.OutInventory();
@@ -201,9 +168,54 @@ public class PlayerManager : MonoBehaviour
                     playerController.isPick = false;
                     castRange = 1.0f;
                     pickSlot.transform.GetChild(0).SetParent(null);
-                    inventoryManager.OutInventory();
+                    inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
+                    inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+                    ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
                 }
             }
         }
     }
+
+
+
+    //플레이어가 바라보는 방향에 따라 아이템의 각도 변경
+    public void ObjectRotationCheck(GameObject _gameObject)
+    {
+        float _rotation = transform.rotation.eulerAngles.y;
+        Debug.Log(_rotation);
+
+        if (_rotation >= 0.0f && _rotation < 85.0f)
+        {
+            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        }
+        else if (_rotation >= 85.0f && _rotation < 175.0f)
+        {
+            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+        }
+        else if (_rotation >= 175.0f && _rotation < 265.0f)
+        {
+            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+        }
+        else if (_rotation >= 265.0f && _rotation < 360.0f)
+        {
+            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
+        }
+    }
+    //바닥 UI 인식
+    //public void ButtonClick()
+    //{
+    //    //TODO 김주완 0119 : UI Manager에서 UI 기능들 끌어다 쓰게 하기
+    //    RaycastHit hit;
+    //    if(Physics.Raycast(transform.position, Vector3.down, out hit, castRange))
+    //    {
+    //        Debug.Log("버튼입니다...");
+    //            playerController.keyCode++;
+    //            if (playerController.keyCode > 2)
+    //            {
+    //                playerController.keyCode = 0;
+    //            }
+            
+    //    }
+        
+    //}
 }
