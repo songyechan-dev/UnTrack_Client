@@ -77,10 +77,21 @@ public class FactoriesObjectManager : MonoBehaviour
             {
                 if (hit.transform.CompareTag(tagToBeDetected))
                 {
+                    RaycastHit tempHit = new RaycastHit();
+                    if (Physics.Raycast(new Ray(transform.position, -transform.up), out tempHit))
+                    {
+                        if (tempHit.transform != null && tempHit.transform.GetComponent<TrackInfo>() != null && tempHit.transform.GetComponent<TrackInfo>().isFinishedTrack)
+                        {
+                            myState = MyState.STOP;
+                            GameManager.Instance().GameClear();
+                            return;
+                        }
+                    }
                     if (hit.transform.GetComponent<TrackInfo>().isFinishedTrack)
                     {
                         myState = MyState.STOP;
                         GameManager.Instance().GameClear();
+                        return;
                     }
                     else
                     {
@@ -97,7 +108,6 @@ public class FactoriesObjectManager : MonoBehaviour
                             }
                         }
                     }
-                    
                 }
                 else
                 {
@@ -177,7 +187,7 @@ public class FactoriesObjectManager : MonoBehaviour
     public void Init()
     {
         int step = 0;
-        int meter = GameManager.Instance().GetRound();
+        float meter = GameManager.Instance().GetMeter();
         int round = GameManager.Instance().GetRound();
         if (meter < 0.3f)
         {

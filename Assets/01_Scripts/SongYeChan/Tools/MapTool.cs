@@ -29,7 +29,8 @@ public class MapTool : EditorWindow
     private Vector3 startPosition;
 
     private GameObject planePrefab;
-    private GameObject obPrefab;
+    private GameObject obStonePrefab;
+    private GameObject obTreePrefab;
     private GameObject trackPrefab;
 
     private Transform mapParent;
@@ -37,7 +38,8 @@ public class MapTool : EditorWindow
     private List<List<int>> mapInfo = new List<List<int>>();
 
     private GameObject planeObject = null;
-    private GameObject obObject = null;
+    private GameObject obStoneObject = null;
+    private GameObject obTreeObject = null;
     private GameObject trackObject = null;
     private GameObject factoriesObjectPrefab = null;
     private TextAsset mapCSV;
@@ -116,7 +118,8 @@ public class MapTool : EditorWindow
             trackYRotationInfoCSV = (TextAsset)EditorGUILayout.ObjectField("Track Y Rotation Info CSV:", trackYRotationInfoCSV, typeof(TextAsset), false);
             mapParent = (Transform)EditorGUILayout.ObjectField("맵 부모:", mapParent, typeof(Transform), true);
             planePrefab = (GameObject)EditorGUILayout.ObjectField("Plan Prefab:", planePrefab, typeof(GameObject), false);
-            obPrefab = (GameObject)EditorGUILayout.ObjectField("OB Prefab:", obPrefab, typeof(GameObject), false);
+            obStonePrefab = (GameObject)EditorGUILayout.ObjectField("OB Stone Prefab:", obStonePrefab, typeof(GameObject), false);
+            obTreePrefab = (GameObject)EditorGUILayout.ObjectField("OB Tree Prefab:", obTreePrefab, typeof(GameObject), false);
             trackPrefab = (GameObject)EditorGUILayout.ObjectField("Track Prefab:", trackPrefab, typeof(GameObject), false);
             factoriesObjectPrefab = (GameObject)EditorGUILayout.ObjectField("factoriesObjectPrefab:", factoriesObjectPrefab, typeof(GameObject), false);
             if (GUILayout.Button("MapShow"))
@@ -159,18 +162,26 @@ public class MapTool : EditorWindow
                 planeObject.tag = "Plane";
                 planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
                 planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
+                //스톤
                 if (mapInfo[i][j] == 1)
                 {
                     prevCreatedYPos = 0;
                     int yCount = Random.Range(1, 5);
-                    for (int k = 0; k < yCount; k++) 
+                    for (int k = 0; k < yCount; k++)
                     {
-                        obObject = Instantiate(obPrefab, mapParent);
-                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
-                        obObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                        prevCreatedYPos = obObject.transform.position.y;
+                        obStoneObject = Instantiate(obStonePrefab, mapParent);
+                        obStoneObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
+                        obStoneObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                        prevCreatedYPos = obStoneObject.transform.position.y;
                     }
                 }
+                else if (mapInfo[i][j] == 2)
+                {
+                    obTreeObject = Instantiate(obTreePrefab, mapParent);
+                    obTreeObject.transform.position = new Vector3(x * objScale * 10, obTreePrefab.transform.localScale.y / 2, z * objScale * 10);
+                    obTreeObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                }
+
                 else if (mapInfo[i][j] == 3 || mapInfo[i][j] == 4)
                 {
                     trackObject = Instantiate(trackPrefab, mapParent);
@@ -182,12 +193,12 @@ public class MapTool : EditorWindow
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
                     if (mapInfo[i][j] == 3)
                     {
-                        trackObject.transform.localEulerAngles= new Vector3(0, rotationInfoDict["startTrackYRotation"],0);
+                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[startTrackYRotationKeyName], 0);
                         trackManager.finalTrack = trackObject;
                     }
                     else
                     {
-                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict["endTrackYRotation"], 0);
+                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[endTrackYRotationKeyName], 0);
                         trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
                     }
                 }
@@ -266,34 +277,42 @@ public class MapTool : EditorWindow
         string mapDataFilePath = Path.Combine(Application.streamingAssetsPath, csvFileName);
         string startTrackRotationInfoFilePath = Path.Combine(Application.streamingAssetsPath, rotationInfoFileName);
         string content = "";
-        string rotationInfo = $"startTrackYRotation,{startTrackYRotation}\nendTrackYRotation,{endTrackYRotation}";
+        string rotationInfo = $"{startTrackYRotationKeyName},{startTrackYRotation}\n{endTrackYRotationKeyName},{endTrackYRotation}";
         string mapInfo = "0";
 
         int randomXcount = 0;
         int originX = 0;
         int originY = 0;
         int randomYcount = 0;
-        bool isCreatedOb = false;
+        bool isCreatedObStone = false;
+        bool isCreatedObTree = false;
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
                 mapInfo = "0";
                 // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
-                if (!isCreatedOb)
+                if (!isCreatedObStone && !isCreatedObTree)
                 {
                     int randomCount = Random.Range(0, 50);
                     randomXcount = Random.Range(3, 7);
                     randomYcount = Random.Range(3, 7);
                     if (randomCount < 1)
                     {
-                        isCreatedOb = true;
+                        if (Random.Range(0, 2) == 0)
+                        {
+                            isCreatedObStone = true;
+                        }
+                        else
+                        {
+                            isCreatedObTree = true;
+                        }
                         originX = x;
                         originY = y;
                     }
                 }
 
-                if (isCreatedOb)
+                if (isCreatedObStone || isCreatedObTree)
                 {
                     if (y > (randomYcount + originY))
                     {
@@ -301,11 +320,12 @@ public class MapTool : EditorWindow
                         randomYcount = 0;
                         originX = 0;
                         originY = 0;
-                        isCreatedOb = false;
+                        isCreatedObStone = false;
+                        isCreatedObTree = false;
                     }
                     else if (x <= (randomXcount + originX) && x >= originX)
                     {
-                        mapInfo = "1";
+                        mapInfo = isCreatedObStone ? "1" : "2";
                     }
                 }
                 //출발Track
