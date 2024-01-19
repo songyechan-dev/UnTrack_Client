@@ -6,16 +6,25 @@ TagManager:
   tags:
   - Plane
   - Track
+  - Obstacle
+  - Player
+  - Item
+  - Factory
+  - DroppedTrack
+  - FactoriesObject
+  - Storage
+  - Engine
+  - DroppedSlot
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Water
   - Water
   - UI
   - 
   - 
-  - 
+  - PickSlot
   - 
   - 
   - 

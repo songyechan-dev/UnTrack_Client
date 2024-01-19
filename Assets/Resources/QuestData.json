@@ -1,0 +1,122 @@
+[
+ {
+  "ID": 1,
+  "CONTENT": "하나의 저장소에 목재 10개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Wood",
+  "PROGRESS_GOAL": 10,
+  "REWARD_VOLT": 1
+ },
+ {
+  "ID": 2,
+  "CONTENT": "하나의 저장소에 목재 15개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Wood",
+  "PROGRESS_GOAL": 15,
+  "REWARD_VOLT": 2
+ },
+ {
+  "ID": 3,
+  "CONTENT": "하나의 저장소에 목재 20개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Wood",
+  "PROGRESS_GOAL": 20,
+  "REWARD_VOLT": 3
+ },
+ {
+  "ID": 4,
+  "CONTENT": "하나의 저장소에 철재 10개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Steel",
+  "PROGRESS_GOAL": 10,
+  "REWARD_VOLT": 1
+ },
+ {
+  "ID": 5,
+  "CONTENT": "하나의 저장소에 철재 15개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Steel",
+  "PROGRESS_GOAL": 10,
+  "REWARD_VOLT": 2
+ },
+ {
+  "ID": 6,
+  "CONTENT": "하나의 저장소에 철재 20개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Steel",
+  "PROGRESS_GOAL": 20,
+  "REWARD_VOLT": 3
+ },
+ {
+  "ID": 7,
+  "CONTENT": "하나의 저장소에 철재 30개 저장하기",
+  "QUEST_TYPE": "Count",
+  "PROGRESS_TYPE": "Steel",
+  "PROGRESS_GOAL": 30,
+  "REWARD_VOLT": 4
+ },
+ {
+  "ID": 8,
+  "CONTENT": "10분 안에 도착지에 도달하기",
+  "QUEST_TYPE": "Time",
+  "PROGRESS_TYPE": "ElapsedTime",
+  "PROGRESS_GOAL": 600,
+  "REWARD_VOLT": 1
+ },
+ {
+  "ID": 9,
+  "CONTENT": "8분 안에 도착지에 도달하기",
+  "QUEST_TYPE": "Time",
+  "PROGRESS_TYPE": "ElapsedTime",
+  "PROGRESS_GOAL": 480,
+  "REWARD_VOLT": 2
+ },
+ {
+  "ID": 10,
+  "CONTENT": "6분 안에 도착지에 도달하기",
+  "QUEST_TYPE": "Time",
+  "PROGRESS_TYPE": "ElapsedTime",
+  "PROGRESS_GOAL": 360,
+  "REWARD_VOLT": 3
+ },
+ {
+  "ID": 11,
+  "CONTENT": "4분 안에 도착지에 도달하기",
+  "QUEST_TYPE": "Time",
+  "PROGRESS_TYPE": "ElapsedTime",
+  "PROGRESS_GOAL": 240,
+  "REWARD_VOLT": 4
+ },
+  {
+    "ID": 12,
+    "CONTENT": "레일 35개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 35,
+    "REWARD_VOLT": 1
+  },
+  {
+    "ID": 13,
+    "CONTENT": "레일 25개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 25,
+    "REWARD_VOLT": 2
+  },
+  {
+    "ID": 14,
+    "CONTENT": "레일 15개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 15,
+    "REWARD_VOLT": 3
+  },
+  {
+    "ID": 15,
+    "CONTENT": "레일 10개로 도착지에 도달하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Track",
+    "PROGRESS_GOAL": 10,
+    "REWARD_VOLT": 4
+  }
+]

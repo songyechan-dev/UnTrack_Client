@@ -4,15 +4,83 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    // ì‹œìž‘
-    void Start()
+    public ItemManager.ITEMTYPE itemType;
+    public int itemNum = 0;
+
+    public bool SaveInventory(GameObject _item)
     {
-        
+        ItemManager.ITEMTYPE _itemType = _item.GetComponent<ItemManager>().itemType;
+
+        if (itemNum <= 0)
+        {
+            _item.layer = LayerMask.NameToLayer("PickSlot");
+            itemType = _itemType;
+            itemNum += 1;
+            return true;
+        }
+        else
+        {
+            if (itemType == _itemType && itemNum < 4)
+            {
+                _item.layer = LayerMask.NameToLayer("PickSlot");
+                itemNum += 1;
+                return true;
+            }
+            else
+            {
+                Debug.Log("°°Àº ¾ÆÀÌÅÛ¸¸ µé¾î ¿Ã¸± ¼ö ÀÖÀ½...");
+                return false;
+            }
+        }
     }
 
-    // ì—…ë°ì´íŠ¸
-    void Update()
+    // ÇÃ·¹ÀÌ¾î ¼Õ¿¡¼­ ¾ÆÀÌÅÛ ³»·Á ³õÀ½
+    public void OutInventory()
     {
-        
+        itemNum = 0;
+    }
+
+    // ÇÃ·¹ÀÌ¾î ¼Õ¿¡¼­ ¾ÆÀÌÅÛ ³»·Á ³õÀ½
+    public void OutInventory(GameObject _item)
+    {
+        _item.layer = LayerMask.NameToLayer("Default");
+        itemNum = 0;
+    }
+
+    // ¹Ù´Ú¿¡ ÀÖ´Â ¾ÆÀÌÅÛ ´õ¹Ì¿¡ ¿Ã¸²
+    public bool DroppedSlotIn(GameObject _item)
+    {
+        ItemManager.ITEMTYPE _itemType = _item.GetComponent<ItemManager>().itemType;
+
+        if (itemNum <= 0)
+        {
+            _item.layer = LayerMask.NameToLayer("PickSlot");
+            itemType = _itemType;
+            itemNum += 1;
+            return true;
+        }
+        else
+        {
+            if (itemType == _itemType)
+            {
+                _item.layer = LayerMask.NameToLayer("PickSlot");
+                itemNum += 1;
+                return true;
+            }
+            else
+            {
+                Debug.Log("°°Àº ¾ÆÀÌÅÛ¸¸ µé¾î ¿Ã¸± ¼ö ÀÖÀ½...");
+                return false;
+            }
+        }
+    }
+
+    // ¹Ù´Ú¿¡ ÀÖ´Â ¾ÆÀÌÅÛ ´õ¹Ì¸¦ ´Ù½Ã µé¾î ¿Ã¸²
+    public void DroppedSlotOut()
+    {
+        if (itemNum > 0)
+        {
+            itemNum -= 1;
+        }
     }
 }
