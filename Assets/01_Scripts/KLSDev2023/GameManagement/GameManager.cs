@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Enum
+    public enum GameState 
+    {
+        GameStart = 0,
+        GameStop = 1,
+        GameClear = 2,
+        GameOver = 3,
+        GameEnd = 4
+    }
+    #endregion
+
     #region Value
     private int round = 1;
     private int finalRound = 5;
@@ -11,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private FactoriesObjectManager firstCreatedFactoriesObject;
     public MapCreator mapCreator;
+    public GameState gameState;
     #endregion
 
     #region Instance
@@ -69,6 +81,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameStart()
     {
+        gameState = GameState.GameStart;
         mapCreator.MapLoad();
     }
 
@@ -82,20 +95,26 @@ public class GameManager : MonoBehaviour
 
     public void GameClear()
     {
-        if (GetRound() < GetFinalRound())
+        if (gameState < GameState.GameClear)
         {
-            round++;
-            //upgrade 호출
-            Debug.Log("GameClear");
+            if (GetRound() < GetFinalRound())
+            {
+                round++;
+                //upgrade 씬호출
+                Debug.Log("GameClear");
+                gameState = GameState.GameClear;
+            }
+            else
+            {
+                GameEnd();
+            }
         }
-        else
-        {
-            GameEnd();
-        }
+        
     }
 
     public void GameEnd()
     {
+        gameState = GameState.GameEnd;
         Debug.Log("게임끝");
     }
 

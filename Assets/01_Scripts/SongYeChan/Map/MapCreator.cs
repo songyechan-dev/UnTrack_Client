@@ -1,6 +1,7 @@
 using GoogleSheetsToUnity.ThirdPary;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,20 +16,29 @@ public class MapCreator : MonoBehaviour
     private bool isMapCSVLoaded = false;
     private float objScale = MapInfo.objScale;
 
-    private string startTrackYRotationInfoFileName = MapInfo.startTrackYRotationInfoFileName;
+    private string trackYRotationInfoFileName = MapInfo.trackYRotationInfoFileName;
 
     private Vector3 startPosition = MapInfo.startPosition;
     private Vector3 startTrackRotation = MapInfo.startTrackRotation;
     private Vector3 endTrackRotation = MapInfo.endTrackRotation;
 
-    public static string startTrackYRotationKeyName = MapInfo.startTrackYRotationKeyName;
-    public static string endTrackYRotationKeyName = MapInfo.endTrackYRotationKeyName;
+    private string startTrackYRotationKeyName = MapInfo.startTrackYRotationKeyName;
+    private string endTrackYRotationKeyName = MapInfo.endTrackYRotationKeyName;
+
+    private int mapWidth = MapInfo.mapWidth;
+    private int mapHeight = MapInfo.mapHeight;
+
+    private Dictionary<string,float> rotationInfoDict = new Dictionary<string,float>();
 
     private int round =1;
 
+    private string content = "";
+    private string rotationInfo = $"{MapInfo.startTrackYRotationKeyName},{MapInfo.startTrackYRotation}\n{MapInfo.endTrackYRotationKeyName},{MapInfo.endTrackYRotation}";
+
     [Header("Prefabs")]
     public GameObject planePrefab;
-    public GameObject obPrefab;
+    public GameObject obStonePrefab;
+    public GameObject obTreePrefab;
     public GameObject trackPrefab;
     [Header("")]
     public TrackManager trackManager;
@@ -52,15 +62,96 @@ public class MapCreator : MonoBehaviour
         //DontDestroyOnLoad(this);
     }
 
+    private void MapDataCreate()
+    {
+        string mapInfo = "0";
+
+        int randomXcount = 0;
+        int originX = 0;
+        int originY = 0;
+        int randomYcount = 0;
+        bool isCreatedObStone = false;
+        bool isCreatedObTree = false;
+        for (int y = 0; y < mapHeight; y++)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                mapInfo = "0";
+                // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
+                if (!isCreatedObStone && !isCreatedObTree)
+                {
+                    int randomCount = Random.Range(0, 50);
+                    randomXcount = Random.Range(3, 7);
+                    randomYcount = Random.Range(3, 7);
+                    if (randomCount < 1)
+                    {
+                        if (Random.Range(0, 2) == 0)
+                        {
+                            isCreatedObStone = true;
+                        }
+                        else
+                        {
+                            isCreatedObTree = true;
+                        }
+                        originX = x;
+                        originY = y;
+                    }
+                }
+
+                if (isCreatedObStone || isCreatedObTree)
+                {
+                    if (y > (randomYcount + originY))
+                    {
+                        randomXcount = 0;
+                        randomYcount = 0;
+                        originX = 0;
+                        originY = 0;
+                        isCreatedObStone = false;
+                        isCreatedObTree = false;
+                    }
+                    else if (x <= (randomXcount + originX) && x >= originX)
+                    {
+                        mapInfo = isCreatedObStone ? "1" : "2";
+                    }
+                }
+                //출발Track
+                if ((x >= MapInfo.defaultStartTrackX && x <= MapInfo.defaultEndTrackX) && (y >= MapInfo.defaultStartTrackZ && y <= MapInfo.defaultEndTrackZ))
+                {
+                    mapInfo = "3";
+                }
+
+                //도착Track
+                if ((x >= MapInfo.finishStartTrackX && x <= MapInfo.finishEndTrackX) && (y >= MapInfo.finishStartTrackZ && y <= MapInfo.finishEndTrackZ))
+                {
+                    mapInfo = "4";
+                }
+                if (x == 0)
+                {
+                    content += mapInfo;
+                }
+                else
+                {
+                    content += $",{mapInfo}";
+                }
+            }
+            if (y < mapHeight - 1)
+            {
+                content += "\n";
+            }
+        }
+        Debug.Log(content);
+
+    }
+
+
+
     private IEnumerator CSVLoad()
     {
-        // TODO : 구글 드라이브에서 가져와야 함 (수정 필요 2024.01.18 송예찬 - DataManager 이용)
-        TextAsset mapCSV = Resources.Load<TextAsset>(MapInfo.mapDataCsvName + round.ToString());
-        mapInfo.Clear();
-
-        if (mapCSV != null)
+        MapDataCreate();
+        if (!string.IsNullOrEmpty(content))
         {
-            string[] lines = mapCSV.text.Split('\n');
+            string[] lines = content.Split('\n');
+            Debug.Log("length :::::::" +lines.Length);
             foreach (string line in lines)
             {
                 List<int> row = new List<int>();
@@ -73,12 +164,39 @@ public class MapCreator : MonoBehaviour
             }
             mapY = mapInfo.Count;
             mapX = mapInfo[0].Count;
-            isMapCSVLoaded = true; // 로딩이 완료되었음을 표시
         }
         else
         {
+            Debug.Log("로드 에러");
             yield return null; // 실패 시 종료
         }
+        if (!string.IsNullOrEmpty(rotationInfo))
+        {
+            Debug.Log("NotNull");
+            rotationInfoDict.Clear();
+            string[] rotationLines = rotationInfo.Split('\n');
+            for (int i = 0; i < rotationLines.Length; i++)
+            {
+                string[] values = rotationLines[i].Split(',');
+                if (values.Length >= 2)
+                {
+                    string key = values[0];
+                    float value = float.Parse(values[1]);
+                    rotationInfoDict.Add(key, value);
+                    isMapCSVLoaded = true;
+                }
+                else
+                {
+                    Debug.LogError("CSV Format 이상함: " + rotationLines[i]);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("로드 에러");
+            yield return null; // 실패 시 종료
+        }
+
     }
 
     private IEnumerator WaitUntilMapCSVLoaded()
@@ -91,7 +209,6 @@ public class MapCreator : MonoBehaviour
         {
             yield return null;
         }
-
         Create();
     }
 
@@ -119,8 +236,9 @@ public class MapCreator : MonoBehaviour
         float prevCreatedYPos;
 
         GameObject planeObject;
-        GameObject obObject;
+        GameObject obStoneObject;
         GameObject trackObject;
+        GameObject obTreeObject;
         
         for (int i = 0; i < mapY; i++)
         {
@@ -136,11 +254,17 @@ public class MapCreator : MonoBehaviour
                     int yCount = Random.Range(1, 5);
                     for (int k = 0; k < yCount; k++)
                     {
-                        obObject = Instantiate(obPrefab, mapParent.transform);
-                        obObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
-                        obObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                        prevCreatedYPos = obObject.transform.position.y;
+                        obStoneObject = Instantiate(obStonePrefab, mapParent.transform);
+                        obStoneObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
+                        obStoneObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                        prevCreatedYPos = obStoneObject.transform.position.y;
                     }
+                }
+                else if (mapInfo[i][j] == 2)
+                {
+                    obTreeObject = Instantiate(obTreePrefab, mapParent.transform);
+                    obTreeObject.transform.position = new Vector3(x * objScale * 10, obTreePrefab.transform.localScale.y / 2, z * objScale * 10);
+                    obTreeObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                 }
                 else if (mapInfo[i][j] == 3 || mapInfo[i][j] == 4)
                 {
@@ -153,11 +277,12 @@ public class MapCreator : MonoBehaviour
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
                     if (mapInfo[i][j] == 3)
                     {
+                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[startTrackYRotationKeyName], 0);
                         trackManager.finalTrack = trackObject;
                     }
                     else
                     {
-                        Debug.Log("호출됨");
+                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[endTrackYRotationKeyName], 0);
                         trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
                     }
                 }
