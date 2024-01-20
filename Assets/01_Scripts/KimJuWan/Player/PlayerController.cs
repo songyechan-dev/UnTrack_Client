@@ -59,9 +59,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMove();
         //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
-        
-
-        
+       
     }
     private void Update()
     {
@@ -80,6 +78,7 @@ public class PlayerController : MonoBehaviour
         //    playerManager.ButtonClick();
         //}
     }
+
     //플레이어 이동
     public void PlayerMove()
     {
@@ -100,8 +99,5 @@ public class PlayerController : MonoBehaviour
             rb.angularVelocity = Vector3.zero;  
         }
         
-    }
-    
-   
-    
+    }  
 }

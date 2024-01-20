@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 477294265792755014}
   - component: {fileID: 7962006342166236999}
   m_Layer: 0
-  m_Name: Wood
-  m_TagString: Item
+  m_Name: Track
+  m_TagString: DroppedTrack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7e759d2a7d864fe418d5656a8c9cddc6, type: 2}
+  - {fileID: 2100000, guid: 56c0b8fbd687d034483466b2f352be3a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

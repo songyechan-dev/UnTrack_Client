@@ -42,8 +42,8 @@ namespace LeeYuJoung
                 Destroy(gameObject);
             }
 
-            storages.Add("Wood", 0);
-            storages.Add("Steel", 0);
+            storages.Add("WOOD", 0);
+            storages.Add("STEEL", 0);
             factorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
         }
 
@@ -55,23 +55,11 @@ namespace LeeYuJoung
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
-        public void OnWoodAddButton()
-        {
-            IngredientAdd("Wood", 1);
-        }
-
-        // :::::: UI 확인용 버튼 나중에 삭제 ::::::
-        public void OnSteelAddButton()
-        {
-            IngredientAdd("Steel", 1);
-        }
-
-        // :::::: UI 확인용 버튼 나중에 삭제 ::::::
         public void OnUIExample(int _num)
         {
             storageText.text = $"STORAGE TOTALVOLUME {_num} / 10";
-            woodText.text = $"Wood : {storages["Wood"]}";
-            steelText.text = $"Steel : {storages["Steel"]}";
+            woodText.text = $"Wood : {storages["WOOD"]}";
+            steelText.text = $"Steel : {storages["STEEL"]}";
         }
 
         // 플레이어가 현재 들고 있는 오브젝트 정보 매개변수로 전달 받기(해당 오브젝트의 이름)
@@ -94,7 +82,7 @@ namespace LeeYuJoung
         }
 
         // Storage 내에 재료 저장
-        public void IngredientAdd(string _ingredient, int _amount)
+        public bool IngredientAdd(string _ingredient, int _amount)
         {
             if (!storages.ContainsKey(_ingredient))
             {
@@ -112,6 +100,7 @@ namespace LeeYuJoung
             if (storageTotalNum + _amount > storageMaxVolume)
             {
                 Debug.Log($":::: 저장소 자리가 가득 찼습니다 ::::");
+                return false;
             }
             else
             {
@@ -127,8 +116,8 @@ namespace LeeYuJoung
                     }
                 }
 
-                OnUIExample(storageTotalNum + _amount);
-                Debug.Log($":::: 저장소에 재료를 저장  :::: {_ingredient} :: {storages[_ingredient]}");
+                OnUIExample(storages["WOOD"] + storages["STEEL"]);
+                return true;
             }
         }
 
@@ -148,7 +137,7 @@ namespace LeeYuJoung
 
             storages[_ingredient] -= _amount;
 
-            OnUIExample(storages["Wood"] + storages["Steel"]);
+            OnUIExample(storages["WOOD"] + storages["STEEL"]);
             Debug.Log($":::: 저장소 재료 사용 :::: {_ingredient} :: {storages[_ingredient]}");
         }
 

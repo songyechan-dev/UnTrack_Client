@@ -1,12 +1,11 @@
+using LeeYuJoung;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class PlayerManager : MonoBehaviour
 {
-
     PlayerController playerController;
     private InventoryManager inventoryManager;
     public Transform pickSlot;
@@ -16,14 +15,11 @@ public class PlayerManager : MonoBehaviour
     public ItemManager itemManager;
 
 
-    private void Start()
+    private void Awake()
     {
         playerController = GetComponent<PlayerController>();
         inventoryManager = GetComponentInChildren<InventoryManager>();
-
     }
-
-   
 
     //플레이어의 정면에 장애물이 있는 경우 파괴
     public void CollectIngredient()
@@ -33,12 +29,12 @@ public class PlayerManager : MonoBehaviour
 
         if (Physics.Raycast(transform.position, transform.forward, out hit, castRange, layerMask))
         {
-
-
             switch (hit.transform.tag)
             {
                 case "Obstacle":
                     hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString());
+
                     break;
                 case "Item":
                     if (!playerController.isPick)
@@ -48,7 +44,6 @@ public class PlayerManager : MonoBehaviour
                         inventoryManager.SaveInventory(hit.transform.gameObject);
                         hit.transform.SetParent(pickSlot.transform);
                         pickSlot.GetChild(0).transform.position = pickSlot.position;
-
                     }
                     else
                     {
@@ -61,36 +56,53 @@ public class PlayerManager : MonoBehaviour
                                 pickSlot.GetChild(inventoryManager.itemNum-1).transform.position = 
                                     pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
                             }
-                        }
-                            
-                        
+                        }                                     
                     }
+
                     break;
                 case "Factory":
+                    FactoryManager _fm = hit.transform.GetComponent<FactoryManager>();
+
+                    if(_fm.ItemUse() && !playerController.isPick)
+                    {
+                        playerController.isPick = true;
+                        castRange = 2f;
+
+                        GameObject _object = Instantiate(_fm.ItemGenerate());
+                        inventoryManager.SaveInventory(_object.transform.gameObject);
+                        _object.transform.SetParent(pickSlot.transform);
+                        _object.transform.position = pickSlot.position;
+                        _object.transform.rotation = pickSlot.rotation;
+                        _object.name = _fm.generateItem;
+                    }
+
                     break;
                 case "Storage":
                     if (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
                         inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                     {
-                        playerController.isPick = false;
-                        castRange = 1f;
-
-                        for (int i = 0; i < pickSlot.transform.childCount; i++)
+                        if(StateManager.Instance().IngredientAdd(inventoryManager.itemType.ToString(), inventoryManager.itemNum))
                         {
-                            Destroy(pickSlot.transform.GetChild(i).gameObject);
-                            inventoryManager.OutInventory();
-                        }
-                        
+                            playerController.isPick = false;
+                            castRange = 1f;
+
+                            for (int i = 0; i < pickSlot.transform.childCount; i++)
+                            {
+                                Destroy(pickSlot.transform.GetChild(i).gameObject);
+                                inventoryManager.OutInventory();
+                            }
+                        }                    
                     }
+
                     break;
                 case "DroppedTrack":
+
                     break;
                 case "DroppedSlot":
                     InventoryManager droppedSlot = hit.transform.GetComponent<InventoryManager>();
 
                     if(playerController.currentTime>=playerController.spaceTime && playerController.isPick)
                     {
-
                         //바닥에 놓은 아이템들 위에 쌓기
                         if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                         {
@@ -144,7 +156,7 @@ public class PlayerManager : MonoBehaviour
 
             if (playerController.isPick)
             {
-                if (pickSlot.GetComponentInChildren<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.WOOD) || pickSlot.GetComponentInChildren<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.STEEL))
+                if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                 {
                     playerController.isPick = false;
                     castRange = 1.0f;
@@ -167,10 +179,11 @@ public class PlayerManager : MonoBehaviour
                 {
                     playerController.isPick = false;
                     castRange = 1.0f;
-                    pickSlot.transform.GetChild(0).SetParent(null);
-                    inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
+
                     inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+                    inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
                     ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
+                    pickSlot.transform.GetChild(0).SetParent(null);
                 }
             }
         }
@@ -201,6 +214,7 @@ public class PlayerManager : MonoBehaviour
             _gameObject.transform.rotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
         }
     }
+
     //바닥 UI 인식
     //public void ButtonClick()
     //{

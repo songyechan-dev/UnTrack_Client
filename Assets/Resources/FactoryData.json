@@ -2,9 +2,9 @@
  {
   "IDX": 1,
   "TYPE": "ProductionMachine",
-  "INGREDIENT_1": "Wood",
+  "INGREDIENT_1": "WOOD",
   "AMOUNT_1": 1,
-  "INGREDIENT_2": "Steel",
+  "INGREDIENT_2": "STEEL",
   "AMOUNT_2": 1,
   "GENERATE_TIME": 10,
   "GENERATE": "Track"
@@ -12,9 +12,9 @@
  {
   "IDX": 2,
   "TYPE": "DynamiteMachine",
-  "INGREDIENT_1": "Steel",
+  "INGREDIENT_1": "STEEL",
   "AMOUNT_1": 1,
-  "INGREDIENT_2": "Steel",
+  "INGREDIENT_2": "STEEL",
   "AMOUNT_2": 1,
   "GENERATE_TIME": 20,
   "GENERATE": "Dynamite"
@@ -22,9 +22,9 @@
  {
   "IDX": 3,
   "TYPE": "WaterTank",
-  "INGREDIENT_1": "Wood",
+  "INGREDIENT_1": "WOOD",
   "AMOUNT_1": 1,
-  "INGREDIENT_2": "Wood",
+  "INGREDIENT_2": "WOOD",
   "AMOUNT_2": 1,
   "GENERATE_TIME": 10,
   "GENERATE": "Bucket"

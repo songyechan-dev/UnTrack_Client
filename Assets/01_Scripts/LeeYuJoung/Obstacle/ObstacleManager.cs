@@ -21,9 +21,6 @@ public class ObstacleManager : MonoBehaviour
     void Start()
     {
         ObstacleJsonLoad(dataPath);
-
-        // Playe에서 실행해야 할 함수
-        ObstacleWorking("Ax");
     }
 
     // 현재 Obstacle의 작업 가능 여부 확인

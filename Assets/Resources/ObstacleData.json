@@ -2,14 +2,14 @@
  {
   "IDX": 1,
   "TYPE": "Tree",
-  "EQUIPMENT_TYPE": "Ax",
+  "EQUIPMENT_TYPE": "AX",
   "WORK_TIME": 3,
   "GENERATE": "Wood"
  },
  {
   "IDX": 2,
   "TYPE": "Stone",
-  "EQUIPMENT_TYPE": "Pick",
+  "EQUIPMENT_TYPE": "PICK",
   "WORK_TIME": 3,
   "GENERATE": "Steel"
  }
