@@ -8,6 +8,7 @@ public class ItemManager : MonoBehaviour
     {
         WOOD,      // ¸ñÀç
         STEEL,     // Ã¶Àç
+        DROPPEDTRACK,  // ¿¬°áµÇÁö ¾ÊÀº Æ®·¢
         BUCKET,    // ¹°Åë
         DYNAMITE,  // ÆøÅº
         AX,        // µµ³¢

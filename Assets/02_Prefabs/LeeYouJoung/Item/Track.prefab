@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7962006342166236999}
   m_Layer: 0
   m_Name: Track
-  m_TagString: DroppedTrack
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f197da88bc3684ba06d43acda28f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
+  itemType: 2

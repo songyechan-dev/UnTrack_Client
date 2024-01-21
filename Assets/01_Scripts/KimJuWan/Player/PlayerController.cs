@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     PlayerManager playerManager;
      
     public bool isPick;
+    public bool isWorking;
 
     public float currentTime = 0f;
     public float spaceTime = .2f;
@@ -42,7 +43,6 @@ public class PlayerController : MonoBehaviour
         KeyCode.LeftControl,
         KeyCode.LeftShift
     };
-
 
     // 시작
    
@@ -57,10 +57,11 @@ public class PlayerController : MonoBehaviour
     // 업데이트
     void FixedUpdate()
     {
-        PlayerMove();
-        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
-       
+        if(!isWorking)
+            PlayerMove();
+        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료      
     }
+
     private void Update()
     {
         if (Input.GetKey(keys[keyCode]))
@@ -97,7 +98,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;  
-        }
-        
+        }       
     }  
 }

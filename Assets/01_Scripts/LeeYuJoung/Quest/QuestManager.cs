@@ -39,7 +39,7 @@ public class QuestManager : MonoBehaviour
 
     private void Start()
     {
-
+        OnExampleButton();
     }
 
     // **** UI 확인용 버튼 ****

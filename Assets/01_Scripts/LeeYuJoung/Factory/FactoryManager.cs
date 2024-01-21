@@ -123,6 +123,7 @@ public class FactoryManager : MonoBehaviour
     public void ItemAdd()
     {
         currentItemNum++;
+        QuestManager.Instance().UpdateProgress(generateItem, 1);
     }
 
     // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 

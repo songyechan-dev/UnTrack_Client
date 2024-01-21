@@ -32,8 +32,7 @@ public class PlayerManager : MonoBehaviour
             switch (hit.transform.tag)
             {
                 case "Obstacle":
-                    hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString());
+                    hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
 
                     break;
                 case "Item":
