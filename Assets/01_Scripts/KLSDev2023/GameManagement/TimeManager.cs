@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    // 시작
-    void Start()
+    private static TimeManager instance;
+    public static TimeManager Instance()
     {
-        
+        return instance;
     }
+    private float curTime => Time.time + Time.deltaTime;
 
-    // 업데이트
-    void Update()
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(this);
+    }
+    public float GetCurTime()
+    {
+        return this.curTime;
     }
 }

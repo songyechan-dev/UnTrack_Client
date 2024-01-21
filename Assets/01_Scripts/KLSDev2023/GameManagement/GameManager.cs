@@ -20,9 +20,13 @@ public class GameManager : MonoBehaviour
     private int finalRound = 5;
     private float meter;
 
-    private FactoriesObjectManager firstCreatedFactoriesObject;
+
+
+    public GameObject factoriesObjectPrefab;
     public MapCreator mapCreator;
     public GameState gameState;
+    public TimeManager timeManager;
+    public GameObject firstFactoriesObject;
     #endregion
 
     #region Instance
@@ -46,6 +50,14 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         GameStart();
+    }
+
+    private void Update()
+    {
+        if (gameState.Equals(GameState.GameStart))
+        {
+            MeterCalculate();
+        }
     }
     #endregion
 
@@ -82,7 +94,8 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         gameState = GameState.GameStart;
-        mapCreator.MapLoad();
+        MapCreator.Instance().MapLoad();
+
     }
 
     /// <summary>
@@ -120,9 +133,11 @@ public class GameManager : MonoBehaviour
 
     public void MeterCalculate()
     {
-
-        //미터 계산 공식 추가
-        //시간초
+        if (firstFactoriesObject != null)
+        {
+            meter = Mathf.InverseLerp(MapInfo.defaultStartTrackX, MapInfo.finishEndTrackX, firstFactoriesObject.transform.position.x);
+            Debug.Log((int)(meter *100) +"미터");
+        }
 
     }
     #endregion

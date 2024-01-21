@@ -51,15 +51,15 @@ public class MapCreator : MonoBehaviour
 
     private void Awake()
     {
-        //if (instance == null)
-        //{
-        //    instance = this;
-        //}
-        //else
-        //{
-        //    Destroy(gameObject);
-        //}
-        //DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(this);
     }
 
     private void MapDataCreate()
@@ -78,12 +78,12 @@ public class MapCreator : MonoBehaviour
             {
                 mapInfo = "0";
                 // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
-                if (!isCreatedObStone && !isCreatedObTree)
+                if (!isCreatedObStone && !isCreatedObTree && y +3 < mapHeight)
                 {
-                    int randomCount = Random.Range(0, 50);
+                    int randomCount = Random.Range(0, 70);
                     randomXcount = Random.Range(3, 7);
-                    randomYcount = Random.Range(3, 7);
-                    if (randomCount < 1)
+                    randomYcount = Random.Range(1, 4);
+                    if (randomCount <1)
                     {
                         if (Random.Range(0, 2) == 0)
                         {
@@ -226,6 +226,7 @@ public class MapCreator : MonoBehaviour
             return;
         }
         GameObject mapParent = Instantiate(new GameObject());
+        FactoriesObjectCreator.Instance().mapParent = mapParent.transform;
         mapParent.name = "MapParent";
         float originX = startPosition.x;
 
@@ -248,7 +249,7 @@ public class MapCreator : MonoBehaviour
                 planeObject.tag = "Plane";
                 planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
                 planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
-                if (mapInfo[i][j] == 1)
+                if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
                     prevCreatedYPos = 0;
                     int yCount = Random.Range(1, 5);
@@ -260,22 +261,23 @@ public class MapCreator : MonoBehaviour
                         prevCreatedYPos = obStoneObject.transform.position.y;
                     }
                 }
-                else if (mapInfo[i][j] == 2)
+                else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
                     obTreeObject = Instantiate(obTreePrefab, mapParent.transform);
                     obTreeObject.transform.position = new Vector3(x * objScale * 10, obTreePrefab.transform.localScale.y / 2, z * objScale * 10);
                     obTreeObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                 }
-                else if (mapInfo[i][j] == 3 || mapInfo[i][j] == 4)
+                else if (mapInfo[i][j] == (int)MapInfo.Type.TRACK || mapInfo[i][j] == (int)MapInfo.Type.FiNISH_TRACK)
                 {
                     trackObject = Instantiate(trackPrefab, mapParent.transform);
                     trackObject.AddComponent<TrackInfo>();
                     trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
                     trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
                     trackObject.tag = "Track";
+                    MapInfo.trackYscale = trackPrefab.transform.localScale.y;
                     trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
                     trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
-                    if (mapInfo[i][j] == 3)
+                    if (mapInfo[i][j] == (int)MapInfo.Type.TRACK)
                     {
                         trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[startTrackYRotationKeyName], 0);
                         trackManager.finalTrack = trackObject;
