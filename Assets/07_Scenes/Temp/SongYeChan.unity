@@ -539,6 +539,7 @@ MonoBehaviour:
   isChangedDistance: 0
   finalTrack: {fileID: 0}
   trackConnectFailed: 0
+  droppedSlotPrefab: {fileID: 4188227089016237225, guid: 5278bed1f1f96fa4d8eac978cd1e4d7d, type: 3}
   leftTrackPrevDirection: 0
   leftTrackPrevAngle: {x: 0, y: 0, z: 0}
   rightTrackPrevDirection: 0

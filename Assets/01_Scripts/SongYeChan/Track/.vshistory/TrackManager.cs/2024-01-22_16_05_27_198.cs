@@ -40,9 +40,8 @@ public class TrackManager : MonoBehaviour
         {
             if (hit.transform.CompareTag(planeTagName))
             {
-                Debug.Log(ray.origin);
                 GameObject track = Instantiate(trackPrefab);
-                track.transform.position = ray.origin + new Vector3(0, trackPrefab.transform.localScale.y / 2, 0);
+                track.transform.position = hit.transform.position + new Vector3(0, trackPrefab.transform.localScale.y / 2, 0);
                 track.AddComponent<TrackInfo>();
                 track.tag = trackTagName;
                 TrackInfo _trackInfo = track.GetComponent<TrackInfo>();
@@ -259,14 +258,12 @@ public class TrackManager : MonoBehaviour
     {
         trackConnectFailed = true;
         GameObject _droppedSlot = Instantiate(droppedSlotPrefab);
-        _droppedSlot.tag = "DroppedSlot";
 
         track.transform.parent = _droppedSlot.transform;
         track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
         track.tag = "Item";
         track.GetComponent<TrackInfo>().isElectricityFlowing = false;
         track.AddComponent<ItemManager>();
-        track.GetComponent<ItemManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
 
         _droppedSlot.GetComponent<InventoryManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
         _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(track);

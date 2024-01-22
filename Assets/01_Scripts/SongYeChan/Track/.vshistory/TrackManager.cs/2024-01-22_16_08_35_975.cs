@@ -259,7 +259,6 @@ public class TrackManager : MonoBehaviour
     {
         trackConnectFailed = true;
         GameObject _droppedSlot = Instantiate(droppedSlotPrefab);
-        _droppedSlot.tag = "DroppedSlot";
 
         track.transform.parent = _droppedSlot.transform;
         track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
