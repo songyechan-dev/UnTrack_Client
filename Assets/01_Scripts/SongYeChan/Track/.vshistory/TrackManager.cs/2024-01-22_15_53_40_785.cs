@@ -137,20 +137,30 @@ public class TrackManager : MonoBehaviour
                     || (backHit.transform != null && backHit.transform.gameObject != finalTrack) && (forwardHit.transform == null)
                     )
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
+                    Debug.Log("마지막 라인 아님");
                 }
 
                 if ((leftHit.transform != null && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && rightHit.transform == null)
                     || (leftHit.transform != null && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && rightHit.transform != null 
                     && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
                 if ((rightHit.transform != null && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && leftHit.transform == null)
                     ||(rightHit.transform != null && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && leftHit.transform != null 
                     && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
 
                 if ((forwardHit.transform != null && !forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && backHit.transform == null)
@@ -255,7 +265,6 @@ public class TrackManager : MonoBehaviour
 
     void TrackConnectFailed(GameObject track)
     {
-        GameObject droppedSlot;
         trackConnectFailed = true;
         track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
         track.tag = droppedTrackTagName;

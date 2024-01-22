@@ -255,7 +255,6 @@ public class TrackManager : MonoBehaviour
 
     void TrackConnectFailed(GameObject track)
     {
-        GameObject droppedSlot;
         trackConnectFailed = true;
         track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
         track.tag = droppedTrackTagName;

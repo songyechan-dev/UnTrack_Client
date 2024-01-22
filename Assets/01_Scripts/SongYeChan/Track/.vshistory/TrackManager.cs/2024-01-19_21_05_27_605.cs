@@ -137,38 +137,57 @@ public class TrackManager : MonoBehaviour
                     || (backHit.transform != null && backHit.transform.gameObject != finalTrack) && (forwardHit.transform == null)
                     )
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
+                    Debug.Log("마지막 라인 아님");
                 }
 
                 if ((leftHit.transform != null && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && rightHit.transform == null)
                     || (leftHit.transform != null && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && rightHit.transform != null 
                     && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
                 if ((rightHit.transform != null && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && leftHit.transform == null)
                     ||(rightHit.transform != null && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && leftHit.transform != null 
                     && !leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
 
                 if ((forwardHit.transform != null && !forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && backHit.transform == null)
                     || (forwardHit.transform != null && !forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && backHit.transform != null
                     && !backHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
                 if ((backHit.transform != null && !backHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && forwardHit.transform == null)
                     || (backHit.transform != null && !backHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && forwardHit.transform != null
                     && !forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing))
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
 
                 if (forwardHit.transform == null && backHit.transform == null && leftHit.transform == null && rightHit.transform == null)
                 {
-                    TrackConnectFailed(track);
+                    trackConnectFailed = true;
+                    track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                    track.tag = droppedTrackTagName;
+                    _trackInfo.isElectricityFlowing = false;
                 }
 
                 if (electricityFlowingList.Count >= 2)
@@ -188,7 +207,10 @@ public class TrackManager : MonoBehaviour
                         {
                             electricityFlowingList[i].localEulerAngles = electricityFlowingList[i].GetComponent<TrackInfo>().prevAngle;
                         }
-                        TrackConnectFailed(track);
+                        trackConnectFailed = true;
+                        track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+                        track.tag = droppedTrackTagName;
+                        _trackInfo.isElectricityFlowing = false;
                     }
 
                 }
@@ -251,15 +273,6 @@ public class TrackManager : MonoBehaviour
             }
         }
         electricityFlowingList.Clear();
-    }
-
-    void TrackConnectFailed(GameObject track)
-    {
-        GameObject droppedSlot;
-        trackConnectFailed = true;
-        track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
-        track.tag = droppedTrackTagName;
-        track.GetComponent<TrackInfo>().isElectricityFlowing = false;
     }
 
 }
