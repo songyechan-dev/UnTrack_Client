@@ -140,12 +140,7 @@ public class FactoriesObjectManager : MonoBehaviour
         {
             if (hit.transform.tag != null && hit.transform.tag.Equals(this.transform.tag))
             {
-                if (hit.transform.GetComponent<Rigidbody>() == null)
-                {
-                    hit.transform.AddComponent<Rigidbody>();
-                    hit.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 5f);
-                    //파괴 이벤트 발생
-                }
+                hit.transform.AddComponent<Rigidbody>();
             }
         }
         if (myState == MyState.MOVE)

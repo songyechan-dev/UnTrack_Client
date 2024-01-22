@@ -146,6 +146,7 @@ public class FactoriesObjectManager : MonoBehaviour
                     hit.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 5f);
                     //파괴 이벤트 발생
                 }
+
             }
         }
         if (myState == MyState.MOVE)

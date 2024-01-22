@@ -171,6 +171,7 @@ public class PlayerManager : MonoBehaviour
                         ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
 
                     }
+
                     inventoryManager.OutInventory();
                 }
                 else

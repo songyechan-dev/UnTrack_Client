@@ -44,7 +44,7 @@ public class FactoriesObjectCreator : MonoBehaviour
             {
                 GameManager.Instance().firstFactoriesObject = factoriesObject;
                 factoriesObject.GetComponent<MeshRenderer>().enabled = false;
-                factoriesObject.GetComponent<BoxCollider>().enabled = false;
+                factoriesObject.tag = "FactoriesObjectOnTrack";
                 //Destroy(factoriesObject.GetComponent<Rigidbody>());
                 
             }

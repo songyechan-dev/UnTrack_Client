@@ -171,7 +171,14 @@ public class PlayerManager : MonoBehaviour
                         ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
 
                     }
+
                     inventoryManager.OutInventory();
+                }
+                else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
+                {
+                    Ray ray = new Ray(transform.position, Vector3.down);
+                    RaycastHit hit;
+                    if()
                 }
                 else
                 {
