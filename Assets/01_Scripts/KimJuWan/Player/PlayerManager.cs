@@ -182,21 +182,24 @@ public class PlayerManager : MonoBehaviour
                     {
                         if (_hit.transform.CompareTag("Plane"))
                         {
-                            playerController.isPick = false;
-                            castRange = 1.0f;
-                            GameObject _prefab = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/KimJuWan/DroppedSlot.prefab", typeof(GameObject)) as GameObject;
-                            GameObject _droppedSlot = Instantiate(_prefab, pickSlot.transform.position, Quaternion.identity);
-                            _droppedSlot.name = "DroppedSlot";
-
                             int num = pickSlot.transform.childCount;
-                            for (int i = 0; i < num; i++)
-                            {
-                                _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                Destroy(pickSlot.transform.GetChild(i).gameObject);
-                            }
 
-                            inventoryManager.OutInventory();
-                            GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
+                            if (num <= 1)
+                            {
+                                playerController.isPick = false;
+                                castRange = 1.0f;
+
+                                Destroy(pickSlot.transform.GetChild(0).gameObject);
+                                inventoryManager.DroppedSlotOut();
+                                GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
+                            }
+                            else
+                            {
+                                //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
+                                Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
+                                inventoryManager.DroppedSlotOut();
+                                GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
+                            }
                         }
                     }
                 }
