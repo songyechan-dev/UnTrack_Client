@@ -151,6 +151,7 @@ public class TrackManager : MonoBehaviour
                     trackConnectFailed = true;
                     track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
                     track.tag = droppedTrackTagName;
+
                     _trackInfo.isElectricityFlowing = false;
                 }
                 if ((rightHit.transform != null && !rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing && leftHit.transform == null)
