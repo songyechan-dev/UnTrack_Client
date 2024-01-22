@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 477294265792755014}
   - component: {fileID: 7962006342166236999}
   m_Layer: 0
-  m_Name: Wood
+  m_Name: Track
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7e759d2a7d864fe418d5656a8c9cddc6, type: 2}
+  - {fileID: 2100000, guid: 56c0b8fbd687d034483466b2f352be3a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f197da88bc3684ba06d43acda28f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
+  itemType: 2

@@ -21,13 +21,10 @@ public class ObstacleManager : MonoBehaviour
     void Start()
     {
         ObstacleJsonLoad(dataPath);
-
-        // Playe에서 실행해야 할 함수
-        ObstacleWorking("Ax");
     }
 
     // 현재 Obstacle의 작업 가능 여부 확인
-    public void ObstacleWorking(string _equipment)
+    public void ObstacleWorking(string _equipment, PlayerController _player)
     {
         if (isWorking || !equipmentType.Equals(_equipment))
         {
@@ -36,11 +33,12 @@ public class ObstacleManager : MonoBehaviour
         }
 
         isWorking = true;
-        StartCoroutine(ObstacleDelete());
+        _player.isWorking = true;
+        StartCoroutine(ObstacleDelete(_player));
     }
 
     // Obstacle 제거
-    IEnumerator ObstacleDelete()
+    IEnumerator ObstacleDelete(PlayerController _player)
     {
         // 점점 작아지는 효과 구현하기
 
@@ -58,6 +56,7 @@ public class ObstacleManager : MonoBehaviour
                 currentTime = 0;
                 isWorking = false;
 
+                _player.isWorking = false;
                 GenerateIngredient();
                 Destroy(gameObject);
             }
@@ -72,6 +71,7 @@ public class ObstacleManager : MonoBehaviour
     public void GenerateIngredient()
     {
         Debug.Log("Generate ::: " + generateItem);
+        QuestManager.Instance().UpdateProgress(generateItem, 1);
         GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
         GameObject _object =  Instantiate(_item, transform.position, transform.rotation);
         _object.name = generateItem;

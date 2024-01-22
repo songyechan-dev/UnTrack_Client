@@ -123,27 +123,28 @@ public class FactoryManager : MonoBehaviour
     public void ItemAdd()
     {
         currentItemNum++;
+        QuestManager.Instance().UpdateProgress(generateItem, 1);
     }
 
     // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 
-    public void ItemUse()
+    public bool ItemUse()
     {
         if(currentItemNum <= 0)
         {
             Debug.Log($"{gameObject.name} 아이템이 없습니다....");
-            return;
+            return false;
         }
-
-        currentItemNum--;
-        ItemGenerate();
+        else
+        {
+            return true;
+        }
     }
 
     // 아이템 생성 → 플레이어 손에 생성
-    public void ItemGenerate()
+    public GameObject ItemGenerate()
     {
-        GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/SongYeChan/{generateItem}.prefab", typeof(GameObject)) as GameObject;
-        GameObject _object = Instantiate(_item, transform.position - new Vector3(0.0f, 0.5f, 0.0f), transform.rotation);
-        _object.name = generateItem;
+        currentItemNum--;
+        return AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
     }
 
     // TODO : 이유정 2024.01.15 FactoryManager.cs FactoryJsonLoad(string path)
