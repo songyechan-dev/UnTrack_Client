@@ -66,7 +66,7 @@ public class UpgradeManager : MonoBehaviour
         if(StateManager.Instance().voltNum >= machineAddPrice)
         {
             // 플레이어가 가진 기계 List에 추가
-            StateManager.Instance().factorys.Add(_gameObject);
+            StateManager.Instance().sceneFactorys.Add(_gameObject);
             machineAddPrice += 1;
         }
         else

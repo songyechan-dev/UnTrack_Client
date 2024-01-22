@@ -73,7 +73,7 @@ public class QuestManager : MonoBehaviour
             progress = (int)_amount;
             Debug.Log(progress);
 
-            if (progress >= progressGoal)
+            if (progress <= progressGoal)
             {
                 Debug.Log(":::: Quest Completed ::::");
                 isCompleted = true;
