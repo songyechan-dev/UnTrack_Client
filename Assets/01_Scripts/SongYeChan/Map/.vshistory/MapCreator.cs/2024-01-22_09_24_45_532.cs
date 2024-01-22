@@ -143,6 +143,8 @@ public class MapCreator : MonoBehaviour
 
     }
 
+
+
     private IEnumerator CSVLoad()
     {
         MapDataCreate();

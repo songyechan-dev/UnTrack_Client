@@ -47,8 +47,7 @@ public class PlayerManager : MonoBehaviour
                     else
                     {
                         if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
+                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                         {
                             if (inventoryManager.SaveInventory(hit.transform.gameObject))
                             {
@@ -170,35 +169,10 @@ public class PlayerManager : MonoBehaviour
                         _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                         pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
                         ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
+
                     }
+
                     inventoryManager.OutInventory();
-                }
-                else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
-                {
-                    RaycastHit _hit;
-                    Ray _ray = new Ray(transform.position, -transform.up);
-
-                    if(Physics.Raycast(_ray, out _hit, 1.0f))
-                    {
-                        if (_hit.transform.CompareTag("Plane"))
-                        {
-                            playerController.isPick = false;
-                            castRange = 1.0f;
-                            GameObject _prefab = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/KimJuWan/DroppedSlot.prefab", typeof(GameObject)) as GameObject;
-                            GameObject _droppedSlot = Instantiate(_prefab, pickSlot.transform.position, Quaternion.identity);
-                            _droppedSlot.name = "DroppedSlot";
-
-                            int num = pickSlot.transform.childCount;
-                            for (int i = 0; i < num; i++)
-                            {
-                                _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                Destroy(pickSlot.transform.GetChild(i).gameObject);
-                            }
-
-                            inventoryManager.OutInventory();
-                            GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
-                        }
-                    }
                 }
                 else
                 {
@@ -213,6 +187,8 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+
+
 
     //플레이어가 바라보는 방향에 따라 아이템의 각도 변경
     public void ObjectRotationCheck(GameObject _gameObject)

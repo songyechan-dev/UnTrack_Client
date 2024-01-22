@@ -39,14 +39,9 @@ public class FactoriesObjectCreator : MonoBehaviour
             factoriesObject.AddComponent<FactoriesObjectManager>();
             factoriesObject.GetComponent<FactoriesObjectManager>().tagToBeDetected = "Track";
             factoriesObject.GetComponent<FactoriesObjectManager>().Init();
-
             if (count <= 0)
             {
                 GameManager.Instance().firstFactoriesObject = factoriesObject;
-                factoriesObject.GetComponent<MeshRenderer>().enabled = false;
-                factoriesObject.GetComponent<BoxCollider>().enabled = false;
-                //Destroy(factoriesObject.GetComponent<Rigidbody>());
-                
             }
             count++;
         }
@@ -57,5 +52,4 @@ public class FactoriesObjectCreator : MonoBehaviour
         count = 0;
         createdTime = 15f;
     }
-
 }
