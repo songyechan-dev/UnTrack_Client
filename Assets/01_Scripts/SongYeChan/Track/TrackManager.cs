@@ -220,25 +220,25 @@ public class TrackManager : MonoBehaviour
                 {
                     if (leftHit.transform != null && leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                     {
-                        Debug.Log("¿ŞÂÊÀÌ ´Ù½Ã º¯°æµÇ¾ßµÊ");
+                        Debug.Log("ì™¼ìª½ì´ ë‹¤ì‹œ ë³€ê²½ë˜ì•¼ë¨");
                         leftHit.transform.GetComponent<TrackInfo>().SetMyDirection(leftTrackPrevDirection, leftHit.transform.GetComponent<TrackInfo>().prevAngle);
                     }
 
                     if (rightHit.transform != null && rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                     {
-                        Debug.Log("¿À¸¥ÂÊÀÌ ´Ù½Ã º¯°æµÇ¾ßµÊ");
+                        Debug.Log("ì˜¤ë¥¸ìª½ì´ ë‹¤ì‹œ ë³€ê²½ë˜ì•¼ë¨");
                         rightHit.transform.GetComponent<TrackInfo>().SetMyDirection(rightTrackPrevDirection, rightHit.transform.GetComponent<TrackInfo>().prevAngle);
                     }
 
                     if (forwardHit.transform != null && forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                     {
-                        Debug.Log("À§ÂÊ");
+                        Debug.Log("ìœ„ìª½");
                         forwardHit.transform.GetComponent<TrackInfo>().SetMyDirection(forwardTrackPrevDirection, forwardHit.transform.GetComponent<TrackInfo>().prevAngle);
                     }
 
                     if (backHit.transform != null && backHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                     {
-                        Debug.Log("¾Æ·§ÂÊ");
+                        Debug.Log("ì•„ë«ìª½");
                         backHit.transform.GetComponent<TrackInfo>().SetMyDirection(backTrackPrevDirection, backHit.transform.GetComponent<TrackInfo>().prevAngle);
                     }
 
