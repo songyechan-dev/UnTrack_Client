@@ -485,10 +485,10 @@ MonoBehaviour:
   obTreePrefab: {fileID: 6632435566270772146, guid: 752c2c0d1583c8948ac6b91f6466c42c, type: 3}
   trackPrefab: {fileID: 360271195562918375, guid: 123c9b7403beb8d4e97088d20c3027e8, type: 3}
   DynamiteMachinePrefab: {fileID: 1414702916102547295, guid: e3f2d3fbc7b58bb4caf1f8758d890f99, type: 3}
-  ProductionMachinePrefab: {fileID: 491123125678747441, guid: 8c01196e3c07e464ba114e48f7a1addb, type: 3}
-  WaterTankPrefab: {fileID: 3934003489838394548, guid: 863feb572dc9f504d8a5396422d983f9, type: 3}
-  EnginePrefab: {fileID: 2095702474359914223, guid: e570248b4402c8340816ab2a47a2f57d, type: 3}
-  StoargePrefab: {fileID: 3686851000239159954, guid: 902d60508499b4947916c14075054536, type: 3}
+  productionMachinePrefab: {fileID: 491123125678747441, guid: 8c01196e3c07e464ba114e48f7a1addb, type: 3}
+  waterTankPrefab: {fileID: 3934003489838394548, guid: 863feb572dc9f504d8a5396422d983f9, type: 3}
+  enginePrefab: {fileID: 2095702474359914223, guid: e570248b4402c8340816ab2a47a2f57d, type: 3}
+  storagePrefab: {fileID: 3686851000239159954, guid: 902d60508499b4947916c14075054536, type: 3}
   trackManager: {fileID: 820733338}
 --- !u!4 &722181249
 Transform:
