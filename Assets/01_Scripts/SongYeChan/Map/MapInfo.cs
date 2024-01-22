@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MapInfo
 {
-    enum Type
+    public enum Type
     {
         PLANE = 0,
         OBSTACLE_STONE = 1,
@@ -25,7 +25,7 @@ public static class MapInfo
     public static string startTrackYRotationKeyName = "startTrackYRotation";
     public static string endTrackYRotationKeyName = "endTrackYRotation";
 
-    public static int mapWidth = 50;
+    public static int mapWidth = 100;
     public static int mapHeight = 20;
     public static float startTrackYRotation = 90f;
     public static float endTrackYRotation = 90f;
@@ -37,9 +37,11 @@ public static class MapInfo
     public static int defaultEndTrackX = 8;
 
     public static int finishStartTrackZ = 5;
-    public static int finishStartTrackX = 20;
+    public static int finishStartTrackX = 40;
 
     public static int finishEndTrackZ = 5;
-    public static int finishEndTrackX = 23;
+    public static int finishEndTrackX = 42;
+
+    public static float trackYscale = 0.2f;
 
 }

@@ -27,7 +27,7 @@ public class FactoriesObjectManager : MonoBehaviour
     MyState myState = MyState.STOP;
 
     [SerializeField]
-    string tagToBeDetected;
+    public string tagToBeDetected;
     [SerializeField]
     MoveDirection moveDirection;
     [SerializeField, Range(0f, 100f)]
@@ -59,7 +59,10 @@ public class FactoriesObjectManager : MonoBehaviour
     // 업데이트
     void Update()
     {
-        SensorDetect();
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
+        {
+            SensorDetect();
+        }
     }
     /// <summary>
     /// 센서 감지를 통해 센서 Ray에 감지된 Track의 속성값으로 이동하는 방향 변경하는 함수
