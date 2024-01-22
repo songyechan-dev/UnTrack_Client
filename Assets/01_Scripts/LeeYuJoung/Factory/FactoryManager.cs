@@ -52,21 +52,30 @@ public class FactoryManager : MonoBehaviour
             switch (factoryType)
             {
                 case FACTORYTYPE.ProductionMachine:
-                    currentItemNum = StateManager.Instance().productionMachines[0]["currentItemNum"];
-                    itemMaxVolume = StateManager.Instance().productionMachines[0]["itemMaxVolume"];
-                    StateManager.Instance().productionMachines.RemoveAt(0);
+                    if(StateManager.Instance().productionMachines.Count > 0)
+                    {
+                        currentItemNum = StateManager.Instance().productionMachines[0]["currentItemNum"];
+                        itemMaxVolume = StateManager.Instance().productionMachines[0]["itemMaxVolume"];
+                        StateManager.Instance().productionMachines.RemoveAt(0);
+                    }
 
                     break;
                 case FACTORYTYPE.WaterTank:
-                    currentItemNum = StateManager.Instance().waterTanks[0]["currentItemNum"];
-                    itemMaxVolume = StateManager.Instance().waterTanks[0]["itemMaxVolume"];
-                    StateManager.Instance().waterTanks.RemoveAt(0);
+                    if(StateManager.Instance().waterTanks.Count > 0)
+                    {
+                        currentItemNum = StateManager.Instance().waterTanks[0]["currentItemNum"];
+                        itemMaxVolume = StateManager.Instance().waterTanks[0]["itemMaxVolume"];
+                        StateManager.Instance().waterTanks.RemoveAt(0);
+                    }
 
                     break;
                 case FACTORYTYPE.DynamiteMachine:
-                    currentItemNum = StateManager.Instance().dynamiteMachines[0]["currentItemNum"];
-                    itemMaxVolume = StateManager.Instance().dynamiteMachines[0]["itemMaxVolume"];
-                    StateManager.Instance().dynamiteMachines.RemoveAt(0);
+                    if(StateManager.Instance().dynamiteMachines.Count > 0)
+                    {
+                        currentItemNum = StateManager.Instance().dynamiteMachines[0]["currentItemNum"];
+                        itemMaxVolume = StateManager.Instance().dynamiteMachines[0]["itemMaxVolume"];
+                        StateManager.Instance().dynamiteMachines.RemoveAt(0);
+                    }
 
                     break;
             }
@@ -186,7 +195,7 @@ public class FactoryManager : MonoBehaviour
 
         for(int i = 0; i < jsonData.Count; i++)
         {
-            if (jsonData[i]["TYPE"].Equals(factoryType))
+            if (jsonData[i]["TYPE"].Equals(factoryType.ToString()))
             {
                 ingredient_1 = jsonData[i]["INGREDIENT_1"];
                 amount_1 = (int)jsonData[i]["AMOUNT_1"];

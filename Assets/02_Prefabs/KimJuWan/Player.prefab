@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6647022998704248623}
   - component: {fileID: 8071043370073123430}
   m_Layer: 0
-  m_Name: Eye
+  m_Name: Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5557981974704694136}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.248, z: 0.606}
-  m_LocalScale: {x: 0.76729, y: 0.25619, z: 0.20727}
+  m_LocalPosition: {x: 0, y: 0.6, z: 1}
+  m_LocalScale: {x: 1, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8738443604681700844}
@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5557981974704694136}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickSlot: {fileID: 241057496895801979}
+  sensor: {fileID: 0}
   droppedSlotPrefab: {fileID: 4222096931821908648, guid: 5278bed1f1f96fa4d8eac978cd1e4d7d, type: 3}
   itemManager: {fileID: 0}
 --- !u!54 &8738443604681700843
