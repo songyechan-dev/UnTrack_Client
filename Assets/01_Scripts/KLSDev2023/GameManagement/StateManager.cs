@@ -27,8 +27,7 @@ namespace LeeYuJoung
         public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
         public int voltNum = 0;              // 현재 보유 볼트(재화) 개수
 
-        public Dictionary<string, int> storages = new Dictionary<string, int>()  // Storage 재료 저장 공간
-        { { "WOOD", 0}, { "STEEL", 0} };
+        public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
         public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
 
         public Text storageText;
@@ -48,6 +47,8 @@ namespace LeeYuJoung
             DontDestroyOnLoad(gameObject);
 
             BringFactoryValue();
+            storages.Add("WOOD", 0);
+            storages.Add("STEEL", 0);
             sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
         }
 

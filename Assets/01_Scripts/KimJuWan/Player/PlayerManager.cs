@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     PlayerController playerController;
     private InventoryManager inventoryManager;
     public Transform pickSlot;
+    public Transform sensor;
     public Transform droppedSlotPrefab;
     float castRange = 1f;
 
@@ -17,6 +18,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        sensor = transform.GetChild(0).gameObject.GetComponent<Transform>();
         playerController = GetComponent<PlayerController>();
         inventoryManager = GetComponentInChildren<InventoryManager>();
     }
@@ -27,7 +29,7 @@ public class PlayerManager : MonoBehaviour
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("PickSlot"));
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, castRange, layerMask))
+        if (Physics.Raycast(sensor.position, -sensor.up, out hit, castRange, layerMask))
         {
             switch (hit.transform.tag)
             {
@@ -148,72 +150,72 @@ public class PlayerManager : MonoBehaviour
                             Destroy(hit.transform.gameObject);
                     }
                     break;
+                case "Plane":
+                    Debug.Log("바닥입니다....");
+
+                    if (playerController.isPick)
+                    {
+                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
+                        {
+                            playerController.isPick = false;
+                            castRange = 1.0f;
+                            GameObject _prefab = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/KimJuWan/DroppedSlot.prefab", typeof(GameObject)) as GameObject;
+                            GameObject _droppedSlot = Instantiate(_prefab, pickSlot.transform.position, Quaternion.identity);
+                            _droppedSlot.name = "DroppedSlot";
+
+                            int num = pickSlot.transform.childCount;
+                            for (int i = 0; i < num; i++)
+                            {
+                                _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+                                pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
+                                ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
+                            }
+                            inventoryManager.OutInventory();
+                        }
+                        else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
+                        {
+                            Ray _ray = new Ray(sensor.position, -sensor.up);
+
+                            if (hit.transform.CompareTag("Plane"))
+                            {
+                                int num = pickSlot.transform.childCount;
+
+                                if (num <= 1)
+                                {
+                                    playerController.isPick = false;
+                                    castRange = 1.0f;
+
+                                    Destroy(pickSlot.transform.GetChild(0).gameObject);
+                                    inventoryManager.DroppedSlotOut();
+                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
+                                }
+                                else
+                                {
+                                    //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
+                                    Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
+                                    inventoryManager.DroppedSlotOut();
+                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            playerController.isPick = false;
+                            castRange = 1.0f;
+
+                            inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+                            inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
+                            ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
+                            pickSlot.transform.GetChild(0).SetParent(null);
+                        }
+                    }
+
+                    break;
             }
         }
         else
         {
-            Debug.Log("바닥입니다....");
-
-            if (playerController.isPick)
-            {
-                if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
-                {
-                    playerController.isPick = false;
-                    castRange = 1.0f;
-                    GameObject _prefab = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/KimJuWan/DroppedSlot.prefab", typeof(GameObject)) as GameObject;
-                    GameObject _droppedSlot = Instantiate(_prefab, pickSlot.transform.position, Quaternion.identity);
-                    _droppedSlot.name = "DroppedSlot";
-
-                    int num = pickSlot.transform.childCount;
-                    for (int i = 0; i < num; i++)
-                    {
-                        _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                        pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
-                        ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
-                    }
-                    inventoryManager.OutInventory();
-                }
-                else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
-                {
-                    RaycastHit _hit;
-                    Ray _ray = new Ray(transform.position, -transform.up);
-
-                    if(Physics.Raycast(_ray, out _hit, 1.0f))
-                    {
-                        if (_hit.transform.CompareTag("Plane"))
-                        {
-                            int num = pickSlot.transform.childCount;
-
-                            if (num <= 1)
-                            {
-                                playerController.isPick = false;
-                                castRange = 1.0f;
-
-                                Destroy(pickSlot.transform.GetChild(0).gameObject);
-                                inventoryManager.DroppedSlotOut();
-                                GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
-                            }
-                            else
-                            {
-                                //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
-                                inventoryManager.DroppedSlotOut();
-                                GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    playerController.isPick = false;
-                    castRange = 1.0f;
-
-                    inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                    inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
-                    ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
-                    pickSlot.transform.GetChild(0).SetParent(null);
-                }
-            }
+ 
         }
     }
 
