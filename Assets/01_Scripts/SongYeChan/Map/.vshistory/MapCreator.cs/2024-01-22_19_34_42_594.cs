@@ -348,22 +348,27 @@ public class MapCreator : MonoBehaviour
                         productionMahcineObject.AddComponent<FactoryManager>();
                         productionMahcineObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         productionMahcineObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                        productionMahcineObject = null;
-                        // TODO : 2024.01.23 여기에서 시작 송예찬
+
                     }
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.STORAGE)
                 {
-                    storageObject = Instantiate(storagePrefab, mapParent.transform);
-                    storageObject.transform.position = new Vector3(x * objScale * 10, storagePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    storageObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-
+                    if (round == 1)
+                    {
+                        storageObject = Instantiate(storagePrefab, mapParent.transform);
+                        storageObject.transform.position = new Vector3(x * objScale * 10, storagePrefab.transform.localScale.y / 2, z * objScale * 10);
+                        storageObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    }
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.ENGINE)
                 {
-                    engineObject = Instantiate(enginePrefab, mapParent.transform);
-                    engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    if (round == 1)
+                    {
+                        engineObject = Instantiate(enginePrefab, mapParent.transform);
+                        engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
+                        engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    }
+
                 }
                 x++;
             }

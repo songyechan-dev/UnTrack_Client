@@ -32,9 +32,9 @@ public class PlayerManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, castRange, layerMask))
         {
-            Debug.Log("태그명 !!! ::: " + hit.transform.tag);
             switch (hit.transform.tag)
             {
+                Debug.Log("태그명 !!! ::: " + hit.transform.tag);
                 case "Obstacle":
                     hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
 

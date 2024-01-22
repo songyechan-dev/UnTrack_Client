@@ -41,7 +41,7 @@ public class TrackManager : MonoBehaviour
             Debug.Log($"hit.transform :: {hit.transform.position}");
 
             GameObject track = Instantiate(trackPrefab);
-            track.transform.position = new Vector3(Mathf.Round(_ray.origin.x), 0 + (trackPrefab.transform.localScale.y / 2), Mathf.Round(_ray.origin.z));
+            track.transform.position = new Vector3(_ray.origin.normalized.x, 0 + (trackPrefab.transform.localScale.y / 2), _ray.origin.normalized.z);
             track.AddComponent<TrackInfo>();
             track.tag = trackTagName;
             TrackInfo _trackInfo = track.GetComponent<TrackInfo>();

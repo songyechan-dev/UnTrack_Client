@@ -28,10 +28,6 @@ public class MapCreator : MonoBehaviour
     private int mapWidth = MapInfo.mapWidth;
     private int mapHeight = MapInfo.mapHeight;
 
-    private bool isCreatedFactory;
-    private bool isCreatedStorage;
-    private bool isCreatedEngine;
-
     private Dictionary<string,float> rotationInfoDict = new Dictionary<string,float>();
 
     private int round =1;
@@ -44,12 +40,6 @@ public class MapCreator : MonoBehaviour
     public GameObject obStonePrefab;
     public GameObject obTreePrefab;
     public GameObject trackPrefab;
-    [Header("")]
-    public GameObject DynamiteMachinePrefab;
-    public GameObject productionMachinePrefab;
-    public GameObject waterTankPrefab;
-    public GameObject enginePrefab;
-    public GameObject storagePrefab;
     [Header("")]
     public TrackManager trackManager;
 
@@ -87,7 +77,6 @@ public class MapCreator : MonoBehaviour
             for (int x = 0; x < mapWidth; x++)
             {
                 mapInfo = "0";
-                
                 // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
                 if (!isCreatedObStone && !isCreatedObTree && y +3 < mapHeight)
                 {
@@ -125,39 +114,6 @@ public class MapCreator : MonoBehaviour
                         mapInfo = isCreatedObStone ? "1" : "2";
                     }
                 }
-
-                if (round == 1)
-                {
-                    int rand = Random.Range(0, 1000);
-                    if (!isCreatedFactory || !isCreatedEngine || !isCreatedStorage)
-                    {
-                        if (rand < 10)
-                        {
-                            if (!isCreatedFactory)
-                            {
-                                mapInfo =((int)(MapInfo.Type.FACTORY)).ToString();
-                                isCreatedFactory = true;
-                                Debug.Log("팩토리 생성");
-                            }
-                            else if (!isCreatedEngine)
-                            {
-                                mapInfo = ((int)(MapInfo.Type.ENGINE)).ToString();
-                                isCreatedEngine = true;
-                                Debug.Log("엔진 생성");
-                            }
-                            else if (!isCreatedStorage)
-                            {
-                                mapInfo = ((int)(MapInfo.Type.STORAGE)).ToString();
-                                isCreatedStorage = true;
-                                Debug.Log("스토리지 생성");
-                            }
-
-                        }
-                    }
-                }
-
-
-
                 //출발Track
                 if ((x >= MapInfo.defaultStartTrackX && x <= MapInfo.defaultEndTrackX) && (y >= MapInfo.defaultStartTrackZ && y <= MapInfo.defaultEndTrackZ))
                 {
@@ -184,9 +140,7 @@ public class MapCreator : MonoBehaviour
             }
         }
         Debug.Log(content);
-        isCreatedFactory = false;
-        isCreatedEngine = false;
-        isCreatedStorage = false;
+
     }
 
     private IEnumerator CSVLoad()
@@ -284,12 +238,6 @@ public class MapCreator : MonoBehaviour
         GameObject obStoneObject;
         GameObject trackObject;
         GameObject obTreeObject;
-
-        GameObject dynamiteMachineObject;
-        GameObject productionMahcineObject;
-        GameObject waterTankObject;
-        GameObject engineObject;
-        GameObject storageObject;
         
         for (int i = 0; i < mapY; i++)
         {
@@ -337,33 +285,6 @@ public class MapCreator : MonoBehaviour
                         trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[endTrackYRotationKeyName], 0);
                         trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
                     }
-                }
-                else if (mapInfo[i][j] == (int)MapInfo.Type.FACTORY)
-                {
-                    if (round == 1)
-                    {
-                        productionMahcineObject = Instantiate(productionMachinePrefab, mapParent.transform);
-                        productionMahcineObject.transform.position = new Vector3(x * objScale * 10, productionMachinePrefab.transform.localScale.y / 2, z * objScale * 10);
-                        productionMahcineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                        productionMahcineObject.AddComponent<FactoryManager>();
-                        productionMahcineObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
-                        productionMahcineObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                        productionMahcineObject = null;
-                        // TODO : 2024.01.23 여기에서 시작 송예찬
-                    }
-                }
-                else if (mapInfo[i][j] == (int)MapInfo.Type.STORAGE)
-                {
-                    storageObject = Instantiate(storagePrefab, mapParent.transform);
-                    storageObject.transform.position = new Vector3(x * objScale * 10, storagePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    storageObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-
-                }
-                else if (mapInfo[i][j] == (int)MapInfo.Type.ENGINE)
-                {
-                    engineObject = Instantiate(enginePrefab, mapParent.transform);
-                    engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                 }
                 x++;
             }

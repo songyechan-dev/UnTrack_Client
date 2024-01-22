@@ -32,7 +32,6 @@ public class PlayerManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, castRange, layerMask))
         {
-            Debug.Log("태그명 !!! ::: " + hit.transform.tag);
             switch (hit.transform.tag)
             {
                 case "Obstacle":
@@ -193,14 +192,12 @@ public class PlayerManager : MonoBehaviour
                                 }
                                 else
                                 {
-
                                     //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
                                     Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }
                             }
-
                         }
                         else
                         {

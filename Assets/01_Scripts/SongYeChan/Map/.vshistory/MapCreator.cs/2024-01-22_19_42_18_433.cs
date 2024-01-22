@@ -349,7 +349,6 @@ public class MapCreator : MonoBehaviour
                         productionMahcineObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         productionMahcineObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
                         productionMahcineObject = null;
-                        // TODO : 2024.01.23 여기에서 시작 송예찬
                     }
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.STORAGE)

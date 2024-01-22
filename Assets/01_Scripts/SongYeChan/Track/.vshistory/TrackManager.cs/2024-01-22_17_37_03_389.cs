@@ -41,7 +41,7 @@ public class TrackManager : MonoBehaviour
             Debug.Log($"hit.transform :: {hit.transform.position}");
 
             GameObject track = Instantiate(trackPrefab);
-            track.transform.position = new Vector3(Mathf.Round(_ray.origin.x), 0 + (trackPrefab.transform.localScale.y / 2), Mathf.Round(_ray.origin.z));
+            track.transform.position = _ray.origin + new Vector3(0, trackPrefab.transform.localScale.y / 2, 0);
             track.AddComponent<TrackInfo>();
             track.tag = trackTagName;
             TrackInfo _trackInfo = track.GetComponent<TrackInfo>();
@@ -256,23 +256,20 @@ public class TrackManager : MonoBehaviour
     void TrackConnectFailed(GameObject track)
     {
         trackConnectFailed = true;
-        GameObject _droppedSlot = Instantiate(droppedSlotPrefab,track.transform.position,track.transform.rotation);
+        GameObject _droppedSlot = Instantiate(droppedSlotPrefab);
         _droppedSlot.tag = "DroppedSlot";
         _droppedSlot.name = "DroppedSlot";
-
         track.transform.parent = _droppedSlot.transform;
         track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
         track.tag = "Item";
         track.GetComponent<TrackInfo>().isElectricityFlowing = false;
         track.AddComponent<ItemManager>();
         track.GetComponent<ItemManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
-
+        
 
         _droppedSlot.GetComponent<InventoryManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
         _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(track);
-
-
-        //track.layer = 0;
+        track.layer = 0;
 
     }
 

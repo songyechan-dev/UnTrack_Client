@@ -28,11 +28,9 @@ public class PlayerManager : MonoBehaviour
     {
         int layerMask = (-1) - (1 << LayerMask.NameToLayer("PickSlot"));
         RaycastHit hit;
-        Ray ray = new Ray(sensor.position, -sensor.up);
 
-        if (Physics.Raycast(ray, out hit, castRange, layerMask))
+        if (Physics.Raycast(sensor.position, -sensor.up, out hit, castRange, layerMask))
         {
-            Debug.Log("태그명 !!! ::: " + hit.transform.tag);
             switch (hit.transform.tag)
             {
                 case "Obstacle":
@@ -40,7 +38,6 @@ public class PlayerManager : MonoBehaviour
 
                     break;
                 case "Item":
-                    Debug.Log("호출됨");
                     if (!playerController.isPick)
                     {
                         playerController.isPick = true;
@@ -177,6 +174,7 @@ public class PlayerManager : MonoBehaviour
                         }
                         else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
                         {
+                            Ray _ray = new Ray(sensor.localPosition, -sensor.up);
 
                             if (hit.transform.CompareTag("Plane"))
                             {
@@ -189,18 +187,16 @@ public class PlayerManager : MonoBehaviour
 
                                     Destroy(pickSlot.transform.GetChild(0).gameObject);
                                     inventoryManager.DroppedSlotOut();
-                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
+                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
                                 }
                                 else
                                 {
-
                                     //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
                                     Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
                                     inventoryManager.DroppedSlotOut();
-                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
+                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(_ray);
                                 }
                             }
-
                         }
                         else
                         {
