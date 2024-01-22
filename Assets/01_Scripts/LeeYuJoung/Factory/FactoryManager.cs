@@ -10,9 +10,9 @@ public class FactoryManager : MonoBehaviour
 {
     public enum FACTORYTYPE
     {
-        ENGINE,
-        STORAGE,
-        MACHINE
+        ProductionMachine,
+        WaterTank,
+        DynamiteMachine
     }
     public FACTORYTYPE factoryType;
 
@@ -41,7 +41,36 @@ public class FactoryManager : MonoBehaviour
 
     public void Init()
     {
-        FactoryJsonLoad(dataPath);
+        if (GameManager.Instance().GetRound() == 1)
+        {
+            FactoryJsonLoad(dataPath);
+        }
+        else
+        {
+            FactoryJsonLoad(dataPath);
+
+            switch (factoryType)
+            {
+                case FACTORYTYPE.ProductionMachine:
+                    currentItemNum = StateManager.Instance().productionMachines[0]["currentItemNum"];
+                    itemMaxVolume = StateManager.Instance().productionMachines[0]["itemMaxVolume"];
+                    StateManager.Instance().productionMachines.RemoveAt(0);
+
+                    break;
+                case FACTORYTYPE.WaterTank:
+                    currentItemNum = StateManager.Instance().waterTanks[0]["currentItemNum"];
+                    itemMaxVolume = StateManager.Instance().waterTanks[0]["itemMaxVolume"];
+                    StateManager.Instance().waterTanks.RemoveAt(0);
+
+                    break;
+                case FACTORYTYPE.DynamiteMachine:
+                    currentItemNum = StateManager.Instance().dynamiteMachines[0]["currentItemNum"];
+                    itemMaxVolume = StateManager.Instance().dynamiteMachines[0]["itemMaxVolume"];
+                    StateManager.Instance().dynamiteMachines.RemoveAt(0);
+
+                    break;
+            }
+        }
     }
 
     // 엔진이 일정 시간마다 불나는 이벤트
@@ -157,7 +186,7 @@ public class FactoryManager : MonoBehaviour
 
         for(int i = 0; i < jsonData.Count; i++)
         {
-            if (jsonData[i]["TYPE"].Equals(gameObject.name))
+            if (jsonData[i]["TYPE"].Equals(factoryType))
             {
                 ingredient_1 = jsonData[i]["INGREDIENT_1"];
                 amount_1 = (int)jsonData[i]["AMOUNT_1"];

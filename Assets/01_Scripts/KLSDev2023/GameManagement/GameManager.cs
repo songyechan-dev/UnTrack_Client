@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         gameState = GameState.GameStart;
-        MapCreator.Instance().MapLoad();
+        //MapCreator.Instance().MapLoad();
 
     }
 

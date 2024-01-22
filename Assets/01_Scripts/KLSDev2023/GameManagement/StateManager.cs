@@ -8,6 +8,10 @@ namespace LeeYuJoung
 {
     public class StateManager : MonoBehaviour
     {
+        public List<Dictionary<string, int>> productionMachines = new List<Dictionary<string, int>>();
+        public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
+        public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
+
         private static StateManager instance;
         public static StateManager Instance()
         {
@@ -16,15 +20,15 @@ namespace LeeYuJoung
 
         public int engineMaxVolume = 5;      // 엔진 최대 수용 가능한 기계 개수
         public int engineCurrentVolume = 3;  // 현재 엔진이 수용한 기계 개수 ( 기본 시작 : 엔진 1개, 저장소 1개, 제작소 1개 )
-        public List<GameObject> factorys = new List<GameObject>();   // 현잰 엔진이 가진 제작소들
+
+        public Dictionary<string, List<int[]>> factorys = new Dictionary<string, List<int[]>>()
+        { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
+
+        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
         public int voltNum = 0;              // 현재 보유 볼트(재화) 개수
 
-        public int accumulateWood = 0;    // 누적 Wood 개수 
-        public int accumulateSteel = 0;   // 누적 Steel 개수
-        public int accumulateTrack = 0;    // 누적 Rail 사용 개수 
-        public float accumulateElapsedTime = 0;  // 누적 경과 시간
-
-        public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
+        public Dictionary<string, int> storages = new Dictionary<string, int>()  // Storage 재료 저장 공간
+        { { "WOOD", 0}, { "STEEL", 0} };
         public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
 
         public Text storageText;
@@ -41,17 +45,15 @@ namespace LeeYuJoung
             {
                 Destroy(gameObject);
             }
+            DontDestroyOnLoad(gameObject);
 
-            storages.Add("WOOD", 0);
-            storages.Add("STEEL", 0);
-            factorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
+            BringFactoryValue();
+            sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
         }
 
         private void Update()
         {
-            // 라운드 시작 하면 시간 누적 시작 하기 & 라운드 끝나면 누적 시간 초기화
-            //accumulateElapsedTime += Time.deltaTime;
-            //CheckAccumulateTime();
+
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
@@ -60,6 +62,24 @@ namespace LeeYuJoung
             storageText.text = $"STORAGE TOTALVOLUME {_num} / 10";
             woodText.text = $"Wood : {storages["WOOD"]}";
             steelText.text = $"Steel : {storages["STEEL"]}";
+        }
+
+        public void BringFactoryValue()
+        {
+            for(int i = 0; i < factorys["ProductionMachine"].Count; i++)
+            {
+                productionMachines.Add(new Dictionary<string, int> { { "currentItemNum", factorys["ProductionMachine"][i][0] }, { "itemMaxVolume", factorys["ProductionMachine"][i][1] } });
+            }
+
+            for (int i = 0; i < factorys["WaterTank"].Count; i++)
+            {
+                waterTanks.Add(new Dictionary<string, int> { { "currentItemNum", factorys["WaterTank"][i][0] }, { "itemMaxVolume", factorys["WaterTank"][i][1] } });
+            }
+
+            for (int i = 0; i < factorys["DynamiteMachine"].Count; i++)
+            {
+                dynamiteMachines.Add(new Dictionary<string, int> { { "currentItemNum", factorys["DynamiteMachine"][i][0] }, { "itemMaxVolume", factorys["DynamiteMachine"][i][1] } });
+            }
         }
 
         // 플레이어가 현재 들고 있는 오브젝트 정보 매개변수로 전달 받기(해당 오브젝트의 이름)
@@ -72,13 +92,6 @@ namespace LeeYuJoung
 
             // Quest 진행도 업그레이드
             QuestManager.Instance().UpdateProgress(_name, _amount);
-        }
-
-        // 현재 라운드의 누적 시간
-        public void CheckAccumulateTime()
-        {
-            // Quest 진행도 업그레이드
-            QuestManager.Instance().UpdateProgress(accumulateElapsedTime);
         }
 
         // Storage 내에 재료 저장
@@ -106,9 +119,9 @@ namespace LeeYuJoung
             {
                 storages[_ingredient] += _amount;
 
-                for (int i = 0; i < factorys.Count; i++)
+                for (int i = 0; i < sceneFactorys.Count; i++)
                 {
-                    FactoryManager _fm = factorys[i].GetComponent<FactoryManager>();
+                    FactoryManager _fm = sceneFactorys[i].GetComponent<FactoryManager>();
 
                     if (!_fm.isWorking)
                     {
