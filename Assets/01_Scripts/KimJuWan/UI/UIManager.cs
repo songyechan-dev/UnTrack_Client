@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class UIManager : MonoBehaviour
 {
+    
     public PlayerController playerController;
     // 시작
     void Start()
@@ -26,4 +29,9 @@ public class UIManager : MonoBehaviour
             playerController.keyCode = 0;
         }
     }
+
+    //public void MoveToLobby()
+    //{
+        
+    //}
 }
