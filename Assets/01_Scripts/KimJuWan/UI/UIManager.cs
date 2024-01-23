@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
             loginFailPanel = canvas.transform.Find("LoginFailPanel").gameObject;
         }
         // --------------------------------------------------------------------------------------
-
+        
     }
 
     //public void MoveToLobby()
