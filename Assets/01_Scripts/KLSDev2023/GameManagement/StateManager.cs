@@ -18,6 +18,7 @@ namespace LeeYuJoung
             return instance;
         }
 
+        public int voltNum = 0;              // 현재 보유 볼트(재화) 개수
         public int engineMaxVolume = 5;      // 엔진 최대 수용 가능한 기계 개수
         public int engineCurrentVolume = 3;  // 현재 엔진이 수용한 기계 개수 ( 기본 시작 : 엔진 1개, 저장소 1개, 제작소 1개 )
 
@@ -25,7 +26,6 @@ namespace LeeYuJoung
         { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
 
         public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
-        public int voltNum = 0;              // 현재 보유 볼트(재화) 개수
 
         public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
         public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
@@ -52,11 +52,6 @@ namespace LeeYuJoung
             sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
         }
 
-        private void Update()
-        {
-
-        }
-
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
         public void OnUIExample(int _num)
         {
@@ -65,6 +60,7 @@ namespace LeeYuJoung
             steelText.text = $"Steel : {storages["STEEL"]}";
         }
 
+        // 업그레이드 끝나고 라운드 시작하기 전 마다 실행
         public void BringFactoryValue()
         {
             for(int i = 0; i < factorys["ProductionMachine"].Count; i++)
