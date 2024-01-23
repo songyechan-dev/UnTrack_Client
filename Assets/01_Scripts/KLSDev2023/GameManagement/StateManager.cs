@@ -31,7 +31,7 @@ namespace LeeYuJoung
         public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
-
+        
 
         public Text storageText;
         public Text woodText;
@@ -53,6 +53,11 @@ namespace LeeYuJoung
             storages.Add("WOOD", 0);
             storages.Add("STEEL", 0);
             sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
+        }
+
+        private void Update()
+        {
+            
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
