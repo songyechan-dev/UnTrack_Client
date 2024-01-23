@@ -17,6 +17,7 @@ public class ObstacleManager : MonoBehaviour
 
     // 현재 Obstacle을 Player가 작업 중인지 확인
     public bool isWorking = false;
+    public RaycastHit hit;
 
     void Start()
     {
@@ -31,10 +32,29 @@ public class ObstacleManager : MonoBehaviour
             Debug.Log("::: 이미 작업 중 이거나 장비가 맞지 않음 :::");
             return;
         }
+        else
+        {
+            CheckObstacleHeight(_player);
+        }
+    }
 
-        isWorking = true;
-        _player.isWorking = true;
-        StartCoroutine(ObstacleDelete(_player));
+    // 위에 Obstacle이 더 있는지 확인
+    public void CheckObstacleHeight(PlayerController _player)
+    {
+        Ray ray = new Ray(transform.position, transform.up);
+
+        if(Physics.Raycast(ray, out hit, 1.0f))
+        {
+            Debug.Log("위에 장애물이 있습니다");
+            hit.transform.GetComponent<ObstacleManager>().CheckObstacleHeight(_player);
+        }
+        else
+        {
+            Debug.Log("맨 위 장애물 입니다");
+            isWorking = true;
+            _player.isWorking = true;
+            StartCoroutine(ObstacleDelete(_player));
+        }
     }
 
     // Obstacle 제거
@@ -48,7 +68,6 @@ public class ObstacleManager : MonoBehaviour
         while (isWorking)
         {
             yield return new WaitForEndOfFrame();
-            Debug.Log("CurrentTime ::: " + currentTime);
             currentTime += Time.deltaTime;
 
             if (currentTime > workTime)
@@ -57,7 +76,7 @@ public class ObstacleManager : MonoBehaviour
                 isWorking = false;
 
                 _player.isWorking = false;
-                GenerateIngredient();
+                GenerateIngredient(_player);
                 Destroy(gameObject);
             }
 
@@ -68,12 +87,13 @@ public class ObstacleManager : MonoBehaviour
     }
 
     // 재료 생성
-    public void GenerateIngredient()
+    public void GenerateIngredient(PlayerController _player)
     {
         Debug.Log("Generate ::: " + generateItem);
         QuestManager.Instance().UpdateProgress(generateItem, 1);
         GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
         GameObject _object =  Instantiate(_item, transform.position, transform.rotation);
+        _object.transform.position = _player.transform.position;
         _object.name = generateItem;
     }
 

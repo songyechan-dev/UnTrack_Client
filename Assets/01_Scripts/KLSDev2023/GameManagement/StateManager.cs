@@ -8,10 +8,6 @@ namespace LeeYuJoung
 {
     public class StateManager : MonoBehaviour
     {
-        public List<Dictionary<string, int>> productionMachines = new List<Dictionary<string, int>>();
-        public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
-        public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
-
         private static StateManager instance;
         public static StateManager Instance()
         {
@@ -22,13 +18,20 @@ namespace LeeYuJoung
         public int engineMaxVolume = 5;      // 엔진 최대 수용 가능한 기계 개수
         public int engineCurrentVolume = 3;  // 현재 엔진이 수용한 기계 개수 ( 기본 시작 : 엔진 1개, 저장소 1개, 제작소 1개 )
 
+        public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
+        public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
+
         public Dictionary<string, List<int[]>> factorys = new Dictionary<string, List<int[]>>()
         { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
 
+        public List<Dictionary<string, int>> productionMachines = new List<Dictionary<string, int>>();
+        public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
+        public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
+
         public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
 
-        public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
-        public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
+        // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
+
 
         public Text storageText;
         public Text woodText;
@@ -80,8 +83,6 @@ namespace LeeYuJoung
         }
 
         // 플레이어가 현재 들고 있는 오브젝트 정보 매개변수로 전달 받기(해당 오브젝트의 이름)
-        // → 재료는 저장소에 내려 놓기 직전에 해당 함수 실행하기
-        // → 트랙은 트랙 옆에 내려 놓기 직전에 해당 함수 실행하기
         public void CheckAccumulateCount(string _name, int _amount)
         {
             int currentNum = (int)GetType().GetField($"accumulate{_name}").GetValue(instance);
