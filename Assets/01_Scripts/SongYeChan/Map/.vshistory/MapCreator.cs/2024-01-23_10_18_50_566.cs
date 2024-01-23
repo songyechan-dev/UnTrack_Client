@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 
 
+// TODO : _round는 GameManager 의 Round로 변경 송예찬 2024.0.18
 public class MapCreator : MonoBehaviour
 {
     private List<List<int>> mapInfo = new List<List<int>>();
@@ -247,7 +248,7 @@ public class MapCreator : MonoBehaviour
         isMapDataLoaded = false;
         yield return StartCoroutine(DataLoad());
 
-        // Data 로딩이 완료될 때까지 대기
+        // CSV 로딩이 완료될 때까지 대기
         while (!isMapDataLoaded)
         {
             yield return null;

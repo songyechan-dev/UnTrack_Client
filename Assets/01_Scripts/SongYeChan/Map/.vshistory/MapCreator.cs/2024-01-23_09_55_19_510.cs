@@ -8,12 +8,13 @@ using UnityEditor;
 using UnityEngine;
 
 
+// TODO : _round는 GameManager 의 Round로 변경 송예찬 2024.0.18
 public class MapCreator : MonoBehaviour
 {
     private List<List<int>> mapInfo = new List<List<int>>();
     private int mapY;
     private int mapX;
-    private bool isMapDataLoaded = false;
+    private bool isMapCSVLoaded = false;
     private float objScale = MapInfo.objScale;
 
     private string trackYRotationInfoFileName = MapInfo.trackYRotationInfoFileName;
@@ -123,50 +124,52 @@ public class MapCreator : MonoBehaviour
                     }
                     else if (x <= (randomXcount + originX) && x >= originX)
                     {
-                        mapInfo = isCreatedObStone ? ((int)(MapInfo.Type.OBSTACLE_STONE)).ToString() : ((int)(MapInfo.Type.OBSTACLE_TREE)).ToString();
+                        mapInfo = isCreatedObStone ? "1" : "2";
                     }
                 }
-                if (!isCreatedFactory || !isCreatedEngine || !isCreatedStorage)
+
+                if (round == 1)
                 {
-                    int rand = Random.Range(0, 500);
-                    if (rand < 100)
+                    int rand = Random.Range(0, 1000);
+                    if (!isCreatedFactory || !isCreatedEngine || !isCreatedStorage)
                     {
-                        if (!isCreatedEngine)
+                        if (rand < 10)
                         {
-                            mapInfo = ((int)(MapInfo.Type.ENGINE)).ToString();
-                            isCreatedEngine = true;
-                            Debug.Log("엔진 생성");
-                        }
-                        else if (!isCreatedStorage)
-                        {
-                            mapInfo = ((int)(MapInfo.Type.STORAGE)).ToString();
-                            isCreatedStorage = true;
-                            Debug.Log("스토리지 생성");
-                        }
-                        else if (round == 1 && !isCreatedFactory)
-                        {
-                            mapInfo = ((int)(MapInfo.Type.FACTORY)).ToString();
-                            isCreatedFactory = true;
-                            Debug.Log("팩토리 생성");
-                        }
-                        else if (round != 1 && factoryCreatedCount < StateManager.Instance().waterTanks.Count + StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count)
-                        {
-                            mapInfo = ((int)(MapInfo.Type.FACTORY)).ToString();
-                            factoryCreatedCount++;
-                            Debug.Log("팩토리 생성");
+                            if (!isCreatedFactory)
+                            {
+                                mapInfo =((int)(MapInfo.Type.FACTORY)).ToString();
+                                isCreatedFactory = true;
+                                Debug.Log("팩토리 생성");
+                            }
+                            else if (!isCreatedEngine)
+                            {
+                                mapInfo = ((int)(MapInfo.Type.ENGINE)).ToString();
+                                isCreatedEngine = true;
+                                Debug.Log("엔진 생성");
+                            }
+                            else if (!isCreatedStorage)
+                            {
+                                mapInfo = ((int)(MapInfo.Type.STORAGE)).ToString();
+                                isCreatedStorage = true;
+                                Debug.Log("스토리지 생성");
+                            }
+
                         }
                     }
                 }
+
+
+
                 //출발Track
                 if ((x >= MapInfo.defaultStartTrackX && x <= MapInfo.defaultEndTrackX) && (y >= MapInfo.defaultStartTrackZ && y <= MapInfo.defaultEndTrackZ))
                 {
-                    mapInfo = ((int)(MapInfo.Type.TRACK)).ToString();
+                    mapInfo = "3";
                 }
 
                 //도착Track
                 if ((x >= MapInfo.finishStartTrackX && x <= MapInfo.finishEndTrackX) && (y >= MapInfo.finishStartTrackZ && y <= MapInfo.finishEndTrackZ))
                 {
-                    mapInfo = ((int)(MapInfo.Type.FiNISH_TRACK)).ToString();
+                    mapInfo = "4";
                 }
                 if (x == 0)
                 {
@@ -188,7 +191,7 @@ public class MapCreator : MonoBehaviour
         isCreatedStorage = false;
     }
 
-    private IEnumerator DataLoad()
+    private IEnumerator CSVLoad()
     {
         MapDataCreate();
         if (!string.IsNullOrEmpty(content))
@@ -226,7 +229,7 @@ public class MapCreator : MonoBehaviour
                     string key = values[0];
                     float value = float.Parse(values[1]);
                     rotationInfoDict.Add(key, value);
-                    isMapDataLoaded = true;
+                    isMapCSVLoaded = true;
                 }
                 else
                 {
@@ -242,13 +245,13 @@ public class MapCreator : MonoBehaviour
 
     }
 
-    private IEnumerator WaitUntilMapDataLoaded()
+    private IEnumerator WaitUntilMapCSVLoaded()
     {
-        isMapDataLoaded = false;
-        yield return StartCoroutine(DataLoad());
+        isMapCSVLoaded = false;
+        yield return StartCoroutine(CSVLoad());
 
-        // Data 로딩이 완료될 때까지 대기
-        while (!isMapDataLoaded)
+        // CSV 로딩이 완료될 때까지 대기
+        while (!isMapCSVLoaded)
         {
             yield return null;
         }
@@ -259,7 +262,7 @@ public class MapCreator : MonoBehaviour
     {
         round = GameManager.Instance().GetRound();
         Debug.Log("Round :::" + round);
-        StartCoroutine(WaitUntilMapDataLoaded());
+        StartCoroutine(WaitUntilMapCSVLoaded());
     }
 
     public void Create()
@@ -346,6 +349,7 @@ public class MapCreator : MonoBehaviour
                         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
                         factoryObject = null;
+                        // TODO : 2024.01.23 여기에서 시작 송예찬
                     }
                     else
                     {
@@ -393,7 +397,6 @@ public class MapCreator : MonoBehaviour
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.ENGINE)
                 {
-                    Debug.Log("엔진생성 호출");
                     engineObject = Instantiate(enginePrefab, mapParent.transform);
                     engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
                     engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);

@@ -247,7 +247,7 @@ public class MapCreator : MonoBehaviour
         isMapDataLoaded = false;
         yield return StartCoroutine(DataLoad());
 
-        // Data 로딩이 완료될 때까지 대기
+        // CSV 로딩이 완료될 때까지 대기
         while (!isMapDataLoaded)
         {
             yield return null;

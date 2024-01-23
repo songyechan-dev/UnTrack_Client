@@ -8,12 +8,13 @@ using UnityEditor;
 using UnityEngine;
 
 
+// TODO : _round는 GameManager 의 Round로 변경 송예찬 2024.0.18
 public class MapCreator : MonoBehaviour
 {
     private List<List<int>> mapInfo = new List<List<int>>();
     private int mapY;
     private int mapX;
-    private bool isMapDataLoaded = false;
+    private bool isMapCSVLoaded = false;
     private float objScale = MapInfo.objScale;
 
     private string trackYRotationInfoFileName = MapInfo.trackYRotationInfoFileName;
@@ -226,7 +227,7 @@ public class MapCreator : MonoBehaviour
                     string key = values[0];
                     float value = float.Parse(values[1]);
                     rotationInfoDict.Add(key, value);
-                    isMapDataLoaded = true;
+                    isMapCSVLoaded = true;
                 }
                 else
                 {
@@ -242,13 +243,13 @@ public class MapCreator : MonoBehaviour
 
     }
 
-    private IEnumerator WaitUntilMapDataLoaded()
+    private IEnumerator WaitUntilMapCSVLoaded()
     {
-        isMapDataLoaded = false;
+        isMapCSVLoaded = false;
         yield return StartCoroutine(DataLoad());
 
-        // Data 로딩이 완료될 때까지 대기
-        while (!isMapDataLoaded)
+        // CSV 로딩이 완료될 때까지 대기
+        while (!isMapCSVLoaded)
         {
             yield return null;
         }
@@ -259,7 +260,7 @@ public class MapCreator : MonoBehaviour
     {
         round = GameManager.Instance().GetRound();
         Debug.Log("Round :::" + round);
-        StartCoroutine(WaitUntilMapDataLoaded());
+        StartCoroutine(WaitUntilMapCSVLoaded());
     }
 
     public void Create()
@@ -346,6 +347,7 @@ public class MapCreator : MonoBehaviour
                         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
                         factoryObject = null;
+                        // TODO : 2024.01.23 여기에서 시작 송예찬
                     }
                     else
                     {
