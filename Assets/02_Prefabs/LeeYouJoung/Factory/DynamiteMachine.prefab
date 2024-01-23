@@ -97,30 +97,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1414702916102547232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414702916102547295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  factoryType: 2
-  dataPath: FactoryData
-  ingredient_1: 
-  amount_1: 0
-  ingredient_2: 
-  amount_2: 0
-  generateTime: 0
-  generateItem: 
-  heatingDeadTime: 45
-  currentHeatingTime: 0
-  currentGenerateTime: 0
-  currentItemNum: 0
-  itemMaxVolume: 5
-  isWorking: 0
-  isHeating: 0
