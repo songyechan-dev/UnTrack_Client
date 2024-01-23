@@ -1626,6 +1626,7 @@ MonoBehaviour:
   factoriesObjectPrefab: {fileID: 0}
   mapCreator: {fileID: 0}
   gameState: 0
+  gameMode: 0
   timeManager: {fileID: 0}
   firstFactoriesObject: {fileID: 0}
 --- !u!4 &893571482
@@ -2638,8 +2639,8 @@ MonoBehaviour:
   voltNum: 0
   engineMaxVolume: 5
   engineCurrentVolume: 3
-  sceneFactorys: []
   storageMaxVolume: 10
+  sceneFactorys: []
   storageText: {fileID: 754540701}
   woodText: {fileID: 997071824}
   steelText: {fileID: 423634270}
