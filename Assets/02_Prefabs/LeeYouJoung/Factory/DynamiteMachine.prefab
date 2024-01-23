@@ -112,12 +112,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factoryType: 2
   dataPath: FactoryData
-  machineType: 1
   ingredient_1: 
   amount_1: 0
   ingredient_2: 
   amount_2: 0
   generateTime: 0
   generateItem: 
-  currentTime: 0
+  heatingDeadTime: 45
+  currentHeatingTime: 0
+  currentGenerateTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
   isWorking: 0
+  isHeating: 0
