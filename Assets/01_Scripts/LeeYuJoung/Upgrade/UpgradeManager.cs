@@ -76,7 +76,7 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    // UI 확인용 
+    // UI 확인용 함수
     public void NextRound()
     {
         StateManager.Instance().BringFactoryValue();
