@@ -7,6 +7,15 @@ using static GameManager;
 
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
+    public enum PlayableButtonInfo
+    {
+        GAME_START,
+        GAME_EXIT,
+        RANKING,
+        SETTING
+    }
+    public PlayableButtonInfo myInfo;
+
     #region Instance
     private static UIManager_LeeYuJoung instance;
     public static UIManager_LeeYuJoung Instance()
@@ -55,18 +64,18 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
     /// </summary>
     /// <param name="_info">PlayableButton 종류</param>
-    public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
+    public void PlayAbleButton_OnStay(PlayableButtonInfo _info)
     {
         switch (_info)
         {
-            case PlayableButtonInfo.Info.GAME_START:
+            case PlayableButtonInfo.GAME_START:
                 ActiveAndDeActive(loginPanel, ground);
                 break;
-            case PlayableButtonInfo.Info.GAME_EXIT:
+            case PlayableButtonInfo.GAME_EXIT:
                 break;
-            case PlayableButtonInfo.Info.RANKING:
+            case PlayableButtonInfo.RANKING:
                 break;
-            case PlayableButtonInfo.Info.SETTING:
+            case PlayableButtonInfo.SETTING:
                 break;
             default:
                 break;
@@ -77,7 +86,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
     /// </summary>
     /// <param name="_info">PlayableButton 종류</param>
-    public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
+    public void PlayAbleButton_OnHit(PlayableButtonInfo _info)
     {
 
     }
@@ -109,24 +118,6 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         }
     }
 
-
-    public void LoginButtonOnClick()
-    {
-        string user_id = loginPanel.transform.Find("InputID").GetComponent<InputField>().text;
-        string user_password = loginPanel.transform.Find("InputPW").GetComponent<InputField>().text;
-        StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
-    }
-
-    //public void ChangeKeyCode()
-    //{
-    //    playerController.keyCode++;
-    //    if(playerController.keyCode >2)
-    //    {
-    //        playerController.keyCode = 0;
-    //    }
-    //}
-
-
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -143,10 +134,10 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             playableButton_Setting = ground.transform.Find("Setting").gameObject;
             playableButton_GameExit = ground.transform.Find("Quit").gameObject;
 
-            playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START;
-            playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING;
-            playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING;
-            playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT;
+            //playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.GAME_START;
+            //playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.RANKING;
+            //playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.SETTING;
+            //playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.GAME_EXIT;
 
             loginPanel = canvas.transform.Find("LoginPanel").gameObject;
             settingPanel = canvas.transform.Find("SettingPanel").gameObject;
@@ -155,9 +146,4 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         // --------------------------------------------------------------------------------------
 
     }
-
-    //public void MoveToLobby()
-    //{
-
-    //}
 }
