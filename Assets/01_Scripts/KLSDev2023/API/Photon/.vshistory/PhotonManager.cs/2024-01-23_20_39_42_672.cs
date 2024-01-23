@@ -114,7 +114,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 //gameStartBtn.onClick.AddListener(() => Onstart(PhotonNetwork.CurrentRoom.Name)); ;
             }
 
-            UIManager.Instance().SetText(UIManager.Instance().roomIdText, PhotonNetwork.CurrentRoom.Name);
+            //UIManager.Instance().SetText(UIManager.Instance().roomIdText, PhotonNetwork.CurrentRoom.Name);
 
         }
         else

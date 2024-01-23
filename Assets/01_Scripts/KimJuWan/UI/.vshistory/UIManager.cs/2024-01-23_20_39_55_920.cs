@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     [Header("Panel")]
     public GameObject roomListPanel02;
     [Header("Text")]
-    public TextMesh roomIdText; 
+    public Text roomIdText; 
 
     #endregion
 
@@ -121,10 +121,6 @@ public class UIManager : MonoBehaviour
     {
         _text.text = _str;
     }
-    public void SetText(TextMesh _text, string _str)
-    {
-        _text.text = _str;
-    }
 
     public void LoginButtonOnClick_01()
     {
@@ -185,7 +181,7 @@ public class UIManager : MonoBehaviour
 
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
 
-            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
+            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<Text>();
         }
         #endregion
 

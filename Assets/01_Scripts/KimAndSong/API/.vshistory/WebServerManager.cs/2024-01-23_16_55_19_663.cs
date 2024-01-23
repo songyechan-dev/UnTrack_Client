@@ -21,7 +21,7 @@ public static class WebServerManager
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel01, UIManager.Instance().loginPanel01);
+                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
             }
             else
             {
@@ -38,7 +38,7 @@ public static class WebServerManager
                 }
                 else
                 {
-                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel01, UIManager.Instance().loginPanel01);
+                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
                 }
             }
         }

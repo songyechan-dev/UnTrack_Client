@@ -21,7 +21,7 @@ public static class WebServerManager
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel01, UIManager.Instance().loginPanel01);
+                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
             }
             else
             {
@@ -33,12 +33,13 @@ public static class WebServerManager
                 bool success = jsonResponse["success"].AsBool;
                 if (success)
                 {
+                    UIManager.Instance().Init();
                     DataManager.SetUserID(userId);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 }
                 else
                 {
-                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel01, UIManager.Instance().loginPanel01);
+                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
                 }
             }
         }

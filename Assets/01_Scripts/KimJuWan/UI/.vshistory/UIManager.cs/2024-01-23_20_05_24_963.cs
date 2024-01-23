@@ -16,31 +16,22 @@ public class UIManager : MonoBehaviour
     }
     #endregion
     public PlayerController playerController;
-    public GameObject canvas;
-    public GameObject ground;
+
     #region Scene01
     [Header("PlayableButtons")]
-
+    public GameObject ground;
     public GameObject playableButton_GameStart01;
     public GameObject playableButton_Ranking01;
     public GameObject playableButton_GameExit01;
     public GameObject playableButton_Setting01;
-
+    public GameObject canvas;
     [Header("Panel")]
-    public GameObject loginPanel01;
-    public GameObject settingPanel01;
-    public GameObject loginFailPanel01;
+    public GameObject loginPanel;
+    public GameObject settingPanel;
+    public GameObject loginFailPanel;
     #endregion
 
     #region Scene02
-    [Header("PlayableButtons")]
-    public GameObject playableButton_GameStart02;
-    public GameObject playableButton_Back02;
-    public GameObject playableButton_FindRoom02;
-    [Header("Panel")]
-    public GameObject roomListPanel02;
-    [Header("Text")]
-    public TextMesh roomIdText; 
 
     #endregion
 
@@ -68,7 +59,7 @@ public class UIManager : MonoBehaviour
         switch (_info)
         {
             case PlayableButtonInfo.Info.GAME_START_01:
-                ActiveAndDeActive(loginPanel01, ground);
+                ActiveAndDeActive(loginPanel, ground);
                 break;
             case PlayableButtonInfo.Info.GAME_EXIT_01:
                 break;
@@ -117,19 +108,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetText(Text _text,string _str)
-    {
-        _text.text = _str;
-    }
-    public void SetText(TextMesh _text, string _str)
-    {
-        _text.text = _str;
-    }
 
     public void LoginButtonOnClick_01()
     {
-        string user_id = loginPanel01.transform.Find("InputID").GetComponent<InputField>().text;
-        string user_password = loginPanel01.transform.Find("InputPW").GetComponent<InputField>().text;
+        string user_id = loginPanel.transform.Find("InputID").GetComponent<InputField>().text;
+        string user_password = loginPanel.transform.Find("InputPW").GetComponent<InputField>().text;
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
 
@@ -138,54 +121,27 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        //playerController = GetComponent<PlayerController>();
-
+        playerController = GetComponent<PlayerController>();
+        ground = GameObject.Find("Ground");
+        canvas = GameObject.Find("Canvas");
         #region Scene01
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            ground = GameObject.Find("Ground");
-            canvas = GameObject.Find("Canvas");
             playableButton_GameStart01 = ground.transform.Find("GameStart").gameObject;
             playableButton_Ranking01 = ground.transform.Find("Ranking").gameObject;
             playableButton_Setting01 = ground.transform.Find("Setting").gameObject;
             playableButton_GameExit01 = ground.transform.Find("Quit").gameObject;
 
             playableButton_GameStart01.AddComponent<PlayableButtonInfo>();
-            playableButton_Ranking01.AddComponent<PlayableButtonInfo>();
-            playableButton_Setting01.AddComponent<PlayableButtonInfo>();
-            playableButton_GameExit01.AddComponent<PlayableButtonInfo>();
 
             playableButton_GameStart01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START_01;
             playableButton_Ranking01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING_01;
             playableButton_Setting01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING_01;
             playableButton_GameExit01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT_01;
 
-            loginPanel01 = canvas.transform.Find("LoginPanel").gameObject;
-            settingPanel01 = canvas.transform.Find("SettingPanel").gameObject;
-            loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
-        }
-        #endregion
-        #region Scene02
-        if (SceneManager.GetActiveScene().buildIndex == 2)
-        {
-            ground = GameObject.Find("Ground");
-            canvas = GameObject.Find("Canvas");
-            playableButton_GameStart02 = ground.transform.Find("GameStart").gameObject;
-            playableButton_Back02 = ground.transform.Find("BacktoMain").gameObject;
-            playableButton_FindRoom02 = ground.transform.Find("EnterRoom").gameObject;
-
-            playableButton_GameStart02.AddComponent<PlayableButtonInfo>();
-            playableButton_Back02.AddComponent<PlayableButtonInfo>();
-            playableButton_FindRoom02.AddComponent<PlayableButtonInfo>();
-
-            playableButton_GameStart02.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START_02;
-            playableButton_Back02.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACK_02;
-            playableButton_FindRoom02.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.FIND_ROOM_02;
-
-
-            roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
-
-            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
+            loginPanel = canvas.transform.Find("LoginPanel").gameObject;
+            settingPanel = canvas.transform.Find("SettingPanel").gameObject;
+            loginFailPanel = canvas.transform.Find("LoginFailPanel").gameObject;
         }
         #endregion
 

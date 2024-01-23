@@ -13,9 +13,6 @@ public class PlayableButtonInfo : MonoBehaviour
         SETTING_01 = 3,
 
         GAME_START_02 = 4,
-        BACK_02 = 5,
-        FIND_ROOM_02 = 6
-
     }
     public Info myInfo;
 }

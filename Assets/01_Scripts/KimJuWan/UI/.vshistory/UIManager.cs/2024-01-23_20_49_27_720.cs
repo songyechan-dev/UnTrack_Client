@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     [Header("Panel")]
     public GameObject roomListPanel02;
     [Header("Text")]
-    public TextMesh roomIdText; 
+    public Text roomIdText; 
 
     #endregion
 
@@ -118,10 +118,6 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetText(Text _text,string _str)
-    {
-        _text.text = _str;
-    }
-    public void SetText(TextMesh _text, string _str)
     {
         _text.text = _str;
     }

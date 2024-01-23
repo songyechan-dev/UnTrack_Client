@@ -121,10 +121,6 @@ public class UIManager : MonoBehaviour
     {
         _text.text = _str;
     }
-    public void SetText(TextMesh _text, string _str)
-    {
-        _text.text = _str;
-    }
 
     public void LoginButtonOnClick_01()
     {

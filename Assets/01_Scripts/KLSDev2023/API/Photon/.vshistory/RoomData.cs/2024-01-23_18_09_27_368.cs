@@ -21,7 +21,6 @@ public class RoomData : MonoBehaviour
         set
         {
             _roomInfo = value;
-            roomInfoText = GetComponentInChildren<Text>();
             // 룸 정보 표시
             roomInfoText.text = $"{_roomInfo.Name} ({_roomInfo.PlayerCount}/{_roomInfo.MaxPlayers})";
             // 버튼 클릭 이벤트에 함수 연결

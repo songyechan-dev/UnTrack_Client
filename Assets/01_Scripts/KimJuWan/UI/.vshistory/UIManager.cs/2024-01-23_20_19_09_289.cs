@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     [Header("Panel")]
     public GameObject roomListPanel02;
     [Header("Text")]
-    public TextMesh roomIdText; 
+    public Text roomIdText; 
 
     #endregion
 
@@ -117,14 +117,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetText(Text _text,string _str)
-    {
-        _text.text = _str;
-    }
-    public void SetText(TextMesh _text, string _str)
-    {
-        _text.text = _str;
-    }
 
     public void LoginButtonOnClick_01()
     {
@@ -139,12 +131,11 @@ public class UIManager : MonoBehaviour
     public void Init()
     {
         //playerController = GetComponent<PlayerController>();
-
+        ground = GameObject.Find("Ground");
+        canvas = GameObject.Find("Canvas");
         #region Scene01
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            ground = GameObject.Find("Ground");
-            canvas = GameObject.Find("Canvas");
             playableButton_GameStart01 = ground.transform.Find("GameStart").gameObject;
             playableButton_Ranking01 = ground.transform.Find("Ranking").gameObject;
             playableButton_Setting01 = ground.transform.Find("Setting").gameObject;
@@ -168,8 +159,6 @@ public class UIManager : MonoBehaviour
         #region Scene02
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
-            ground = GameObject.Find("Ground");
-            canvas = GameObject.Find("Canvas");
             playableButton_GameStart02 = ground.transform.Find("GameStart").gameObject;
             playableButton_Back02 = ground.transform.Find("BacktoMain").gameObject;
             playableButton_FindRoom02 = ground.transform.Find("EnterRoom").gameObject;
@@ -185,7 +174,7 @@ public class UIManager : MonoBehaviour
 
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
 
-            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
+            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<Text>();
         }
         #endregion
 

@@ -35,6 +35,7 @@ public static class WebServerManager
                 {
                     DataManager.SetUserID(userId);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    UIManager.Instance().Init();
                 }
                 else
                 {
