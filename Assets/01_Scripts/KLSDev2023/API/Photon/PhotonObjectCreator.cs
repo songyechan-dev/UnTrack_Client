@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PhotonObjectCreator : MonoBehaviourPunCallbacks
 {
-    void Creaate(GameObject _gameObject, Transform _transform)
+    public void Create(string objectName, Transform _transform)
     {
         Vector3 _position = _transform.position;
         Quaternion _rotation = _transform.rotation;
-        PhotonNetwork.Instantiate(_gameObject.transform.tag, _position,_rotation);
+        PhotonNetwork.Instantiate(objectName, _position,_rotation);
     }
 }

@@ -12,6 +12,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public string version = "1.0f";
     private string userID = "hello1";
     private GameObject roomPrefab;
+    public PhotonObjectCreator photonObjectCreator;
     [Header("UI")]
 
     // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리 자료형
@@ -115,7 +116,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             }
 
             UIManager.Instance().SetText(UIManager.Instance().roomIdText, PhotonNetwork.CurrentRoom.Name);
-
+            photonObjectCreator.Create("Player", transform);
         }
         else
         {

@@ -38,13 +38,14 @@ public class PlayerController : MonoBehaviour
 
 
     public string playableButtonTagName = "PlayableButton";
+    private PhotonView pv;
 
 
     // 시작
    
     void Start()
     {
-       
+        pv = GetComponent<PhotonView>();
         playerManager = GetComponent<PlayerManager>();
         //rb = GetComponent<Rigidbody>();
         
@@ -53,61 +54,94 @@ public class PlayerController : MonoBehaviour
     // 업데이트
     void FixedUpdate()
     {
-        if(!isWorking)
-            PlayerMove();
-        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
+        if (pv == null)
+        {
+            if (!isWorking)
+                PlayerMove();
+            //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
 
-        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
-        {
-            //플레이어가 스테이하면 실행
-            CheckPlayableButton_OnStay();
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+            {
+                //플레이어가 스테이하면 실행
+                CheckPlayableButton_OnStay();
+            }
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+            {
+                //스페이스바 눌렀을때 실행
+                CheckPlayableButton_OnHit();
+            }
         }
-        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+        else if (pv != null && pv.IsMine)
         {
-            //스페이스바 눌렀을때 실행
-            CheckPlayableButton_OnHit();
+            Debug.Log("포톤 시작됨");
         }
+
+
     }
 
     void CheckPlayableButton_OnStay()
     {
-        Ray ray = new Ray(transform.position, -transform.up);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (pv == null)
         {
-            if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+            Ray ray = new Ray(transform.position, -transform.up);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+                {
+                    UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                }
             }
         }
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
+        
     }
 
     void CheckPlayableButton_OnHit()
     {
-        Ray ray = new Ray(transform.position, -transform.up);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (pv == null)
         {
-            if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+            Ray ray = new Ray(transform.position, -transform.up);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+                {
+                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                }
             }
         }
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
+        
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
+        if (pv == null)
         {
-            currentTime += Time.deltaTime;
+            if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
+            {
+                currentTime += Time.deltaTime;
+            }
+            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+            {
+                playerManager.CollectIngredient();
+                currentTime = 0;
+            }
         }
-        if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+        else if (pv != null && pv.IsMine)
         {
-            playerManager.CollectIngredient();
-            currentTime = 0;
+            Debug.Log("포톤 시작됨");
         }
+        
 
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
