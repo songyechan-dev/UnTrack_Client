@@ -24,7 +24,7 @@ public enum PLAYERSTATE
 public class PlayerController : MonoBehaviour
 {
     
-    private float moveSpeed = 20f;
+    private float moveSpeed = 10f;
     
     Vector3 moveDirection;
     //Rigidbody rb;

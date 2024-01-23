@@ -31,7 +31,8 @@ namespace LeeYuJoung
         public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
-        
+        public float currentTime = 0;
+        public float fireTime = 20.0f;
 
         public Text storageText;
         public Text woodText;
@@ -57,7 +58,13 @@ namespace LeeYuJoung
 
         private void Update()
         {
-            
+            currentTime += Time.deltaTime;
+
+            if (currentTime > fireTime)
+            {
+                currentTime = 0;
+                Fire();
+            }
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
@@ -87,14 +94,28 @@ namespace LeeYuJoung
             }
         }
 
-        // 플레이어가 현재 들고 있는 오브젝트 정보 매개변수로 전달 받기(해당 오브젝트의 이름)
-        public void CheckAccumulateCount(string _name, int _amount)
-        {
-            int currentNum = (int)GetType().GetField($"accumulate{_name}").GetValue(instance);
-            GetType().GetField($"accumulate{_name}").SetValue(instance, currentNum + _amount);
+        //// 플레이어가 현재 들고 있는 오브젝트 정보 매개변수로 전달 받기(해당 오브젝트의 이름)
+        //public void CheckAccumulateCount(string _name, int _amount)
+        //{
+        //    int currentNum = (int)GetType().GetField($"accumulate{_name}").GetValue(instance);
+        //    GetType().GetField($"accumulate{_name}").SetValue(instance, currentNum + _amount);
 
-            // Quest 진행도 업그레이드
-            QuestManager.Instance().UpdateProgress(_name, _amount);
+        //    // Quest 진행도 업그레이드
+        //    QuestManager.Instance().UpdateProgress(_name, _amount);
+        //}
+
+        public void Fire()
+        {
+            int _idx = Random.Range(0, sceneFactorys.Count);
+
+            if (!sceneFactorys[_idx].GetComponent<FactoryManager>().isHeating)
+            {
+                sceneFactorys[_idx].GetComponent<FactoryManager>().EngineOverheating();
+            }
+            else
+            {
+                Fire();
+            }
         }
 
         // Storage 내에 재료 저장
@@ -158,7 +179,6 @@ namespace LeeYuJoung
         }
 
         // Storage에 아이템을 제작할 재료가 충분한지 확인 
-        // → 플레이어가 저장소에 재료 넣을 때 & 아이템 제작을 끝냈을 때 확인
         public bool IngredientCheck(string _ingredient1, string _ingredient2, int _amount1, int _amount2)
         {
             if (_ingredient1.Equals(_ingredient2))
