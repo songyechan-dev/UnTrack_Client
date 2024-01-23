@@ -67,7 +67,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case "Factory":
                     FactoryManager _fm = hit.transform.GetComponent<FactoryManager>();
-
+                    
                     if(_fm.ItemUse() && !playerController.isPick)
                     {
                         playerController.isPick = true;
