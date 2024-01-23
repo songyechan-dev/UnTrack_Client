@@ -9,8 +9,8 @@ using static GameManager;
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
     #region Instance
-    private static UIManager_LeeYuJoung instance;
-    public static UIManager_LeeYuJoung Instance()
+    private static UIManager instance;
+    public static UIManager Instance()
     {
         return instance;
     }
