@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class RoomData : MonoBehaviour
 {
     private RoomInfo _roomInfo;
-    // ÇÏÀ§¿¡ ÀÖ´Â TMP_Text¸¦ ÀúÀåÇÒ º¯¼ö
+    // í•˜ìœ„ì— ìˆëŠ” TMP_Textë¥¼ ì €ì¥í•  ë³€ìˆ˜
     private Text roomInfoText;
-    // PhotonManager Á¢±Ù º¯¼ö
+    // PhotonManager ì ‘ê·¼ ë³€ìˆ˜
     private PhotonManager photonManager;
     public Text infoText;
-    // ÇÁ·ÎÆÛÆ¼ Á¤ÀÇ
+    // í”„ë¡œí¼í‹° ì •ì˜
     public RoomInfo RoomInfo
     {
         get
@@ -21,9 +21,9 @@ public class RoomData : MonoBehaviour
         set
         {
             _roomInfo = value;
-            // ·ë Á¤º¸ Ç¥½Ã
+            // ë£¸ ì •ë³´ í‘œì‹œ
             roomInfoText.text = $"{_roomInfo.Name} ({_roomInfo.PlayerCount}/{_roomInfo.MaxPlayers})";
-            // ¹öÆ° Å¬¸¯ ÀÌº¥Æ®¿¡ ÇÔ¼ö ¿¬°á
+            // ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ì— í•¨ìˆ˜ ì—°ê²°
             GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => OnEnterRoom(_roomInfo.Name));
         }
     }
@@ -49,7 +49,7 @@ public class RoomData : MonoBehaviour
         {
             PhotonNetwork.LeaveLobby();
             PhotonNetwork.LeaveRoom();
-            infoText.text = "ÇöÀç ÇØ´ç¹æ¿¡ Á¢¼ÓÁßÀÔ´Ï´Ù.";
+            infoText.text = "í˜„ì¬ í•´ë‹¹ë°©ì— ì ‘ì†ì¤‘ì…ë‹ˆë‹¤.";
             return;
         }
         if (PhotonNetwork.InRoom)
@@ -60,7 +60,7 @@ public class RoomData : MonoBehaviour
             return;
         }
 
-        infoText.text = "";        // ·ë Á¢¼Ó
+        infoText.text = "";        // ë£¸ ì ‘ì†
         PhotonNetwork.JoinRoom(roomName);
     }
 }
