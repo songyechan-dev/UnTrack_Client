@@ -5,38 +5,33 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using static GameManager;
 
+
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
-    public enum PlayableButtonInfo
-    {
-        GAME_START,
-        GAME_EXIT,
-        RANKING,
-        SETTING
-    }
-    public PlayableButtonInfo myInfo;
-
     #region Instance
-    private static UIManager_LeeYuJoung instance;
-    public static UIManager_LeeYuJoung Instance()
+    private static UIManager instance;
+    public static UIManager Instance()
     {
         return instance;
     }
     #endregion
     public PlayerController playerController;
 
-    #region playableButtons
+    #region Scene01
     [Header("PlayableButtons")]
     public GameObject ground;
-    public GameObject playableButton_GameStart;
-    public GameObject playableButton_Ranking;
-    public GameObject playableButton_GameExit;
-    public GameObject playableButton_Setting;
+    public GameObject playableButton_GameStart01;
+    public GameObject playableButton_Ranking01;
+    public GameObject playableButton_GameExit01;
+    public GameObject playableButton_Setting01;
     public GameObject canvas;
     [Header("Panel")]
     public GameObject loginPanel;
     public GameObject settingPanel;
     public GameObject loginFailPanel;
+    #endregion
+
+    #region Scene02
 
     #endregion
 
@@ -54,28 +49,23 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         Init();
     }
 
-    // ¾÷µ¥ÀÌÆ®
-    void Update()
-    {
-
-    }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ ÇØ´ç ¹öÆ°¿¡ ¸Ó¹°¶§ ÇØ¾ßÇÒ ÇÔ¼ö È£Ãâ
+    /// í”Œë ˆì´ì–´ê°€ í•´ë‹¹ ë²„íŠ¼ì— ë¨¸ë¬¼ë•Œ í•´ì•¼í•  í•¨ìˆ˜ í˜¸ì¶œ
     /// </summary>
-    /// <param name="_info">PlayableButton Á¾·ù</param>
-    public void PlayAbleButton_OnStay(PlayableButtonInfo _info)
+    /// <param name="_info">PlayableButton ì¢…ë¥˜</param>
+    public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
         switch (_info)
         {
-            case PlayableButtonInfo.GAME_START:
+            case PlayableButtonInfo.Info.GAME_START_01:
                 ActiveAndDeActive(loginPanel, ground);
                 break;
-            case PlayableButtonInfo.GAME_EXIT:
+            case PlayableButtonInfo.Info.GAME_EXIT_01:
                 break;
-            case PlayableButtonInfo.RANKING:
+            case PlayableButtonInfo.Info.RANKING_01:
                 break;
-            case PlayableButtonInfo.SETTING:
+            case PlayableButtonInfo.Info.SETTING_01:
                 break;
             default:
                 break;
@@ -83,29 +73,29 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ ÇØ´ç ¹öÆ°¿¡¼­ ¾×¼ÇÅ°¹öÆ°À» ´­·¶À»¶§ ÇØ¾ßÇÒ ÇÔ¼ö È£Ãâ
+    /// í”Œë ˆì´ì–´ê°€ í•´ë‹¹ ë²„íŠ¼ì—ì„œ ì•¡ì…˜í‚¤ë²„íŠ¼ì„ ëˆŒë €ì„ë•Œ í•´ì•¼í•  í•¨ìˆ˜ í˜¸ì¶œ
     /// </summary>
-    /// <param name="_info">PlayableButton Á¾·ù</param>
-    public void PlayAbleButton_OnHit(PlayableButtonInfo _info)
+    /// <param name="_info">PlayableButton ì¢…ë¥˜</param>
+    public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
     {
 
     }
     /// <summary>
-    /// Æ¯Á¤ ¿ÀºêÁ§Æ®ÀÇ Active¸¦ ²ô°Å³ª ÄÒ´Ù
+    /// íŠ¹ì • ì˜¤ë¸Œì íŠ¸ì˜ Activeë¥¼ ë„ê±°ë‚˜ ì¼ ë‹¤
     /// </summary>
-    /// <param name="_activeGameObject">SetActive true¸¦ ÇØ¾ßµÉ °´Ã¼</param>
-    /// <param name="_deActiveGameObject">SetActive false¸¦ ÇØ¾ßµÉ °´Ã¼</param>
-    public void ActiveAndDeActive(GameObject _activeGameObject, GameObject _deActiveGameObject)
+    /// <param name="_activeGameObject">SetActive trueë¥¼ í•´ì•¼ë  ê°ì²´</param>
+    /// <param name="_deActiveGameObject">SetActive falseë¥¼ í•´ì•¼ë  ê°ì²´</param>
+    public void ActiveAndDeActive(GameObject _activeGameObject,GameObject _deActiveGameObject)
     {
         _activeGameObject.SetActive(true);
         _deActiveGameObject.SetActive(false);
     }
 
     /// <summary>
-    /// Æ¯Á¤ ¿ÀºêÁ§Æ®ÀÇ active¸¦ ÄÑ°í, Æ¯Á¤ ¿ÀºêÁ§Æ®µéÀÇ active À»²ö´Ù
+    /// íŠ¹ì • ì˜¤ë¸Œì íŠ¸ì˜ activeë¥¼ ì¼œê³ , íŠ¹ì • ì˜¤ë¸Œì íŠ¸ë“¤ì˜ active ì„ëˆë‹¤
     /// </summary>
-    /// <param name="_activeGameObject">SetActive true¸¦ ÇØ¾ßµÉ °´Ã¼</param>
-    /// <param name="_deActiveGameObjects">SetActive false¸¦ ÇØ¾ßµÉ °´Ã¼µé</param>
+    /// <param name="_activeGameObject">SetActive trueë¥¼ í•´ì•¼ë  ê°ì²´</param>
+    /// <param name="_deActiveGameObjects">SetActive falseë¥¼ í•´ì•¼ë  ê°ì²´ë“¤</param>
     public void ActiveAndDeActive(GameObject _activeGameObject, params GameObject[] _deActiveGameObjects)
     {
         _activeGameObject.SetActive(true);
@@ -118,32 +108,41 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         }
     }
 
+
+    public void LoginButtonOnClick_01()
+    {
+        string user_id = loginPanel.transform.Find("InputID").GetComponent<InputField>().text;
+        string user_password = loginPanel.transform.Find("InputPW").GetComponent<InputField>().text;
+        StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
+    }
+
     /// <summary>
-    /// °¢¾À º°·Î panel¹× playablebutton ÃÊ±âÈ­
+    /// ê°ì”¬ ë³„ë¡œ panelë° playablebutton ì´ˆê¸°í™”
     /// </summary>
     public void Init()
     {
         playerController = GetComponent<PlayerController>();
         ground = GameObject.Find("Ground");
         canvas = GameObject.Find("Canvas");
-        // --------------------------------------------------------------------------------------
-        if (SceneManager.GetActiveScene().name.Equals("01_Intro"))
+        #region Scene01
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            playableButton_GameStart = ground.transform.Find("GameStart").gameObject;
-            playableButton_Ranking = ground.transform.Find("Ranking").gameObject;
-            playableButton_Setting = ground.transform.Find("Setting").gameObject;
-            playableButton_GameExit = ground.transform.Find("Quit").gameObject;
+            playableButton_GameStart01 = ground.transform.Find("GameStart").gameObject;
+            playableButton_Ranking01 = ground.transform.Find("Ranking").gameObject;
+            playableButton_Setting01 = ground.transform.Find("Setting").gameObject;
+            playableButton_GameExit01 = ground.transform.Find("Quit").gameObject;
 
-            //playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.GAME_START;
-            //playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.RANKING;
-            //playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.SETTING;
-            //playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.GAME_EXIT;
+            playableButton_GameStart01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START_01;
+            playableButton_Ranking01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING_01;
+            playableButton_Setting01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING_01;
+            playableButton_GameExit01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT_01;
 
             loginPanel = canvas.transform.Find("LoginPanel").gameObject;
             settingPanel = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel = canvas.transform.Find("LoginFailPanel").gameObject;
         }
-        // --------------------------------------------------------------------------------------
+        #endregion
 
     }
+
 }

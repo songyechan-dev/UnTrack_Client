@@ -8,7 +8,6 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-#if UNITY_EDITOR
 public class MapTool : EditorWindow
 {
     public enum MapMode
@@ -362,4 +361,3 @@ public class MapTool : EditorWindow
 
 }
 
-#endif
