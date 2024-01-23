@@ -96,8 +96,6 @@ public class FactoryManager : MonoBehaviour
 
         while (true)
         {
-            // 아이템 제작 효과 구현
-
             yield return new WaitForEndOfFrame();
             currentHeatingTime += Time.deltaTime;
 
@@ -105,8 +103,9 @@ public class FactoryManager : MonoBehaviour
             {
                 // GameOver 처리
                 Debug.Log("::::: GAME OVER :::::");
-                currentHeatingTime = 0;
+                //GameManager.Instance().GameOver();
                 isHeating = false;
+                currentHeatingTime = 0;
                 break;
             }
 
@@ -114,6 +113,16 @@ public class FactoryManager : MonoBehaviour
             if (loopNum++ > 10000)
                 throw new Exception("Infinite Loop");
         }
+    }
+
+    // PlayerManager.cs에서 hit 태그가 Factory 이며 & 플레이어가 물통을 들고 있다면 실행
+    public void FireSuppression()
+    {
+        Debug.Log("::::: 화재 진압 완료 :::::");
+        StopCoroutine(FactoryInFire());
+        isHeating = false;
+        currentHeatingTime = 0;
+
     }
 
     // 아이템 제작할 수 있는지 확인
