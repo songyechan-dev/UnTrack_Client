@@ -24,8 +24,8 @@ public class FactoryManager : MonoBehaviour
     public float generateTime;
     public string generateItem;
 
-    public float heatingDeadTime = 45;
-    public float currentHeatingTime = 0;
+    public float fireDeadTime = 50;
+    public float currentFireTime = 0;
     public float currentGenerateTime = 0;
 
     public int currentItemNum = 0;
@@ -97,15 +97,14 @@ public class FactoryManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForEndOfFrame();
-            currentHeatingTime += Time.deltaTime;
+            currentFireTime += Time.deltaTime;
 
-            if (currentHeatingTime > heatingDeadTime)
+            if (currentFireTime > fireDeadTime)
             {
-                // GameOver 처리
                 Debug.Log("::::: GAME OVER :::::");
                 //GameManager.Instance().GameOver();
                 isHeating = false;
-                currentHeatingTime = 0;
+                currentFireTime = 0;
                 break;
             }
 
@@ -121,8 +120,7 @@ public class FactoryManager : MonoBehaviour
         Debug.Log("::::: 화재 진압 완료 :::::");
         StopCoroutine(FactoryInFire());
         isHeating = false;
-        currentHeatingTime = 0;
-
+        currentFireTime = 0;
     }
 
     // 아이템 제작할 수 있는지 확인

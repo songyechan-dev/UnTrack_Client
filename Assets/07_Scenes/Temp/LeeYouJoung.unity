@@ -306,6 +306,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2159b5c9b42d5d4bab0254c1be8021d, type: 3}
+--- !u!1 &306903095 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3934003489838394548, guid: 863feb572dc9f504d8a5396422d983f9, type: 3}
+  m_PrefabInstance: {fileID: 6338140431458399186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &306903100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306903095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factoryType: 1
+  dataPath: FactoryData
+  ingredient_1: 
+  amount_1: 0
+  ingredient_2: 
+  amount_2: 0
+  generateTime: 0
+  generateItem: 
+  fireDeadTime: 50
+  currentFireTime: 0
+  currentGenerateTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
+  isWorking: 0
+  isHeating: 0
 --- !u!1 &314380317
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,6 +961,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 477294265792755013, guid: ebb538f5121c5e444b1d6c6a8a43b148, type: 3}
   m_PrefabInstance: {fileID: 2715261231656429234}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &669834532 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1414702916102547295, guid: e3f2d3fbc7b58bb4caf1f8758d890f99, type: 3}
+  m_PrefabInstance: {fileID: 8608512096061787629}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &669834537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669834532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factoryType: 2
+  dataPath: FactoryData
+  ingredient_1: 
+  amount_1: 0
+  ingredient_2: 
+  amount_2: 0
+  generateTime: 0
+  generateItem: 
+  fireDeadTime: 50
+  currentFireTime: 0
+  currentGenerateTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
+  isWorking: 0
+  isHeating: 0
 --- !u!1 &669882780
 GameObject:
   m_ObjectHideFlags: 0
@@ -1594,6 +1658,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776786812}
   m_CullTransparentMesh: 1
+--- !u!1 &813941925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 491123125678747441, guid: 8c01196e3c07e464ba114e48f7a1addb, type: 3}
+  m_PrefabInstance: {fileID: 491123123781581454}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &813941926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813941925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factoryType: 0
+  dataPath: FactoryData
+  ingredient_1: 
+  amount_1: 0
+  ingredient_2: 
+  amount_2: 0
+  generateTime: 0
+  generateItem: 
+  fireDeadTime: 50
+  currentFireTime: 0
+  currentGenerateTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
+  isWorking: 0
+  isHeating: 0
 --- !u!1 &893571480
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,7 +1706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &893571481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2641,6 +2737,8 @@ MonoBehaviour:
   engineCurrentVolume: 3
   storageMaxVolume: 10
   sceneFactorys: []
+  currentTime: 0
+  fireTime: 20
   storageText: {fileID: 754540701}
   woodText: {fileID: 997071824}
   steelText: {fileID: 423634270}
