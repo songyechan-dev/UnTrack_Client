@@ -24,7 +24,7 @@ public enum PLAYERSTATE
 public class PlayerController : MonoBehaviour
 {
     
-    private float moveSpeed = 10f;
+    private float moveSpeed = 20f;
     
     Vector3 moveDirection;
     //Rigidbody rb;
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
             {
-                UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                Debug.Log("있음");
             }
         }
     }

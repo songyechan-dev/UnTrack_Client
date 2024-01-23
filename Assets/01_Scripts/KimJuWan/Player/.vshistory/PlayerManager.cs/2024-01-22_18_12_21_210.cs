@@ -67,17 +67,8 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case "Factory":
                     FactoryManager _fm = hit.transform.GetComponent<FactoryManager>();
-                    if (_fm.isHeating && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.BUCKET))
-                    {
-                        playerController.isPick = false;
-                        castRange = 1f;
 
-                        Destroy(pickSlot.GetChild(0).gameObject);
-                        inventoryManager.OutInventory();
-                        _fm.FireSuppression();
-                    }
-
-                    if (_fm.ItemUse() && !playerController.isPick)
+                    if(_fm.ItemUse() && !playerController.isPick)
                     {
                         playerController.isPick = true;
                         castRange = 2f;

@@ -6,7 +6,7 @@ namespace KLSDev2023
 {
     public static class SceneManager
     {
-        
+        public static int activeSceneNum = 0;
     }
 }
 

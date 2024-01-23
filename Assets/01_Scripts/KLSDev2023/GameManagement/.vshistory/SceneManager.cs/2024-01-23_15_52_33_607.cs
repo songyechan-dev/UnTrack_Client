@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace KLSDev2023
 {
-    public static class SceneManager
+    public class SceneManager : MonoBehaviour
     {
-        
+        public int activeSceneNum = 0;
     }
 }
 

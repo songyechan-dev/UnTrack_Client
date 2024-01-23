@@ -31,10 +31,26 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
         }
     }
+    private void Start()
+    {
+        //TODO : 2024.01.17 유저명 로드 해야됨 송예찬 포톤 
+        userID =
+        //데이터 저장기능 필요
+
+        PhotonNetwork.NickName = userID;
+    }
 
 
 
-  
+    string SetRoomName()
+    {
+        if (string.IsNullOrEmpty(roomNameIF.text))
+        {
+            roomNameIF.text = $"ROOM_{Random.Range(1, 101):000}";
+        }
+
+        return roomNameIF.text;
+    }
 
 
 
@@ -53,29 +69,31 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            //InfoText필요
-            //infoText.text = "현재 방 로딩중입니다. \n잠시후 다시 접속해주세요.";
+            infoText.text = "현재 방 로딩중입니다. \n잠시후 다시 접속해주세요.";
             return;
         }
     }
 
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.JoinRandomRoom();
+        // 수동으로 접속하기 위해 자동 입장은 주석처리
+        // PhotonNetwork.JoinRandomRoom();        
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-
+        Debug.Log($"JoinRandom Filed {returnCode}:{message}");
+        // 룸을 생성하는 함수 실행
+        OnMakeRoomClick();
 
         // 룸의 속성 정의
-        RoomOptions ro = new RoomOptions();
-        ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
-        ro.IsOpen = true;       // 룸의 오픈 여부
-        ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
+        // RoomOptions ro = new RoomOptions();
+        // ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
+        // ro.IsOpen = true;       // 룸의 오픈 여부
+        // ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
 
         // 룸 생성
-        PhotonNetwork.CreateRoom(SetRoomName(), ro);
+        // PhotonNetwork.CreateRoom("My Room", ro);
     }
 
     public override void OnCreatedRoom()
@@ -201,20 +219,20 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         // 무작위로 추출한 룸으로 입장
 
     }
-    //public void OnMakeRoomClick()
-    //{
-    //    // 유저명 저장
-    //    SetUserId();
+    public void OnMakeRoomClick()
+    {
+        // 유저명 저장
+        SetUserId();
 
-    //    // 룸의 속성 정의
-    //    RoomOptions ro = new RoomOptions();
-    //    ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
-    //    ro.IsOpen = true;       // 룸의 오픈 여부
-    //    ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
+        // 룸의 속성 정의
+        RoomOptions ro = new RoomOptions();
+        ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
+        ro.IsOpen = true;       // 룸의 오픈 여부
+        ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
 
-    //    // 룸 생성
-    //    PhotonNetwork.CreateRoom(SetRoomName(), ro);
-    //}
+        // 룸 생성
+        PhotonNetwork.CreateRoom(SetRoomName(), ro);
+    }
 
     #endregion
 }

@@ -21,7 +21,7 @@ public static class WebServerManager
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
+                Debug.LogError("아이디 혹은 비밀번호를 확인해주세요.");
             }
             else
             {
@@ -33,12 +33,12 @@ public static class WebServerManager
                 bool success = jsonResponse["success"].AsBool;
                 if (success)
                 {
-                    DataManager.SetUserID(userId);
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    Debug.Log(KLSDev2023.SceneManager.activeSceneNum);
+                    SceneManager.LoadScene(++KLSDev2023.SceneManager.activeSceneNum);
                 }
                 else
                 {
-                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
+                    Debug.Log("Login failed: " + jsonResponse["message"]);
                 }
             }
         }

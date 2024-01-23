@@ -4795,7 +4795,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1826639904}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: LoginButtonOnClick
+        m_MethodName: LoginButtonOnClick_01
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4950,10 +4950,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   ground: {fileID: 0}
-  playableButton_GameStart: {fileID: 0}
-  playableButton_Ranking: {fileID: 0}
-  playableButton_GameExit: {fileID: 0}
-  playableButton_Setting: {fileID: 0}
+  playableButton_GameStart01: {fileID: 0}
+  playableButton_Ranking01: {fileID: 0}
+  playableButton_GameExit01: {fileID: 0}
+  playableButton_Setting01: {fileID: 0}
   canvas: {fileID: 0}
   loginPanel: {fileID: 0}
   settingPanel: {fileID: 0}

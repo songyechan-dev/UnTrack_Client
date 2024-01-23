@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     #endregion
     public PlayerController playerController;
 
-    #region Scene01
+    #region playableButtons
     [Header("PlayableButtons")]
     public GameObject ground;
     public GameObject playableButton_GameStart01;
@@ -29,9 +29,6 @@ public class UIManager : MonoBehaviour
     public GameObject loginPanel;
     public GameObject settingPanel;
     public GameObject loginFailPanel;
-    #endregion
-
-    #region Scene02
 
     #endregion
 
@@ -49,6 +46,11 @@ public class UIManager : MonoBehaviour
         Init();
     }
 
+    // 업데이트
+    void Update()
+    {
+        
+    }
 
     /// <summary>
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
@@ -109,12 +111,22 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void LoginButtonOnClick_01()
+    public void LoginButtonOnClick()
     {
         string user_id = loginPanel.transform.Find("InputID").GetComponent<InputField>().text;
         string user_password = loginPanel.transform.Find("InputPW").GetComponent<InputField>().text;
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
+
+    //public void ChangeKeyCode()
+    //{
+    //    playerController.keyCode++;
+    //    if(playerController.keyCode >2)
+    //    {
+    //        playerController.keyCode = 0;
+    //    }
+    //}
+
 
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
@@ -124,8 +136,8 @@ public class UIManager : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         ground = GameObject.Find("Ground");
         canvas = GameObject.Find("Canvas");
-        #region Scene01
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        // --------------------------------------------------------------------------------------
+        if (SceneManager.GetActiveScene().name.Equals("01_Intro"))
         {
             playableButton_GameStart01 = ground.transform.Find("GameStart").gameObject;
             playableButton_Ranking01 = ground.transform.Find("Ranking").gameObject;
@@ -141,8 +153,12 @@ public class UIManager : MonoBehaviour
             settingPanel = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel = canvas.transform.Find("LoginFailPanel").gameObject;
         }
-        #endregion
+        // --------------------------------------------------------------------------------------
 
     }
 
+    //public void MoveToLobby()
+    //{
+        
+    //}
 }
