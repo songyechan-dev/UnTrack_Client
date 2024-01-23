@@ -15,6 +15,7 @@ TagManager:
   - Storage
   - Engine
   - DroppedSlot
+  - PlayableButton
   layers:
   - Default
   - TransparentFX

@@ -24,7 +24,7 @@ public enum PLAYERSTATE
 public class PlayerController : MonoBehaviour
 {
     
-    private float moveSpeed = 6f;
+    private float moveSpeed = 20f;
     
     Vector3 moveDirection;
     //Rigidbody rb;
@@ -36,13 +36,9 @@ public class PlayerController : MonoBehaviour
     public float currentTime = 0f;
     public float spaceTime = .2f;
 
-    public int keyCode = 0;
-    public List<KeyCode> keys = new List<KeyCode>()
-    {
-        KeyCode.Space,
-        KeyCode.LeftControl,
-        KeyCode.LeftShift
-    };
+
+    public string playableButtonTagName = "PlayableButton";
+
 
     // 시작
    
@@ -59,16 +55,55 @@ public class PlayerController : MonoBehaviour
     {
         if(!isWorking)
             PlayerMove();
-        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료      
+        //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
+
+        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+        {
+            //플레이어가 스테이하면 실행
+            CheckPlayableButton_OnStay();
+        }
+        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+        {
+            //스페이스바 눌렀을때 실행
+            CheckPlayableButton_OnHit();
+        }
+    }
+
+    void CheckPlayableButton_OnStay()
+    {
+        Ray ray = new Ray(transform.position, -transform.up);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+            {
+                UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+            }
+        }
+    }
+
+    void CheckPlayableButton_OnHit()
+    {
+        Ray ray = new Ray(transform.position, -transform.up);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+            {
+                Debug.Log("있음");
+            }
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKey(keys[keyCode]))
+        if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
         {
             currentTime += Time.deltaTime;
         }
-        if (Input.GetKeyUp(keys[keyCode]))
+        if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
         {
             playerManager.CollectIngredient();
             currentTime = 0;

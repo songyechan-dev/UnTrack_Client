@@ -1,33 +1,43 @@
+using SimpleJSON;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class WebServerManager : MonoBehaviour
+public static class WebServerManager 
 {
-    public string webUrl = "http://localhost:3000";
+    private static string serverURL = "http://localhost:3000";  // 서버 URL을 적절히 변경하세요
 
-    IEnumerator Login()
+    public static IEnumerator LoginCoroutine(string userId, string password)
     {
-        // 로그인 요청을 보낼 데이터 (예: 사용자 이름과 비밀번호)
         WWWForm form = new WWWForm();
-        form.AddField("user_id", "example_user");
-        form.AddField("user_password", "example_password");
-
-        using (UnityWebRequest www = UnityWebRequest.Post(webUrl, form))
+        form.AddField("userId", userId);
+        form.AddField("password", password);
+        Debug.Log("호출됨");
+        using (UnityWebRequest www = UnityWebRequest.Post(serverURL+"/user/login", form))
         {
             yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error: " + www.error);
+                Debug.LogError("아이디 혹은 비밀번호를 확인해주세요.");
             }
             else
             {
-                string token = www.downloadHandler.text;
-                Debug.Log("Received Token: " + token);
+                string responseText = www.downloadHandler.text;
+                Debug.Log("Server response: " + responseText);
 
-                // 여기에서 토큰을 사용하여 로그인 후의 동작을 수행할 수 있습니다.
+                JSONNode jsonResponse = JSON.Parse(responseText);
+
+                bool success = jsonResponse["success"].AsBool;
+                if (success)
+                {
+                    Debug.Log("Login successful");
+                }
+                else
+                {
+                    Debug.Log("Login failed: " + jsonResponse["message"]);
+                }
             }
         }
     }
