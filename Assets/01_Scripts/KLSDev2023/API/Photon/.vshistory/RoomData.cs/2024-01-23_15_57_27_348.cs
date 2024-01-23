@@ -60,6 +60,7 @@ public class RoomData : MonoBehaviour
             return;
         }
 
+        //photonManager.SetUserId();
         infoText.text = "";        // ·ë Á¢¼Ó
         PhotonNetwork.JoinRoom(roomName);
     }

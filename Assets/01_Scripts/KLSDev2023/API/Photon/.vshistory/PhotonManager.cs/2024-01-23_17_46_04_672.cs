@@ -42,7 +42,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsConnectedAndReady)
         {
             PhotonNetwork.JoinLobby();
-            return;
+            //return;
         }
         else
         {
@@ -60,7 +60,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("랜덤룸 생성");
         // 룸의 속성 정의
         RoomOptions ro = new RoomOptions();
         ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수

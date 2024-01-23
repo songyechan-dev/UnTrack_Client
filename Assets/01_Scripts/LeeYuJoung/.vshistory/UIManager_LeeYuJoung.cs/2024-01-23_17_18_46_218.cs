@@ -57,20 +57,20 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     /// <param name="_info">PlayableButton Á¾·ù</param>
     public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
-        //switch (_info)
-        //{
-        //    case PlayableButtonInfo.Info.GAME_START:
-        //        ActiveAndDeActive(loginPanel, ground);
-        //        break;
-        //    case PlayableButtonInfo.Info.GAME_EXIT:
-        //        break;
-        //    case PlayableButtonInfo.Info.RANKING:
-        //        break;
-        //    case PlayableButtonInfo.Info.SETTING:
-        //        break;
-        //    default:
-        //        break;
-        //}
+        switch (_info)
+        {
+            case PlayableButtonInfo.Info.GAME_START:
+                ActiveAndDeActive(loginPanel, ground);
+                break;
+            case PlayableButtonInfo.Info.GAME_EXIT:
+                break;
+            case PlayableButtonInfo.Info.RANKING:
+                break;
+            case PlayableButtonInfo.Info.SETTING:
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>

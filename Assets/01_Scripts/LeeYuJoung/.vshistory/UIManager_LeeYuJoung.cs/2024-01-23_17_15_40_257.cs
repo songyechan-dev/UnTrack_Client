@@ -57,20 +57,20 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     /// <param name="_info">PlayableButton Á¾·ù</param>
     public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
-        //switch (_info)
-        //{
-        //    case PlayableButtonInfo.Info.GAME_START:
-        //        ActiveAndDeActive(loginPanel, ground);
-        //        break;
-        //    case PlayableButtonInfo.Info.GAME_EXIT:
-        //        break;
-        //    case PlayableButtonInfo.Info.RANKING:
-        //        break;
-        //    case PlayableButtonInfo.Info.SETTING:
-        //        break;
-        //    default:
-        //        break;
-        //}
+        switch (_info)
+        {
+            case PlayableButtonInfo.Info.GAME_START:
+                ActiveAndDeActive(loginPanel, ground);
+                break;
+            case PlayableButtonInfo.Info.GAME_EXIT:
+                break;
+            case PlayableButtonInfo.Info.RANKING:
+                break;
+            case PlayableButtonInfo.Info.SETTING:
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>
@@ -143,10 +143,10 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             playableButton_Setting = ground.transform.Find("Setting").gameObject;
             playableButton_GameExit = ground.transform.Find("Quit").gameObject;
 
-            //playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START;
-            //playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING;
-            //playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING;
-            //playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT;
+            playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START;
+            playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING;
+            playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING;
+            playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT;
 
             loginPanel = canvas.transform.Find("LoginPanel").gameObject;
             settingPanel = canvas.transform.Find("SettingPanel").gameObject;

@@ -25,7 +25,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = version;
         PhotonNetwork.NickName = DataManager.GetUserID();
-        roomPrefab = Resources.Load<GameObject>("Room");
+        roomPrefab = Resources.Load<GameObject>("RoomItem");
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -54,13 +54,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("로비임");
         PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("랜덤룸 생성");
         // 룸의 속성 정의
         RoomOptions ro = new RoomOptions();
         ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
@@ -156,13 +154,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 if (rooms.ContainsKey(roomInfo.Name) == false)
                 {
                     // RoomInfo 프리팹을 scrollContent 하위에 생성
-                    GameObject room = Instantiate(roomPrefab, scrollContent);
+                    GameObject roomPrefab = Instantiate(roomPrefab, scrollContent);
                     // 룸 정보를 표시하기 위해 RoomInfo 정보 전달
-                    room.GetComponent<RoomData>().RoomInfo = roomInfo;
+                    roomPrefab.GetComponent<RoomData>().RoomInfo = roomInfo;
                     //roomPrefab.GetComponent<RoomData>().infoText = infoText;
 
                     // 딕셔너리 자료형에 데이터 추가
-                    rooms.Add(roomInfo.Name, room);
+                    rooms.Add(roomInfo.Name, roomPrefab);
                     Debug.Log("신입들어옴");
                 }
                 else

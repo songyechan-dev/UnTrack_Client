@@ -404,8 +404,8 @@ public class MapCreator : MonoBehaviour
             z++;
 
         }
-        //EditorUtility.SetDirty(mapParent.gameObject);
-        //AssetDatabase.SaveAssets();
-        //AssetDatabase.Refresh();
+        EditorUtility.SetDirty(mapParent.gameObject);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }

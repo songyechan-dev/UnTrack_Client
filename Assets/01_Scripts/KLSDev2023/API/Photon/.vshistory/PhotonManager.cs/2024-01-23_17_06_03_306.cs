@@ -1,6 +1,5 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,7 +10,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 {
     public string version = "1.0f";
     private string userID = "hello1";
-    private GameObject roomPrefab;
+    private GameObject roomItemPrefab;
     [Header("UI")]
 
     // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리 자료형
@@ -19,18 +18,26 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // RoomItem 프리팹이 추가될 ScrollContent
     public Transform scrollContent;
 
+    public TeamManager teamManager;
 
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = version;
         PhotonNetwork.NickName = DataManager.GetUserID();
-        roomPrefab = Resources.Load<GameObject>("Room");
+        roomItemPrefab = Resources.Load<GameObject>("RoomItem");
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
         }
     }
+
+
+
+  
+
+
+
     #region Callbacks
     public override void OnConnectedToMaster()
     {
@@ -54,34 +61,39 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("로비임");
         PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("랜덤룸 생성");
+
+
         // 룸의 속성 정의
         RoomOptions ro = new RoomOptions();
         ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
         ro.IsOpen = true;       // 룸의 오픈 여부
         ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
 
-        Guid newUuid = Guid.NewGuid();
         // 룸 생성
-        PhotonNetwork.CreateRoom(newUuid.ToString(),ro);
+        PhotonNetwork.CreateRoom(SetRoomName(), ro);
+    }
+
+    public override void OnCreatedRoom()
+    {
+
     }
 
     //유저가 입장시 팀 UI 업데이트
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log(newPlayer.NickName + "입장");
+        teamManager.UpdateTeamUI();
     }
 
     //유저가 퇴장시 팀 UI 업데이트
     public override void OnPlayerLeftRoom(Player player)
     {
-        Debug.Log(player.NickName + "나감");
+        teamInfoListView.SetActive(false);
+        teamManager.Left(player.NickName);
     }
 
 
@@ -98,7 +110,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             {
                 if (PhotonNetwork.NickName.Equals(playerInfo.NickName))
                 {
-                    Debug.Log("사용자가 이미 로그인 중 입니다.\n다시 로그인해주세요.");
+                    infoText.text = "동일한 닉네임을 사용중입니다.\n다시 로그인해주세요.";
                     PhotonNetwork.LeaveLobby();
                     PhotonNetwork.LeaveRoom();
                     return;
@@ -108,17 +120,21 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             // 마스터 클라이언트인 경우에 룸에 입장한 후 전투 씬을 로딩한다.
             if (PhotonNetwork.IsMasterClient)
             {
-                //게임시작 로직
-                //gameStartBtn.gameObject.SetActive(true);
-                //gameStartBtn.onClick.RemoveAllListeners();
-                //gameStartBtn.onClick.AddListener(() => Onstart(PhotonNetwork.CurrentRoom.Name)); ;
+                gameStartBtn.gameObject.SetActive(true);
+                gameStartBtn.onClick.RemoveAllListeners();
+                gameStartBtn.onClick.AddListener(() => Onstart(PhotonNetwork.CurrentRoom.Name)); ;
             }
 
-
+            teamInfoListView.SetActive(true);
+            teamManager.TeamSet(PhotonNetwork.NickName);
+            if (DBManager.SelectDataPlayer(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.NickName).Rows.Count <= 0)
+            {
+                DBManager.InsertData(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.NickName, teamManager.teamList[PhotonNetwork.NickName]);
+            }
         }
         else
         {
-            //infoText.text = "현재 방 로딩중입니다. \n잠시후 다시 접속해주세요.";
+            infoText.text = "현재 방 로딩중입니다. \n잠시후 다시 접속해주세요.";
             return;
         }
     }
@@ -156,13 +172,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 if (rooms.ContainsKey(roomInfo.Name) == false)
                 {
                     // RoomInfo 프리팹을 scrollContent 하위에 생성
-                    GameObject room = Instantiate(roomPrefab, scrollContent);
+                    GameObject roomPrefab = Instantiate(roomItemPrefab, scrollContent);
                     // 룸 정보를 표시하기 위해 RoomInfo 정보 전달
-                    room.GetComponent<RoomData>().RoomInfo = roomInfo;
-                    //roomPrefab.GetComponent<RoomData>().infoText = infoText;
+                    roomPrefab.GetComponent<RoomData>().RoomInfo = roomInfo;
+                    roomPrefab.GetComponent<RoomData>().infoText = infoText;
 
                     // 딕셔너리 자료형에 데이터 추가
-                    rooms.Add(roomInfo.Name, room);
+                    rooms.Add(roomInfo.Name, roomPrefab);
                     Debug.Log("신입들어옴");
                 }
                 else
@@ -177,6 +193,28 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void OnLoginClick()
+    {
+        // 유저명 저장
+        SetUserId();
+
+        // 무작위로 추출한 룸으로 입장
+
+    }
+    //public void OnMakeRoomClick()
+    //{
+    //    // 유저명 저장
+    //    SetUserId();
+
+    //    // 룸의 속성 정의
+    //    RoomOptions ro = new RoomOptions();
+    //    ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
+    //    ro.IsOpen = true;       // 룸의 오픈 여부
+    //    ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
+
+    //    // 룸 생성
+    //    PhotonNetwork.CreateRoom(SetRoomName(), ro);
+    //}
 
     #endregion
 }
