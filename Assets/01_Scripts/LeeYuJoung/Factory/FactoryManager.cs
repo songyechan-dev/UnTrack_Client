@@ -36,7 +36,7 @@ public class FactoryManager : MonoBehaviour
 
     public void Start()
     {
-        Init();
+        //Init();
     }
 
     public void Init()

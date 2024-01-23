@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1414702916102547235}
   - component: {fileID: 1414702916102547234}
   - component: {fileID: 1414702916102547233}
-  - component: {fileID: 1414702916102547232}
   m_Layer: 0
   m_Name: DynamiteMachine
   m_TagString: Factory

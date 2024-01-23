@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         gameState = GameState.GameStart;
-        //MapCreator.Instance().MapLoad();
+        MapCreator.Instance().MapLoad();
 
     }
 
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         if (firstFactoriesObject != null)
         {
             meter = Mathf.InverseLerp(MapInfo.defaultStartTrackX, MapInfo.finishEndTrackX, firstFactoriesObject.transform.position.x);
-            Debug.Log((int)(meter *100) +"미터");
+            //Debug.Log((int)(meter *100) +"미터");
         }
 
     }
