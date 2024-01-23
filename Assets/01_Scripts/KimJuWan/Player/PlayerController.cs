@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed = 6f;
     
     Vector3 moveDirection;
-    Rigidbody rb;
+    //Rigidbody rb;
     PlayerManager playerManager;
      
     public bool isPick;
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     {
        
         playerManager = GetComponent<PlayerManager>();
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         
     }
 
@@ -96,8 +96,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;  
+            //rb.velocity = Vector3.zero;
+            //rb.angularVelocity = Vector3.zero;  
         }       
     }  
 }
