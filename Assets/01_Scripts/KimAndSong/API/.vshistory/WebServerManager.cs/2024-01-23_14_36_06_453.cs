@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 public static class WebServerManager 
 {
@@ -21,7 +20,7 @@ public static class WebServerManager
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
+                Debug.LogError("아이디 혹은 비밀번호를 확인해주세요.");
             }
             else
             {
@@ -33,12 +32,11 @@ public static class WebServerManager
                 bool success = jsonResponse["success"].AsBool;
                 if (success)
                 {
-                    DataManager.SetUserID(userId);
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    Debug.Log("Login successful");
                 }
                 else
                 {
-                    UIManager.Instance().ActiveAndDeActive(UIManager.Instance().loginFailPanel, UIManager.Instance().loginPanel);
+                    Debug.Log("Login failed: " + jsonResponse["message"]);
                 }
             }
         }

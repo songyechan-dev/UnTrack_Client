@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class DataManager
+public static class DataManager : MonoBehaviour
 {
     private static string userID;
 
@@ -13,6 +13,6 @@ public static class DataManager
 
     public static void SetUserID(string _userID)
     {
-        userID = _userID;
+        this.userID = _userID;
     }
 }

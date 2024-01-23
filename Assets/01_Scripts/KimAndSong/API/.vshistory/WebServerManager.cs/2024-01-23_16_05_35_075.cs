@@ -33,7 +33,6 @@ public static class WebServerManager
                 bool success = jsonResponse["success"].AsBool;
                 if (success)
                 {
-                    DataManager.SetUserID(userId);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 }
                 else

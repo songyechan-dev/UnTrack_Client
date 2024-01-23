@@ -2,11 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KLSDev2023
+public class DataManager : MonoBehaviour
 {
-    public static class SceneManager
-    {
-        
-    }
+    private string userID;
 }
-

@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
             {
-                UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                UIManager.Instance().PlayAbleButton_OnHIt(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
             }
         }
     }

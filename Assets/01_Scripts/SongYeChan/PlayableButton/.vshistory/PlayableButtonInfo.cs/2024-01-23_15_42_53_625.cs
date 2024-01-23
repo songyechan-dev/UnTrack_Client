@@ -9,8 +9,8 @@ public class PlayableButtonInfo : MonoBehaviour
     {
         GAME_START_01 = 0,
         GAME_EXIT_01 = 1,
-        RANKING_01 = 2,
-        SETTING_01 = 3
+        RANKING01 = 2,
+        SETTING01 = 3
     }
     public Info myInfo;
 }
