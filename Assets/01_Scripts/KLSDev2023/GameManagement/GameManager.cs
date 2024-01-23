@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Value
-    private int round = 1;
+    private int round = 2;
     private int finalRound = 5;
     private float meter;
 
