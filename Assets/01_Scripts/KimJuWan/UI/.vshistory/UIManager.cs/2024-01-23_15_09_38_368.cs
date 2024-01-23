@@ -127,10 +127,6 @@ public class UIManager : MonoBehaviour
     //    }
     //}
 
-
-    /// <summary>
-    /// 각씬 별로 panel및 playablebutton 초기화
-    /// </summary>
     public void Init()
     {
         playerController = GetComponent<PlayerController>();

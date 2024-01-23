@@ -55,22 +55,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        //GameStart();
-        SetKeyCode();
-    }
-
-    private void SetKeyCode()
-    {
         if (PlayerPrefs.HasKey("PlayerActionKeyCode"))
         {
-            KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt("PlayerActionKeyCode");
+            KeyCodeInfo.myActionKeyCode = PlayerPrefs.GetInt("PlayerActionKeyCode");
         }
-        else
-        {
-            KeyCodeInfo.myActionKeyCode = KeyCode.Space;
-        }
+        //GameStart();
     }
-
 
     private void Update()
     {

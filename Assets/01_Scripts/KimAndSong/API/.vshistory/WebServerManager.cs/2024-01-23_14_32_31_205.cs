@@ -10,10 +10,12 @@ public static class WebServerManager
 
     public static IEnumerator LoginCoroutine(string userId, string password)
     {
+        // 서버에 보낼 데이터 생성
         WWWForm form = new WWWForm();
         form.AddField("userId", userId);
         form.AddField("password", password);
         Debug.Log("호출됨");
+        // HTTP POST 요청
         using (UnityWebRequest www = UnityWebRequest.Post(serverURL+"/user/login", form))
         {
             yield return www.SendWebRequest();

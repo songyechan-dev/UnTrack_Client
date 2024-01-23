@@ -52,10 +52,6 @@ public class UIManager : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
-    /// </summary>
-    /// <param name="_info">PlayableButton 종류</param>
     public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
         switch (_info)
@@ -74,16 +70,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
-    /// </summary>
-    /// <param name="_info">PlayableButton 종류</param>
     public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
     {
 
     }
     /// <summary>
-    /// 특정 오브젝트의 Active를 끄거나 켠다
+    /// 특정 오브젝트를 끄거나 킨다
     /// </summary>
     /// <param name="_activeGameObject">SetActive true를 해야될 객체</param>
     /// <param name="_deActiveGameObject">SetActive false를 해야될 객체</param>
@@ -93,11 +85,6 @@ public class UIManager : MonoBehaviour
         _deActiveGameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// 특정 오브젝트의 active를 켜고, 특정 오브젝트들의 active 을끈다
-    /// </summary>
-    /// <param name="_activeGameObject">SetActive true를 해야될 객체</param>
-    /// <param name="_deActiveGameObjects">SetActive false를 해야될 객체들</param>
     public void ActiveAndDeActive(GameObject _activeGameObject, params GameObject[] _deActiveGameObjects)
     {
         _activeGameObject.SetActive(true);
@@ -127,10 +114,6 @@ public class UIManager : MonoBehaviour
     //    }
     //}
 
-
-    /// <summary>
-    /// 각씬 별로 panel및 playablebutton 초기화
-    /// </summary>
     public void Init()
     {
         playerController = GetComponent<PlayerController>();

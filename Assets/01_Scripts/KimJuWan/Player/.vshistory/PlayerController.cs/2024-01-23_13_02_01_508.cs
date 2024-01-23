@@ -36,9 +36,14 @@ public class PlayerController : MonoBehaviour
     public float currentTime = 0f;
     public float spaceTime = .2f;
 
-
+    public int keyCode = 0;
     public string playableButtonTagName = "PlayableButton";
-
+    public List<KeyCode> keys = new List<KeyCode>()
+    {
+        KeyCode.Space,
+        KeyCode.LeftControl,
+        KeyCode.LeftShift
+    };
 
     // 시작
    
@@ -62,7 +67,7 @@ public class PlayerController : MonoBehaviour
             //플레이어가 스테이하면 실행
             CheckPlayableButton_OnStay();
         }
-        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(keys[keyCode]))
         {
             //스페이스바 눌렀을때 실행
             CheckPlayableButton_OnHit();
@@ -99,11 +104,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
+        if (Input.GetKey(keys[keyCode]))
         {
             currentTime += Time.deltaTime;
         }
-        if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+        if (Input.GetKeyUp(keys[keyCode]))
         {
             playerManager.CollectIngredient();
             currentTime = 0;

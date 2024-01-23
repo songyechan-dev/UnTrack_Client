@@ -56,21 +56,7 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         //GameStart();
-        SetKeyCode();
     }
-
-    private void SetKeyCode()
-    {
-        if (PlayerPrefs.HasKey("PlayerActionKeyCode"))
-        {
-            KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt("PlayerActionKeyCode");
-        }
-        else
-        {
-            KeyCodeInfo.myActionKeyCode = KeyCode.Space;
-        }
-    }
-
 
     private void Update()
     {
@@ -116,7 +102,6 @@ public class GameManager : MonoBehaviour
         gameState = GameState.GameStart;
         MapCreator.Instance().MapLoad();
         gameMode = GameMode.Play;
-        UIManager.Instance().Init();
     }
 
     /// <summary>
@@ -139,7 +124,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameClear");
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
-                UIManager.Instance().Init();
             }
             else
             {
@@ -153,7 +137,6 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.GameEnd;
         gameMode = GameMode.None;
-        UIManager.Instance().Init();
         Debug.Log("게임끝");
     }
 

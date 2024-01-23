@@ -52,10 +52,6 @@ public class UIManager : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
-    /// </summary>
-    /// <param name="_info">PlayableButton 종류</param>
     public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
         switch (_info)
@@ -65,7 +61,7 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.GAME_EXIT:
                 break;
-            case PlayableButtonInfo.Info.RANKING:
+            case PlayableButtonInfo.Info.LANKING:
                 break;
             case PlayableButtonInfo.Info.SETTING:
                 break;
@@ -74,63 +70,27 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
-    /// </summary>
-    /// <param name="_info">PlayableButton 종류</param>
     public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
     {
 
     }
-    /// <summary>
-    /// 특정 오브젝트의 Active를 끄거나 켠다
-    /// </summary>
-    /// <param name="_activeGameObject">SetActive true를 해야될 객체</param>
-    /// <param name="_deActiveGameObject">SetActive false를 해야될 객체</param>
-    public void ActiveAndDeActive(GameObject _activeGameObject,GameObject _deActiveGameObject)
+
+    public void ActiveAndDeActive(GameObject _actvieGameObject, GameObject _deActiveGameObject)
     {
-        _activeGameObject.SetActive(true);
+        Debug.Log("호출됨");
+        _actvieGameObject.SetActive(true);
         _deActiveGameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// 특정 오브젝트의 active를 켜고, 특정 오브젝트들의 active 을끈다
-    /// </summary>
-    /// <param name="_activeGameObject">SetActive true를 해야될 객체</param>
-    /// <param name="_deActiveGameObjects">SetActive false를 해야될 객체들</param>
-    public void ActiveAndDeActive(GameObject _activeGameObject, params GameObject[] _deActiveGameObjects)
+    public void ChangeKeyCode()
     {
-        _activeGameObject.SetActive(true);
-        foreach (GameObject obj in _deActiveGameObjects)
+        playerController.keyCode++;
+        if(playerController.keyCode >2)
         {
-            if (obj != null)
-            {
-                obj.SetActive(false);
-            }
+            playerController.keyCode = 0;
         }
     }
 
-
-    public void LoginButtonOnClick()
-    {
-        string user_id = loginPanel.transform.Find("InputID").GetComponent<InputField>().text;
-        string user_password = loginPanel.transform.Find("InputPW").GetComponent<InputField>().text;
-        StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
-    }
-
-    //public void ChangeKeyCode()
-    //{
-    //    playerController.keyCode++;
-    //    if(playerController.keyCode >2)
-    //    {
-    //        playerController.keyCode = 0;
-    //    }
-    //}
-
-
-    /// <summary>
-    /// 각씬 별로 panel및 playablebutton 초기화
-    /// </summary>
     public void Init()
     {
         playerController = GetComponent<PlayerController>();
@@ -144,16 +104,12 @@ public class UIManager : MonoBehaviour
             playableButton_Setting = ground.transform.Find("Setting").gameObject;
             playableButton_GameExit = ground.transform.Find("Quit").gameObject;
 
-            playableButton_GameStart.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START;
-            playableButton_Ranking.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING;
-            playableButton_Setting.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING;
-            playableButton_GameExit.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT;
-
             loginPanel = canvas.transform.Find("LoginPanel").gameObject;
             settingPanel = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel = canvas.transform.Find("LoginFailPanel").gameObject;
         }
         // --------------------------------------------------------------------------------------
+        Debug.Log(SceneManager.GetActiveScene().name);
 
     }
 

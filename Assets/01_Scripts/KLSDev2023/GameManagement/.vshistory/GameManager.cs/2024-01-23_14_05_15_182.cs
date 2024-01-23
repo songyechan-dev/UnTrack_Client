@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         //GameStart();
-        SetKeyCode();
     }
 
     private void SetKeyCode()

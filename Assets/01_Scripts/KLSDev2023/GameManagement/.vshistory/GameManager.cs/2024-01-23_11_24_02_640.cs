@@ -13,15 +13,10 @@ public class GameManager : MonoBehaviour
         GameOver = 3,
         GameEnd = 4
     }
-    public enum GameMode
-    {
-        None = 0,
-        Play = 1
-    }
     #endregion
 
     #region Value
-    private int round = 1;
+    private int round = 2;
     private int finalRound = 5;
     private float meter;
 
@@ -30,7 +25,6 @@ public class GameManager : MonoBehaviour
     public GameObject factoriesObjectPrefab;
     public MapCreator mapCreator;
     public GameState gameState;
-    public GameMode gameMode;
     public TimeManager timeManager;
     public GameObject firstFactoriesObject;
     #endregion
@@ -55,22 +49,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        //GameStart();
-        SetKeyCode();
+        GameStart();
     }
-
-    private void SetKeyCode()
-    {
-        if (PlayerPrefs.HasKey("PlayerActionKeyCode"))
-        {
-            KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt("PlayerActionKeyCode");
-        }
-        else
-        {
-            KeyCodeInfo.myActionKeyCode = KeyCode.Space;
-        }
-    }
-
 
     private void Update()
     {
@@ -115,8 +95,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.GameStart;
         MapCreator.Instance().MapLoad();
-        gameMode = GameMode.Play;
-        UIManager.Instance().Init();
+
     }
 
     /// <summary>
@@ -124,8 +103,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        gameMode = GameMode.None;
-        UIManager.Instance().Init();
+        
     }
 
     public void GameClear()
@@ -138,8 +116,6 @@ public class GameManager : MonoBehaviour
                 //upgrade 씬호출
                 Debug.Log("GameClear");
                 gameState = GameState.GameClear;
-                gameMode = GameMode.None;
-                UIManager.Instance().Init();
             }
             else
             {
@@ -152,8 +128,6 @@ public class GameManager : MonoBehaviour
     public void GameEnd()
     {
         gameState = GameState.GameEnd;
-        gameMode = GameMode.None;
-        UIManager.Instance().Init();
         Debug.Log("게임끝");
     }
 

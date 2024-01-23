@@ -74,10 +74,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
-    /// </summary>
-    /// <param name="_info">PlayableButton 종류</param>
     public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
     {
 
@@ -127,10 +123,6 @@ public class UIManager : MonoBehaviour
     //    }
     //}
 
-
-    /// <summary>
-    /// 각씬 별로 panel및 playablebutton 초기화
-    /// </summary>
     public void Init()
     {
         playerController = GetComponent<PlayerController>();

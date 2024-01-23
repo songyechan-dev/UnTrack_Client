@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
             //플레이어가 스테이하면 실행
             CheckPlayableButton_OnStay();
         }
-        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+        if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(keys[keyCode]))
         {
             //스페이스바 눌렀을때 실행
             CheckPlayableButton_OnHit();
