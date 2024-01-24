@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using static GameManager;
 
 
 public class UIManager_LeeYuJoung : MonoBehaviour
@@ -35,6 +34,21 @@ public class UIManager_LeeYuJoung : MonoBehaviour
 
     #endregion
 
+    #region Scene04
+    [Header("PlayableButtons")]
+    public GameObject playableButton_CONTINUE_04;
+    public GameObject playableButton_ENGINE_UPGRADE_04;
+    public GameObject playableButton_STORAGE_UPGRADE_04;
+    public GameObject playableButton_MACHINE_UPGRADE_04;
+    public GameObject playableButton_PRODUCTIONMACHINE_BUY_04;
+    public GameObject playableButton_DYNAMITEMACHINE_BUY_04;
+    public GameObject playableButton_WATERTANK_BUY_04; 
+    public GameObject playableButton_GAME_EXIT_04;
+    [Header("Panel")]
+    public GameObject machineUpgradePanel;
+
+    #endregion
+
     private void Awake()
     {
         if (instance == null)
@@ -48,7 +62,6 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         DontDestroyOnLoad(this);
         Init();
     }
-
 
     /// <summary>
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
@@ -80,6 +93,56 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     {
 
     }
+
+    #region Scene04_PlayAbleButton_OnStay
+    public void PlayAbleButton_OnStay(PlayableButtonInfo_LeeYuJoung.Info _info)
+    {
+        switch (_info)
+        {
+            case PlayableButtonInfo_LeeYuJoung.Info.CONTINUE_04:
+                // 다음 라운드 게임 시작 
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.MACHINE_UPGRADE_04:
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.GAME_EXIT_04:
+                // 로비로 돌아가기
+
+                break;
+            default:
+                break;
+        }
+    }
+    #endregion
+
+    #region Scene04_PlayAbleButton_OnHit
+    public void PlayAbleButton_OnHit(PlayableButtonInfo_LeeYuJoung.Info _info)
+    {
+        switch (_info)
+        {
+            case PlayableButtonInfo_LeeYuJoung.Info.ENGINE_UPGRADE_04:
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.STORAGE_UPGRADE_04:
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_BUY_04:
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_BUY_04:
+
+                break;
+            case PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_BUY_04:
+
+                break;
+
+            default:
+                break;
+        }
+    }
+    #endregion
+
     /// <summary>
     /// 특정 오브젝트의 Active를 끄거나 켠다
     /// </summary>
@@ -107,7 +170,6 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             }
         }
     }
-
 
     public void LoginButtonOnClick_01()
     {
@@ -143,6 +205,21 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         }
         #endregion
 
-    }
+        #region Scene04
+        if (SceneManager.GetActiveScene().buildIndex == 4)
+        {
+            playableButton_CONTINUE_04 = ground.transform.Find("Continue").gameObject;
+            playableButton_GAME_EXIT_04 = ground.transform.Find("BacktoLobby").gameObject;
+            playableButton_ENGINE_UPGRADE_04 = ground.transform.Find("EngineUpgrade").transform.GetChild(1).gameObject;
+            playableButton_STORAGE_UPGRADE_04 = ground.transform.Find("StorageUpgrade").transform.GetChild(1).gameObject;
+            playableButton_MACHINE_UPGRADE_04 = ground.transform.Find("MachineUpgrade").gameObject;
+            playableButton_PRODUCTIONMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(1).gameObject;
+            playableButton_DYNAMITEMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(2).gameObject;
+            playableButton_WATERTANK_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(3).gameObject;
 
+            playableButton_CONTINUE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.CONTINUE_04;
+
+        }
+        #endregion
+    }
 }
