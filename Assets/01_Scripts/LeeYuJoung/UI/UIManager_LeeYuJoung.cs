@@ -53,6 +53,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     public GameObject engineDesPanel;
     public GameObject storageDesPanel;
     [Header("Text")]
+    public Text voltNumText;
     public TextMesh enginePriceText;
     public TextMesh engineDesText;
     public TextMesh storagePriceText;
@@ -173,32 +174,38 @@ public class UIManager_LeeYuJoung : MonoBehaviour
                 upgradeManager.UpgradeEngine();
                 enginePriceText.text = upgradeManager.engineUpgradePrice.ToString();
                 engineDesText.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.STORAGE_UPGRADE_04:
                 upgradeManager.UpgradeStorage();
                 storagePriceText.text = upgradeManager.storageUpgradePrice.ToString();
                 storageDesText.text = $"저장소 현재 용량 \n {StateManager.Instance().storageMaxVolume}";
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_UPGRADE_04:
                 upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, info.machineUpgradeIDX);
                 info.transform.GetChild(1).GetComponent<TextMesh>().text = upgradeManager.factoryPrice["ProductionMachine"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_UPGRADE_04:
                 upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, info.machineUpgradeIDX);
                 info.transform.GetChild(1).GetComponent<TextMesh>().text = upgradeManager.factoryPrice["DynamiteMachine"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_UPGRADE_04:
                 upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, info.machineUpgradeIDX);
                 info.transform.GetChild(1).GetComponent<TextMesh>().text = upgradeManager.factoryPrice["WaterTank"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_BUY_04:
                 upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.ProductionMachine);
                 productionMachineBuyPriceText.text = upgradeManager.machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
                 upgradeManager.ClearUpgradeMachine(pos);
                 upgradeManager.ShowUpgradeMachine(pos);
 
@@ -206,6 +213,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             case PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_BUY_04:
                 upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.DynamiteMachine);
                 dynamiteMachineBuyPriceText.text = upgradeManager.machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
                 upgradeManager.ClearUpgradeMachine(pos);
                 upgradeManager.ShowUpgradeMachine(pos);
 
@@ -213,6 +221,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             case PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_BUY_04:
                 upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.WaterTank);
                 waterTankBuyPriceText.text = upgradeManager.machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
                 upgradeManager.ClearUpgradeMachine(pos);
                 upgradeManager.ShowUpgradeMachine(pos);
 
@@ -313,6 +322,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
             playableButton_DYNAMITEMACHINE_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_BUY_04;
             playableButton_WATERTANK_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_BUY_04;
 
+            voltNumText = canvas.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<Text>();
             enginePriceText = playableButton_ENGINE_UPGRADE_04.transform.GetChild(2).GetComponent<TextMesh>();
             engineDesText = engineDesPanel.GetComponentInChildren<TextMesh>();  
             storagePriceText = playableButton_STORAGE_UPGRADE_04.transform.GetChild(2).GetComponent<TextMesh>();

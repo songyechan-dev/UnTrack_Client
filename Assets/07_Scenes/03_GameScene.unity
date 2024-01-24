@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 227078142}
   - component: {fileID: 227078141}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Quest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1815,7 +1815,7 @@ GameObject:
   - component: {fileID: 1945650047}
   - component: {fileID: 1945650046}
   m_Layer: 5
-  m_Name: Text (Legacy) (4)
+  m_Name: Volt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

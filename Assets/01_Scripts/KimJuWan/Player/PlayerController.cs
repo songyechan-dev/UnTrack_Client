@@ -78,8 +78,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#if LeeYouJoung
+                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#endif
+#if !LeeYouJoung
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+#endif
                 }
                 if (isReady)
                 {
@@ -90,9 +94,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }
-
-        
+        }   
     }
 
     void CheckPlayableButton_OnHit()
@@ -106,8 +108,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#if LeeYouJoung
+                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
+#endif
+#if !LeeYouJoung
                     UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+#endif
                 }
             }
         }
