@@ -76,6 +76,16 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 break;
+            case PlayableButtonInfo.Info.GAME_START_02:
+                if (!playerController.GetIsReady())
+                {
+                    playerController.SetIsReady(true);
+                }
+                break;
+            case PlayableButtonInfo.Info.BACK_02:
+                break;
+            case PlayableButtonInfo.Info.FIND_ROOM_02:
+                break;
             default:
                 break;
         }
@@ -161,6 +171,8 @@ public class UIManager : MonoBehaviour
             playableButton_GameExit01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT_01;
 
             loginPanel01 = canvas.transform.Find("LoginPanel").gameObject;
+            loginPanel01.transform.Find("LoginBtn").GetComponent<Button>().onClick.RemoveAllListeners();
+            loginPanel01.transform.Find("LoginBtn").GetComponent<Button>().onClick.AddListener(LoginButtonOnClick_01);
             settingPanel01 = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
         }

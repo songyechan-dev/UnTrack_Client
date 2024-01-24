@@ -47,6 +47,10 @@ MonoBehaviour:
   - SyncTeamList
   - SyncTeamSet
   - TeamListChange
+  - SetNeedReadyUserCount_Sync
+  - SyncNeedReadyUserCount
+  - SyncReadyUserCount
+  - SetReadyUserCount_Sync
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

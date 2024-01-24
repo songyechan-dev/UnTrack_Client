@@ -49,8 +49,11 @@ public class MapCreator : MonoBehaviour
     public GameObject waterTankPrefab;
     public GameObject enginePrefab;
     public GameObject storagePrefab;
+    public GameObject axPrefab;
+    public GameObject pickPrefab;
     [Header("")]
     public TrackManager trackManager;
+    public PhotonObjectCreator photonObjectCreator;
 
     private static MapCreator instance;
     public static MapCreator Instance()
@@ -69,6 +72,10 @@ public class MapCreator : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
+        //방장인지 확인
+        MapLoad();
+        trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
+        photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
     }
 
     private void MapDataCreate()
@@ -167,6 +174,14 @@ public class MapCreator : MonoBehaviour
                 {
                     mapInfo = ((int)(MapInfo.Type.FiNISH_TRACK)).ToString();
                 }
+                if (x == MapInfo.defaultStartTrackX - 1 && y == MapInfo.defaultStartTrackZ - 1)
+                {
+                    mapInfo = ((int)(MapInfo.Type.Ax)).ToString();
+                }
+                if (x == MapInfo.defaultStartTrackX - 2 && y == MapInfo.defaultStartTrackZ - 2)
+                {
+                    mapInfo = ((int)(MapInfo.Type.Pick)).ToString();
+                }
                 if (x == 0)
                 {
                     content += mapInfo;
@@ -175,6 +190,7 @@ public class MapCreator : MonoBehaviour
                 {
                     content += $",{mapInfo}";
                 }
+
             }
             if (y < mapHeight - 1)
             {
@@ -286,6 +302,9 @@ public class MapCreator : MonoBehaviour
         GameObject factoryObject;
         GameObject engineObject;
         GameObject storageObject;
+
+        GameObject axObject;
+        GameObject pickObject;
         
         for (int i = 0; i < mapY; i++)
         {
@@ -397,6 +416,19 @@ public class MapCreator : MonoBehaviour
                     engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
                     engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                 }
+                else if (mapInfo[i][j] == (int)MapInfo.Type.Ax)
+                {
+                    Debug.Log("Ax 생성 호출");
+                    axObject = Instantiate(axPrefab, mapParent.transform);
+                    axObject.transform.position = new Vector3(x * objScale * 10, axPrefab.transform.localScale.y / 2, z * objScale * 10);
+                    axObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                }
+                else if (mapInfo[i][j] == (int)MapInfo.Type.Pick)
+                {
+                    pickObject = Instantiate(pickPrefab, mapParent.transform);
+                    pickObject.transform.position = new Vector3(x * objScale * 10, pickPrefab.transform.localScale.y / 2, z * objScale * 10);
+                    pickObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                }
                 x++;
             }
             x = originX;
@@ -406,5 +438,7 @@ public class MapCreator : MonoBehaviour
         //EditorUtility.SetDirty(mapParent.gameObject);
         //AssetDatabase.SaveAssets();
         //AssetDatabase.Refresh();
+        photonObjectCreator.Create("Player", new Vector3(0, 1, 0));
     }
+    
 }

@@ -10,151 +10,104 @@ using UnityEngine.UI;
 
 public class TeamManager : MonoBehaviourPunCallbacks
 {
-    public string testName;
-    public Dictionary<string, string> teamList = new Dictionary<string, string>();
-    public GameObject content_Yellow;
-    public GameObject content_Blue;
-    private GameObject playerItem;
+    private string roomName;
+    [SerializeField]
+    private int needReadyUserCount;
+    [SerializeField]
+    private int readyUserCount;
+    public PhotonView pv;
 
-    public List<string> testNum = new List<string>();
-
-
-
-    void Start()
+    private void Awake()
     {
-
-        playerItem = Resources.Load<GameObject>("PlayerItem");
-        UpdateTeamUI();
-
+        pv = GetComponent<PhotonView>();
     }
 
-    public void TeamSet(string nickName)
+    #region needReadyUserCount
+
+    public int GetNeedReadyUserCount()
     {
-
-        string myTeam = "";
-        int random = Random.Range(0, 2);
-        if (random == 0)
-        {
-            myTeam = "Yellow";
-        }
-        else
-        {
-            myTeam = "Blue";
-        }
-
-        if (!teamList.ContainsKey(nickName))
-        {
-            photonView.RPC("SyncTeamSet", RpcTarget.AllBuffered, nickName, myTeam);
-        }
-        UpdateTeamUI();
-
+        return needReadyUserCount;
     }
-
+    public void SetNeedReadyUserCount(bool isPlus)
+    {
+        pv.RPC("SetNeedReadyUserCount_Sync", RpcTarget.MasterClient, isPlus);
+    }
     [PunRPC]
-    void SyncTeamSet(string nickName, string team)
+    public void SetNeedReadyUserCount_Sync(bool isPlus)
     {
-        if (teamList.ContainsKey(nickName))
+        if (PhotonNetwork.IsMasterClient)
         {
-            teamList[nickName] = team;
-        }
-        else
-        {
-            teamList.Add(nickName, team);
-        }
-        DBManager.DeleteData(PhotonNetwork.CurrentRoom.Name, nickName); // 예를 들어 기존 데이터 삭제
-        DBManager.InsertData(PhotonNetwork.CurrentRoom.Name, nickName, team);
-        UpdateTeamUI();
-        Debug.Log($"내팀은 :::: {nickName} {team}");
-    }
-
-    public void Left(string nickName)
-    {
-        photonView.RPC("TeamListChange", RpcTarget.AllBuffered, nickName);
-    }
-
-    [PunRPC]
-    void TeamListChange(string nickName)
-    {
-        teamList.Remove(nickName);
-        DBManager.DeleteData(PhotonNetwork.CurrentRoom.Name, nickName);
-        UpdateTeamUI();
-    }
-
-    public void ChangeTeam(string team)
-    {
-        photonView.RPC("SyncChangeTeam", RpcTarget.AllBuffered, PhotonNetwork.NickName, team);
-        UpdateTeamUI();
-    }
-
-
-
-    [PunRPC]
-    void SyncChangeTeam(string nickName, string team)
-    {
-        ;
-        if (teamList.ContainsKey(nickName))
-        {
-            teamList[nickName] = team;
-        }
-        else
-        {
-            teamList.Add(nickName, team);
-        }
-        DBManager.DeleteData(PhotonNetwork.CurrentRoom.Name, nickName);
-        DBManager.InsertData(PhotonNetwork.CurrentRoom.Name, nickName, team);
-        UpdateTeamUI();
-    }
-
-
-    public void UpdateTeamUI()
-    {
-        if (content_Blue.transform.childCount > 0)
-        {
-            List<GameObject> children = new List<GameObject>();
-            foreach (Transform child in content_Blue.transform)
+            if (isPlus)
             {
-                if (child.GetSiblingIndex() != 0)
+                needReadyUserCount++;
+            }
+            else
+            {
+                needReadyUserCount--;
+            }
+            Debug.Log(needReadyUserCount);
+            pv.RPC("SyncNeedReadyUserCount", RpcTarget.Others, needReadyUserCount);
+        }
+    }
+    [PunRPC]
+    private void SyncNeedReadyUserCount(int updatedValue)
+    {
+        needReadyUserCount = updatedValue;
+        Debug.Log("Synced NeedReadyUserCount: " + needReadyUserCount);
+    }
+
+    #endregion
+
+    #region readyUserCount
+
+    public int GetReadyUserCount()
+    {
+        return readyUserCount;
+    }
+
+    public void SetReadyUserCount(bool isPlus)
+    {
+        pv.RPC("SetReadyUserCount_Sync", RpcTarget.MasterClient, isPlus);
+    }
+
+    [PunRPC]
+    public void SetReadyUserCount_Sync(bool isPlus)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (isPlus)
+            {
+                if (GetReadyUserCount() == GetNeedReadyUserCount() - 1 && GetNeedReadyUserCount() >1)
                 {
-                    children.Add(child.gameObject);
+                    readyUserCount++;
+                    Debug.Log("게임시작");
+                    PhotonNetwork.LoadLevel(3);
+                }
+                else
+                {
+                    readyUserCount++;
                 }
             }
-            foreach (Transform child in content_Yellow.transform)
+            else
             {
-                if (child.GetSiblingIndex() != 0)
-                {
-                    children.Add(child.gameObject);
-                }
+                //게임시작 후 벗어나면 게임시작 진행 멈추는 기능 필요 할 수도 있음(게임이 바로 시작되는게아니라 스테이가 필요하다면)
+                readyUserCount--;
             }
-
-            foreach (GameObject child in children)
-            {
-                Destroy(child);
-            }
-        }
-        foreach (var player in teamList)
-        {
-            string playerName = player.Key;
-            string playerTeam = player.Value;
-
-
-            GameObject teamContent = playerTeam.Equals("Yellow") ? content_Yellow : content_Blue;
-
-
-            GameObject playerUI = Instantiate(playerItem, teamContent.transform);
-            playerUI.GetComponentInChildren<Text>().text = playerName;
+            Debug.Log(readyUserCount);
+            pv.RPC("SyncReadyUserCount", RpcTarget.Others, readyUserCount);
         }
     }
-
-    public void SetTestName(string nickName)
-    {
-        testName = nickName;
-        photonView.RPC("SetName", RpcTarget.Others, nickName);
-    }
-
     [PunRPC]
-    private void SetName(string nickName)
+    private void SyncReadyUserCount(int updatedValue)
     {
-        testName = nickName;
+        readyUserCount = updatedValue;
+        Debug.Log("readyUserCount: " + readyUserCount);
     }
+
+
+
+    #endregion
+
+
 
 }
