@@ -38,7 +38,10 @@ public class PlayerController : MonoBehaviour
 
     public string playableButtonTagName = "PlayableButton";
     private PhotonView pv;
+    private TeamManager teamManager;
 
+    private bool isReady = false;
+    
 
     // 시작
    
@@ -46,8 +49,12 @@ public class PlayerController : MonoBehaviour
     {
         pv = GetComponent<PhotonView>();
         playerManager = GetComponent<PlayerManager>();
+        if (pv != null && pv.IsMine)
+        {
+            teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
+        }
         //rb = GetComponent<Rigidbody>();
-        
+
     }
 
     // 업데이트
@@ -71,8 +78,16 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-                    //UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                }
+                if (isReady)
+                {
+                    if (!hit.transform.CompareTag(playableButtonTagName))
+                    {
+                        Debug.Log("벗어남");
+                        SetIsReady(false);
+                    }
                 }
             }
         }
@@ -91,8 +106,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
-                    //UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
                 }
             }
         }
@@ -153,5 +168,24 @@ public class PlayerController : MonoBehaviour
             //rb.velocity = Vector3.zero;
             //rb.angularVelocity = Vector3.zero;  
         }       
-    }  
+    }
+
+    public bool GetIsReady()
+    {
+        if (pv.IsMine)
+        {
+            return isReady;
+        }
+        return false;
+    }
+
+    public void SetIsReady(bool _isReady)
+    {
+        if (pv.IsMine)
+        {
+            Debug.Log("ready Set");
+            this.isReady = _isReady;
+            teamManager.SetReadyUserCount(_isReady);
+        }
+    }
 }
