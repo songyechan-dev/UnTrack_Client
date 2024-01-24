@@ -163,12 +163,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                     room.GetComponent<RoomData>().RoomInfo = roomInfo;
                     //roomPrefab.GetComponent<RoomData>().infoText = infoText;
 
-                    if (!roomInfo.Name.Equals(PhotonNetwork.CurrentRoom.Name))
-                    {
-                        // 딕셔너리 자료형에 데이터 추가
-                        rooms.Add(roomInfo.Name, room);
-                        Debug.Log("신입들어옴");
-                    }
+                    // 딕셔너리 자료형에 데이터 추가
+                    rooms.Add(roomInfo.Name, room);
+                    Debug.Log("신입들어옴");
                 }
                 else
                 {

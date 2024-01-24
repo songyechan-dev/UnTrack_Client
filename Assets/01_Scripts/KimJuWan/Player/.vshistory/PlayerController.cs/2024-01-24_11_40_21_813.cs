@@ -58,6 +58,9 @@ public class PlayerController : MonoBehaviour
             if (!isWorking)
                 PlayerMove();
         }
+
+
+
     }
 
     void CheckPlayableButton_OnStay()

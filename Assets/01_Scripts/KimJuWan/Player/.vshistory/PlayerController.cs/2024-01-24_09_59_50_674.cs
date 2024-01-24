@@ -53,16 +53,34 @@ public class PlayerController : MonoBehaviour
     // 업데이트
     void FixedUpdate()
     {
-        if (pv == null || (pv != null && pv.IsMine))
+        if (pv == null)
         {
             if (!isWorking)
                 PlayerMove();
+            //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
+
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+            {
+                //플레이어가 스테이하면 실행
+                CheckPlayableButton_OnStay();
+            }
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+            {
+                //스페이스바 눌렀을때 실행
+                CheckPlayableButton_OnHit();
+            }
         }
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
+
+
     }
 
     void CheckPlayableButton_OnStay()
     {
-        if (pv == null || (pv != null && pv.IsMine))
+        if (pv == null)
         {
             Ray ray = new Ray(transform.position, -transform.up);
             RaycastHit hit;
@@ -75,13 +93,16 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
         
     }
 
     void CheckPlayableButton_OnHit()
     {
-        if (pv == null || (pv != null && pv.IsMine))
+        if (pv == null)
         {
             Ray ray = new Ray(transform.position, -transform.up);
             RaycastHit hit;
@@ -94,25 +115,17 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
         
     }
 
     private void Update()
     {
-        if (pv == null || (pv != null && pv.IsMine))
+        if (pv == null)
         {
-            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
-            {
-                //스페이스바 눌렀을때 실행
-                CheckPlayableButton_OnHit();
-            }
-            else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
-            {
-                //플레이어가 스테이하면 실행
-                CheckPlayableButton_OnStay();
-            }
-            
             if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
             {
                 currentTime += Time.deltaTime;
@@ -123,7 +136,10 @@ public class PlayerController : MonoBehaviour
                 currentTime = 0;
             }
         }
-
+        else if (pv != null && pv.IsMine)
+        {
+            Debug.Log("포톤 시작됨");
+        }
         
 
         //if (Input.GetKeyDown(KeyCode.Space))

@@ -57,7 +57,22 @@ public class PlayerController : MonoBehaviour
         {
             if (!isWorking)
                 PlayerMove();
+            //TODO 김주완 0118: Space 키 변수화 하기(단축키 설정) -> 0119 완료
+
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+            {
+                //플레이어가 스테이하면 실행
+                CheckPlayableButton_OnStay();
+            }
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+            {
+                //스페이스바 눌렀을때 실행
+                CheckPlayableButton_OnHit();
+            }
         }
+
+
+
     }
 
     void CheckPlayableButton_OnStay()
@@ -102,17 +117,6 @@ public class PlayerController : MonoBehaviour
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
-            {
-                //스페이스바 눌렀을때 실행
-                CheckPlayableButton_OnHit();
-            }
-            else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
-            {
-                //플레이어가 스테이하면 실행
-                CheckPlayableButton_OnStay();
-            }
-            
             if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
             {
                 currentTime += Time.deltaTime;
