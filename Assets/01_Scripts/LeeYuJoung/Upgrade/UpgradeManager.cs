@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using LeeYuJoung;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 public class UpgradeManager : MonoBehaviour
 {
     public int engineUpgradePrice = 3;
     public int storageUpgradePrice = 2;
+
     public Dictionary<string, int[]> factoryPrice = new Dictionary<string, int[]>() 
     { { "ProductionMachine", new int[] { 1 } }, { "WaterTank", new int[] { 1 } }, { "DynamiteMachine", new int[] { 1 } } };
-    public int machineAddPrice = 2;
+    public Dictionary<string, int> machineAddPrice = new Dictionary<string, int>() 
+    { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
 
     // 엔진 업그레이드
     public void UpgradeEngine()
@@ -48,13 +52,12 @@ public class UpgradeManager : MonoBehaviour
     {
         if (StateManager.Instance().voltNum >= factoryPrice[_factoryType.ToString()][_idx])
         {
-            // 제작소 총 용량 증가
             if (StateManager.Instance().factorys[_factoryType.ToString()].Count != 0)
             {
-                Debug.Log($"::: 업그레이드 시작 ::: {StateManager.Instance().factorys[_factoryType.ToString()][_idx][1]}");
+                Debug.Log($"::: 업그레이드 성공 ::: {StateManager.Instance().factorys[_factoryType.ToString()][_idx][1]}");
                 StateManager.Instance().factorys[_factoryType.ToString()][_idx][1] += 2;
+                StateManager.Instance().voltNum -= factoryPrice[_factoryType.ToString()][_idx];
                 factoryPrice[_factoryType.ToString()][_idx] += 1;
-                Debug.Log($"::: 업그레이드 성공 ::: {StateManager.Instance().factorys[_factoryType.ToString()][_idx][1]}"); ;
             }
         }
         else
@@ -66,36 +69,55 @@ public class UpgradeManager : MonoBehaviour
     // 기계 추가 구매
     public void BuyMachine(FactoryManager.FACTORYTYPE _factoryType)
     {
-        if(StateManager.Instance().voltNum >= machineAddPrice)
+        if(StateManager.Instance().voltNum >= machineAddPrice[_factoryType.ToString()])
         {
-            // 플레이어가 가진 기계 List에 추가
+            Debug.Log($":::: {_factoryType} 구매 완료 ::::");
+            Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
+
             StateManager.Instance().factorys[_factoryType.ToString()].Add(new int[] { 0, 5 });
-            machineAddPrice += 1;
+            StateManager.Instance().voltNum -= machineAddPrice[_factoryType.ToString()];
+            machineAddPrice[_factoryType.ToString()] += 1;
+
+            Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
         }
         else
         {
-            Debug.Log(":::: 볼트 부족 업그레이드 실패 ::::");
+            Debug.Log(":::: 볼트 부족 구매 실패 ::::");
         }
     }
 
-    // UI 확인용 함수
-    public void NextRound()
+    public void ShowUpgradeMachine(Transform[] _pos)
     {
+        int _idx = 0;
         StateManager.Instance().BringFactoryValue();
+
+        for (int i = 0; i < StateManager.Instance().productionMachines.Count; i++)
+        {
+            GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeProductionMachine"), _pos[_idx++]);
+            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+        }
+
+        for (int i = 0; i < StateManager.Instance().waterTanks.Count; i++)
+        {
+            GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeWaterTank"), _pos[_idx++]);
+            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+        }
+
+        for (int i = 0; i < StateManager.Instance().dynamiteMachines.Count; i++)
+        {
+            GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeDynamiteMachine"), _pos[_idx++]);
+            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+        }
     }
 
-    public void Production1Upgrade()
+    public void ClearUpgradeMachine(Transform[] _pos)
     {
-        UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, 0);
-    }
-
-    public void WaterTankUpgrade()
-    {
-        UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, 0);
-    }
-
-    public void DynamiteUpgrade()
-    {
-        UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, 0);
+        for (int i = 0; i < _pos.Length; i++)
+        {
+            if (_pos[i].childCount > 0)
+            {
+                Destroy(_pos[i].GetChild(0).gameObject);
+            }
+        }
     }
 }

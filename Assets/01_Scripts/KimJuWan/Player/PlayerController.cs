@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
                     //UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
                 }
             }
