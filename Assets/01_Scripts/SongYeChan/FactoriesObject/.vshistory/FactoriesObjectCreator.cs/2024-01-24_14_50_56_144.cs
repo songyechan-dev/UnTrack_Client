@@ -1,4 +1,3 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +25,7 @@ public class FactoriesObjectCreator : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart) && PhotonNetwork.IsMasterClient)
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             InvokeRepeating("Create", 0f, createdTime);
         }

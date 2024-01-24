@@ -155,13 +155,18 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        moveDirection.Set(h, 0f, v);
 
+        moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        if (!(h == 0 && v == 0))
+        {
             transform.position += moveDirection;
             transform.rotation = Quaternion.LookRotation(moveDirection);
+        }
+        else
+        {
+            //rb.velocity = Vector3.zero;
+            //rb.angularVelocity = Vector3.zero;  
         }
     }
 

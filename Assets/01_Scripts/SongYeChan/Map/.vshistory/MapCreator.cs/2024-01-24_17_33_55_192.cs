@@ -369,7 +369,6 @@ public class MapCreator : MonoBehaviour
                         factoryObject.AddComponent<FactoryManager>();
                         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                        factoryObject.GetComponent<FactoryManager>().Init();
                         factoryObject = null;
                     }
                     else

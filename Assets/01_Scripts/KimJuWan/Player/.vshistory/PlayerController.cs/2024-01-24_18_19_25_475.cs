@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     private TeamManager teamManager;
 
     private bool isReady = false;
+
+    public Rigidbody;
     
 
     // 시작
@@ -53,7 +55,7 @@ public class PlayerController : MonoBehaviour
         {
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
         }
-        //rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
     }
 
@@ -155,13 +157,20 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        Vector3 moveDirection = new Vector3(h, 0f, v).normalized;
 
-            transform.position += moveDirection;
+        if (moveDirection.magnitude >= 0.1f)
+        {
+            // 이동 방향으로 이동
+            rb.velocity = moveDirection * moveSpeed;
+
+            // 이동 방향으로 회전
             transform.rotation = Quaternion.LookRotation(moveDirection);
+        }
+        else
+        {
+            // 정지할 때 속도 초기화
+            rb.velocity = Vector3.zero;
         }
     }
 

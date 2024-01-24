@@ -1,4 +1,3 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -115,10 +114,7 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         gameState = GameState.GameStart;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            MapCreator.Instance().MapLoad();
-        }
+        MapCreator.Instance().MapLoad();
         gameMode = GameMode.Play;
         UIManager.Instance().Init();
     }

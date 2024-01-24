@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using LeeYuJoung;
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -56,8 +54,6 @@ public class MapCreator : MonoBehaviour
     [Header("")]
     public TrackManager trackManager;
     public PhotonObjectCreator photonObjectCreator;
-    private PhotonView pv;
-    private GameObject planeObject;
 
     private static MapCreator instance;
     public static MapCreator Instance()
@@ -77,13 +73,9 @@ public class MapCreator : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         //방장인지 확인
-        if (PhotonNetwork.IsMasterClient)
-        {
-            MapLoad();
-        }
+        MapLoad();
         trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
         photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
-        pv = GetComponent<PhotonView>();
     }
 
     private void MapDataCreate()
@@ -302,6 +294,7 @@ public class MapCreator : MonoBehaviour
 
         float prevCreatedYPos;
 
+        GameObject planeObject;
         GameObject obStoneObject;
         GameObject trackObject;
         GameObject obTreeObject;
@@ -313,13 +306,14 @@ public class MapCreator : MonoBehaviour
         GameObject axObject;
         GameObject pickObject;
         
-
         for (int i = 0; i < mapY; i++)
         {
             for (int j = 0; j < mapX; j++)
             {
-                pv.RPC("CreatePlane",RpcTarget.AllBuffered,x,y,z);
-                CreatePlane(x, y, z);
+                planeObject = Instantiate(planePrefab, mapParent.transform);
+                planeObject.tag = "Plane";
+                planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
+                planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
                     prevCreatedYPos = 0;
@@ -369,7 +363,6 @@ public class MapCreator : MonoBehaviour
                         factoryObject.AddComponent<FactoryManager>();
                         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
                         factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                        factoryObject.GetComponent<FactoryManager>().Init();
                         factoryObject = null;
                     }
                     else
@@ -447,13 +440,5 @@ public class MapCreator : MonoBehaviour
         //AssetDatabase.Refresh();
         photonObjectCreator.Create("Player", new Vector3(0, 1, 0));
     }
-
-    [PunRPC]
-    void CreatePlane(float x, float y, float z)
-    {
-        planeObject = Instantiate(planePrefab);
-        planeObject.tag = "Plane";
-        planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
-        planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
-    }
+    
 }

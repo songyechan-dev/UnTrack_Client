@@ -149,20 +149,32 @@ public class PlayerController : MonoBehaviour
         //}
     }
 
+    float smoothTime = 0.15f; // 이동에 대한 부드러움을 제어하는 값
+    float turnSmoothTime = 0.1f; // 회전에 대한 부드러움을 제어하는 값
+    float turnSmoothVelocity; // 회전에 대한 부드러움을 제어하는 변수
     //플레이어 이동
     public void PlayerMove()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        Vector3 inputDirection = new Vector3(h, 0f, v).normalized;
 
-            transform.position += moveDirection;
-            transform.rotation = Quaternion.LookRotation(moveDirection);
+        // 부드러운 이동을 위해 Lerp를 사용
+        moveDirection = Vector3.Lerp(moveDirection, inputDirection * moveSpeed, smoothTime * Time.deltaTime);
+
+        if (inputDirection.magnitude > 0.1f)
+        {
+            // 목표 회전 각도 계산
+            float targetAngle = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+
+            // 회전
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
         }
+
+        // 이동
+        transform.Translate(moveDirection * Time.deltaTime, Space.World);
     }
 
     public bool GetIsReady()

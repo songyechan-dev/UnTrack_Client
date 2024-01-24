@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
+        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) // Check if there is significant input
         {
             Vector3 moveDirection = new Vector3(h, 0f, v);
             moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
