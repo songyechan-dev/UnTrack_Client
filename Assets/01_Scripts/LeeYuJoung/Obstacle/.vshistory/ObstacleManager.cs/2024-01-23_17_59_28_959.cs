@@ -46,11 +46,7 @@ public class ObstacleManager : MonoBehaviour
         if(Physics.Raycast(ray, out hit, 1.0f))
         {
             Debug.Log("위에 장애물이 있습니다");
-            if (hit.transform.tag != null && hit.transform.tag.Equals("Obstacle"))
-            {
-                hit.transform.GetComponent<ObstacleManager>().CheckObstacleHeight(_player);
-            }
-            
+            hit.transform.GetComponent<ObstacleManager>().CheckObstacleHeight(_player);
         }
         else
         {

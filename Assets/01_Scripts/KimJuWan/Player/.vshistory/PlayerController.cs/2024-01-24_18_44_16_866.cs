@@ -78,12 +78,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
                 if (isReady)
                 {
@@ -94,7 +90,9 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }   
+        }
+
+        
     }
 
     void CheckPlayableButton_OnHit()
@@ -108,12 +106,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
             }
         }
@@ -161,14 +155,19 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        moveDirection.Set(h, 0f, v);
 
-            transform.position += moveDirection;
+        moveDirection =  moveDirection.normalized * moveSpeed * Time.deltaTime;
+        if (!(h == 0 && v == 0))
+        {
+            transform.position +=moveDirection;
             transform.rotation = Quaternion.LookRotation(moveDirection);
         }
+        else
+        {
+            //rb.velocity = Vector3.zero;
+            //rb.angularVelocity = Vector3.zero;  
+        }       
     }
 
     public bool GetIsReady()

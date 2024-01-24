@@ -35,8 +35,6 @@ public class QuestManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
-        dataPath = "QuestData";
     }
 
     private void Start()

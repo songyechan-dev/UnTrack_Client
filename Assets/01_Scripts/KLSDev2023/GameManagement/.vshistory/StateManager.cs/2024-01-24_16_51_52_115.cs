@@ -69,9 +69,9 @@ namespace LeeYuJoung
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
         public void OnUIExample(int _num)
         {
-            //storageText.text = $"STORAGE TOTALVOLUME {_num} / 10";
-            //woodText.text = $"Wood : {storages["WOOD"]}";
-            //steelText.text = $"Steel : {storages["STEEL"]}";
+            storageText.text = $"STORAGE TOTALVOLUME {_num} / 10";
+            woodText.text = $"Wood : {storages["WOOD"]}";
+            steelText.text = $"Steel : {storages["STEEL"]}";
         }
 
         // 업그레이드 끝나고 라운드 시작하기 전 마다 실행

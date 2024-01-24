@@ -78,12 +78,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
                 if (isReady)
                 {
@@ -94,7 +90,9 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }   
+        }
+
+        
     }
 
     void CheckPlayableButton_OnHit()
@@ -108,12 +106,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
             }
         }
@@ -161,13 +155,27 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        // 이동 방향 설정
+        moveDirection.Set(h, 0f, v);
 
-            transform.position += moveDirection;
-            transform.rotation = Quaternion.LookRotation(moveDirection);
+        // 정규화된 이동 방향에 고정된 속도를 곱하여 이동 벡터 생성
+        Vector3 movement = moveDirection.normalized * moveSpeed * Time.deltaTime;
+
+        // 이동 벡터의 크기를 1로 고정
+        if (movement.magnitude > 1f)
+        {
+            movement.Normalize();
+        }
+
+        // 이동 적용
+        if (!(h == 0 && v == 0))
+        {
+            transform.position += movement;
+            transform.rotation = Quaternion.LookRotation(movement);
+        }
+        else
+        {
+            
         }
     }
 

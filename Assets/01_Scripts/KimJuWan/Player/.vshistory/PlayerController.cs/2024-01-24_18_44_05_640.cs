@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
 {
     
     private float moveSpeed = 10f;
-    
+    private float rotationSpeed = 5.0f;
+
     Vector3 moveDirection;
     //Rigidbody rb;
     PlayerManager playerManager;
@@ -78,12 +79,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
                 if (isReady)
                 {
@@ -94,7 +91,9 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }   
+        }
+
+        
     }
 
     void CheckPlayableButton_OnHit()
@@ -108,12 +107,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-#if LeeYouJoung
-                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
-#endif
-#if !LeeYouJoung
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
-#endif
                 }
             }
         }
@@ -156,18 +151,43 @@ public class PlayerController : MonoBehaviour
     }
 
     //플레이어 이동
-    public void PlayerMove()
+    void PlayerMove()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
-        {
-            Vector3 moveDirection = new Vector3(h, 0f, v);
-            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+        Vector3 inputDirection = Vector3.zero;
 
-            transform.position += moveDirection;
-            transform.rotation = Quaternion.LookRotation(moveDirection);
+        if (h > 0)
+        {
+            inputDirection = Vector3.right;
+        }
+        else if (h < 0)
+        {
+            inputDirection = Vector3.left;
+        }
+        else if (v > 0)
+        {
+            inputDirection = Vector3.forward;
+        }
+        else if (v < 0)
+        {
+            inputDirection = Vector3.back;
+        }
+
+        if (inputDirection != Vector3.zero)
+        {
+            // 목표 회전 각도 계산
+            float targetAngle = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
+
+            // 현재 각도를 부드럽게 회전
+            float angle = Mathf.LerpAngle(transform.eulerAngles.y, targetAngle, rotationSpeed * Time.deltaTime);
+
+            // 부드럽게 회전
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            // 이동
+            transform.Translate(inputDirection * moveSpeed * Time.deltaTime);
         }
     }
 
