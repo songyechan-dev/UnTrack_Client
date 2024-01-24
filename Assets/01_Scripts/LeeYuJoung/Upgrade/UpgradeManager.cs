@@ -16,8 +16,9 @@ public class UpgradeManager : MonoBehaviour
     {
         if(StateManager.Instance().voltNum >= engineUpgradePrice)
         {
-            // 엔진 총 용량 1개 증가
+            Debug.Log(":::: 엔진 업그레이드 성공 ::::");
             StateManager.Instance().engineMaxVolume += 1;
+            StateManager.Instance().voltNum -= engineUpgradePrice;
             engineUpgradePrice += 1;
         }
         else
@@ -31,8 +32,9 @@ public class UpgradeManager : MonoBehaviour
     {
         if (StateManager.Instance().voltNum >= storageUpgradePrice)
         {
-            // 저장소 총 용량 5개 증가
+            Debug.Log(":::: 저장소 업그레이드 성공 ::::");
             StateManager.Instance().storageMaxVolume += 5;
+            StateManager.Instance().voltNum -= storageUpgradePrice;
             storageUpgradePrice += 1;
         }
         else

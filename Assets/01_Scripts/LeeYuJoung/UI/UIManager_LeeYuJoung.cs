@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using LeeYuJoung;
 
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
@@ -35,6 +35,8 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     #endregion
 
     #region Scene04
+    public UpgradeManager upgradeManager;
+
     [Header("PlayableButtons")]
     public GameObject playableButton_CONTINUE_04;
     public GameObject playableButton_ENGINE_UPGRADE_04;
@@ -104,6 +106,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.MACHINE_UPGRADE_04:
+                ActiveAndDeActive(machineUpgradePanel);
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.GAME_EXIT_04:
@@ -122,9 +125,11 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         switch (_info)
         {
             case PlayableButtonInfo_LeeYuJoung.Info.ENGINE_UPGRADE_04:
+                upgradeManager.UpgradeEngine();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.STORAGE_UPGRADE_04:
+                upgradeManager.UpgradeStorage();
 
                 break;
             case PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_BUY_04:
@@ -208,17 +213,26 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         #region Scene04
         if (SceneManager.GetActiveScene().buildIndex == 4)
         {
+            upgradeManager = GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>();
+
             playableButton_CONTINUE_04 = ground.transform.Find("Continue").gameObject;
             playableButton_GAME_EXIT_04 = ground.transform.Find("BacktoLobby").gameObject;
-            playableButton_ENGINE_UPGRADE_04 = ground.transform.Find("EngineUpgrade").transform.GetChild(1).gameObject;
-            playableButton_STORAGE_UPGRADE_04 = ground.transform.Find("StorageUpgrade").transform.GetChild(1).gameObject;
+            playableButton_ENGINE_UPGRADE_04 = ground.transform.Find("EngineUpgrade").gameObject;
+            playableButton_STORAGE_UPGRADE_04 = ground.transform.Find("StorageUpgrade").gameObject;
             playableButton_MACHINE_UPGRADE_04 = ground.transform.Find("MachineUpgrade").gameObject;
             playableButton_PRODUCTIONMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(1).gameObject;
             playableButton_DYNAMITEMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(2).gameObject;
             playableButton_WATERTANK_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(3).gameObject;
+            machineUpgradePanel = ground.transform.Find("MachineUpgradePanel").gameObject;
 
             playableButton_CONTINUE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.CONTINUE_04;
-
+            playableButton_GAME_EXIT_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.GAME_EXIT_04;
+            playableButton_ENGINE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.ENGINE_UPGRADE_04;
+            playableButton_STORAGE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.STORAGE_UPGRADE_04;
+            playableButton_MACHINE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.MACHINE_UPGRADE_04;
+            playableButton_PRODUCTIONMACHINE_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_BUY_04;
+            playableButton_DYNAMITEMACHINE_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_BUY_04;
+            playableButton_WATERTANK_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_BUY_04;
         }
         #endregion
     }

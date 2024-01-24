@@ -63,7 +63,7 @@ namespace LeeYuJoung
             if (currentTime > fireTime)
             {
                 currentTime = 0;
-                Fire();
+                //Fire();
             }
         }
 

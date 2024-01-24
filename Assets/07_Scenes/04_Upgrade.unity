@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8738443604681700844, guid: 2ee8377549c9cee47bcd038ecc998133, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8738443604681700844, guid: 2ee8377549c9cee47bcd038ecc998133, type: 3}
       propertyPath: m_LocalPosition.x
@@ -435,12 +435,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 216806332}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15, y: 0, z: -0.8}
-  m_LocalScale: {x: 0.9230769, y: 1, z: 3.5}
+  m_LocalPosition: {x: -1.0166668, y: 0.03, z: -0.8166667}
+  m_LocalScale: {x: 0.060000002, y: 0.2, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1292500753}
-  m_RootOrder: 1
+  m_Father: {fileID: 618652525}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &216806334
 MeshCollider:
@@ -603,6 +603,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &277237997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 277237998}
+  m_Layer: 0
+  m_Name: ---------------Player-------------
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &277237998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277237997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &365974091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,6 +1108,7 @@ Transform:
   - {fileID: 724697112}
   - {fileID: 1292500753}
   - {fileID: 1795109239}
+  - {fileID: 216806333}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1474,6 +1506,7 @@ GameObject:
   - component: {fileID: 724697115}
   - component: {fileID: 724697114}
   - component: {fileID: 724697113}
+  - component: {fileID: 724697116}
   m_Layer: 0
   m_Name: StorageUpgrade
   m_TagString: PlayableButton
@@ -1562,6 +1595,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724697111}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &724697116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724697111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myInfo: 0
 --- !u!1 &775365670
 GameObject:
   m_ObjectHideFlags: 0
@@ -2387,7 +2433,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1917395577}
-  - {fileID: 216806333}
   m_Father: {fileID: 618652525}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2624,10 +2669,9 @@ GameObject:
   - component: {fileID: 1424088183}
   - component: {fileID: 1424088182}
   - component: {fileID: 1424088181}
-  - component: {fileID: 1424088184}
   m_Layer: 0
   m_Name: Engine
-  m_TagString: PlayableButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2711,19 +2755,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424088179}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1424088184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424088179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
 --- !u!1 &1463241813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,6 +3109,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1586301908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1586301910}
+  - component: {fileID: 1586301909}
+  m_Layer: 0
+  m_Name: StateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1586301909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586301908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df997173eee6a54d9cb6db4a61d6608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voltNum: 0
+  engineMaxVolume: 5
+  engineCurrentVolume: 3
+  storageMaxVolume: 10
+  sceneFactorys: []
+  currentTime: 0
+  fireTime: 20
+  storageText: {fileID: 0}
+  woodText: {fileID: 0}
+  steelText: {fileID: 0}
+--- !u!4 &1586301910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586301908}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1676890005
 GameObject:
   m_ObjectHideFlags: 0
@@ -3351,7 +3436,7 @@ GameObject:
   - component: {fileID: 1795109240}
   m_Layer: 0
   m_Name: MachineBuy
-  m_TagString: PlayableButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3451,6 +3536,7 @@ GameObject:
   - component: {fileID: 1799271199}
   - component: {fileID: 1799271198}
   - component: {fileID: 1799271201}
+  - component: {fileID: 1799271202}
   m_Layer: 0
   m_Name: EngineUpgrade
   m_TagString: PlayableButton
@@ -3539,6 +3625,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1799271202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799271196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myInfo: 0
 --- !u!1 &1804224526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3884,6 +3983,7 @@ MonoBehaviour:
   loginPanel: {fileID: 0}
   settingPanel: {fileID: 0}
   loginFailPanel: {fileID: 0}
+  upgradeManager: {fileID: 0}
   playableButton_CONTINUE_04: {fileID: 0}
   playableButton_ENGINE_UPGRADE_04: {fileID: 0}
   playableButton_STORAGE_UPGRADE_04: {fileID: 0}
@@ -3920,10 +4020,9 @@ GameObject:
   - component: {fileID: 2075519854}
   - component: {fileID: 2075519853}
   - component: {fileID: 2075519852}
-  - component: {fileID: 2075519855}
   m_Layer: 0
   m_Name: Storage
-  m_TagString: PlayableButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4007,16 +4106,3 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075519850}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2075519855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2075519850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
