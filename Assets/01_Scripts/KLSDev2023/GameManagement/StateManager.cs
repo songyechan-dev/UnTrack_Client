@@ -50,7 +50,6 @@ namespace LeeYuJoung
             }
             DontDestroyOnLoad(gameObject);
 
-            BringFactoryValue();
             storages.Add("WOOD", 0);
             storages.Add("STEEL", 0);
             sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
