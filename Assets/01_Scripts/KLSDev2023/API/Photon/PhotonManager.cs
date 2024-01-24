@@ -13,12 +13,15 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private string userID = "hello1";
     private GameObject roomPrefab;
     public PhotonObjectCreator photonObjectCreator;
+
     [Header("UI")]
 
     // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리 자료형
     private Dictionary<string, GameObject> rooms = new Dictionary<string, GameObject>();
     // RoomItem 프리팹이 추가될 ScrollContent
     public Transform scrollContent;
+
+    public TeamManager teamManager;
 
 
     void Awake()
@@ -83,6 +86,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player player)
     {
         Debug.Log(player.NickName + "나감");
+        teamManager.SetNeedReadyUserCount(false);
     }
 
 
@@ -116,7 +120,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             }
 
             UIManager.Instance().SetText(UIManager.Instance().roomIdText, PhotonNetwork.CurrentRoom.Name);
-            photonObjectCreator.Create("Player", transform);
+
+            //TODO : 송예찬 수정해야됨
+            photonObjectCreator.Create("Player", new Vector3(0,20,0));
+            teamManager.SetNeedReadyUserCount(true);
         }
         else
         {
@@ -163,12 +170,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                     room.GetComponent<RoomData>().RoomInfo = roomInfo;
                     //roomPrefab.GetComponent<RoomData>().infoText = infoText;
 
-                    if (!roomInfo.Name.Equals(PhotonNetwork.CurrentRoom.Name))
-                    {
-                        // 딕셔너리 자료형에 데이터 추가
-                        rooms.Add(roomInfo.Name, room);
-                        Debug.Log("신입들어옴");
-                    }
+                    // 딕셔너리 자료형에 데이터 추가
+                    rooms.Add(roomInfo.Name, room);
+                    Debug.Log("신입들어옴");
+
                 }
                 else
                 {

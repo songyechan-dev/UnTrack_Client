@@ -13,7 +13,9 @@ public static class MapInfo
         FiNISH_TRACK = 4,
         FACTORY = 5,
         STORAGE = 6,
-        ENGINE = 7
+        ENGINE = 7,
+        Ax = 8,
+        Pick = 9
     }
     public static string mapDataCsvName = "MapData";
     public static float objScale = 0.1f;

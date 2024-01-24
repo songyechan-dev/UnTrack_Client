@@ -5,6 +5,7 @@ using UnityEngine;
 public static class DataManager
 {
     private static string userID;
+    private static int needReadyUserCount = 0;
 
     public static string GetUserID()
     {
@@ -15,4 +16,7 @@ public static class DataManager
     {
         userID = _userID;
     }
+
+
+
 }

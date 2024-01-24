@@ -25,7 +25,11 @@ public class FactoriesObjectCreator : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        InvokeRepeating("Create", 0f, createdTime);
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
+        {
+            InvokeRepeating("Create", 0f, createdTime);
+        }
+        
     }
     
     public void Create()

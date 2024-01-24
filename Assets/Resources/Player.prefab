@@ -143,9 +143,9 @@ GameObject:
   - component: {fileID: 9017414315893891912}
   - component: {fileID: 9017414315893891908}
   - component: {fileID: 9017414315893891907}
-  - component: {fileID: 9017414315893891906}
   - component: {fileID: -482669073529749514}
   - component: {fileID: 6258059926074263839}
+  - component: {fileID: -6201045496833657940}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -266,22 +266,6 @@ MonoBehaviour:
   sensor: {fileID: 0}
   droppedSlotPrefab: {fileID: 4222096931821908648, guid: 5278bed1f1f96fa4d8eac978cd1e4d7d, type: 3}
   itemManager: {fileID: 0}
---- !u!54 &9017414315893891906
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9017414315893891914}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
 --- !u!114 &-482669073529749514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +297,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 2
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
@@ -321,3 +305,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!54 &-6201045496833657940
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9017414315893891914}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

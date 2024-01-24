@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TestClick : MonoBehaviour,IPointerClickHandler
+public class TestClick : MonoBehaviour
 {
-    public void OnPointerClick(PointerEventData eventData)
+    public void NextScene()
     {
-        Debug.Log("여기서 호출됨");
-    }
-
-    // 시작
-    void Start()
-    {
-        
-    }
-
-    // 업데이트
-    void Update()
-    {
-        
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

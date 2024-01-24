@@ -11,4 +11,11 @@ public class PhotonObjectCreator : MonoBehaviourPunCallbacks
         Quaternion _rotation = _transform.rotation;
         PhotonNetwork.Instantiate(objectName, _position,_rotation);
     }
+
+    public void Create(string objectName, Vector3 position)
+    {
+        //플레이어 생성 및 UIManager에 컨트롤러 
+        UIManager.Instance().playerController = PhotonNetwork.Instantiate(objectName, position, Quaternion.identity).GetComponent<PlayerController>();
+        UIManager.Instance().playerController.transform.localScale = new Vector3(1, 1, 1);
+    }
 }
