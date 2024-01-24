@@ -22,13 +22,13 @@ public enum PLAYERSTATE
 }
 public class PlayerController : MonoBehaviour
 {
-
+    
     private float moveSpeed = 10f;
-
+    
     Vector3 moveDirection;
     //Rigidbody rb;
     PlayerManager playerManager;
-
+     
     public bool isPick;
     public bool isWorking;
 
@@ -41,10 +41,10 @@ public class PlayerController : MonoBehaviour
     private TeamManager teamManager;
 
     private bool isReady = false;
-
+    
 
     // 시작
-
+   
     void Start()
     {
         pv = GetComponent<PhotonView>();
@@ -78,8 +78,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#if LeeYouJoung
+                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#endif
+#if !LeeYouJoung
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+#endif
                 }
                 if (isReady)
                 {
@@ -90,9 +94,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }
-
-
+        }   
     }
 
     void CheckPlayableButton_OnHit()
@@ -106,13 +108,17 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
-                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+#if LeeYouJoung
+                    UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>());
+#endif
+#if !LeeYouJoung
                     UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+#endif
                 }
             }
         }
 
-
+        
     }
 
     private void Update()
@@ -129,7 +135,7 @@ public class PlayerController : MonoBehaviour
                 //플레이어가 스테이하면 실행
                 CheckPlayableButton_OnStay();
             }
-
+            
             if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
             {
                 currentTime += Time.deltaTime;
@@ -141,7 +147,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
+        
 
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -155,7 +161,7 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f)
+        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f) 
         {
             Vector3 moveDirection = new Vector3(h, 0f, v);
             moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
