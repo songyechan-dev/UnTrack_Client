@@ -52,6 +52,17 @@ MonoBehaviour:
   - SyncReadyUserCount
   - SetReadyUserCount_Sync
   - CreatePlane
+  - CreatePlane_Master
+  - CreatePlane_Others
+  - CreateObject_Master
+  - CreateObject_Others
+  - CreateFactory_Master
+  - CreateFactory_Others
+  - CreateTrack_Master
+  - CreateTrack_Others
+  - CreateStone_Master
+  - CreateStone_Others
+  - Delete
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

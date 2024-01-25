@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -30,7 +31,10 @@ public class TeamManager : MonoBehaviourPunCallbacks
     }
     public void SetNeedReadyUserCount(bool isPlus)
     {
-        pv.RPC("SetNeedReadyUserCount_Sync", RpcTarget.MasterClient, isPlus);
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.OfflineMode)
+        {
+            pv.RPC("SetNeedReadyUserCount_Sync", RpcTarget.MasterClient, isPlus);
+        }
     }
     [PunRPC]
     public void SetNeedReadyUserCount_Sync(bool isPlus)
@@ -45,15 +49,21 @@ public class TeamManager : MonoBehaviourPunCallbacks
             {
                 needReadyUserCount--;
             }
-            Debug.Log(needReadyUserCount);
             pv.RPC("SyncNeedReadyUserCount", RpcTarget.Others, needReadyUserCount);
         }
     }
     [PunRPC]
     private void SyncNeedReadyUserCount(int updatedValue)
     {
-        needReadyUserCount = updatedValue;
-        Debug.Log("Synced NeedReadyUserCount: " + needReadyUserCount);
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.OfflineMode)
+        {
+            needReadyUserCount = updatedValue;
+            Debug.Log("Synced NeedReadyUserCount: " + needReadyUserCount);
+        }
+        else
+        {
+            Debug.Log("여기호출");
+        }
     }
 
     #endregion
@@ -104,10 +114,22 @@ public class TeamManager : MonoBehaviourPunCallbacks
         Debug.Log("readyUserCount: " + readyUserCount);
     }
 
-
-
     #endregion
 
-
+    //TODO : 트러블 슈팅 - 송예찬
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        // Player 태그를 가진 오브젝트를 찾아서 삭제
+        GameObject[] playersWithTag = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject playerObject in playersWithTag)
+        {
+            PhotonView pv = playerObject.GetComponent<PhotonView>();
+            if (pv.CreatorActorNr == otherPlayer.ActorNumber)
+            {
+                PhotonNetwork.Destroy(playerObject);
+                SetReadyUserCount(false);
+            }
+        }
+    }
 
 }
