@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.GameStart;
         if (PhotonNetwork.IsMasterClient)
         {
-            MapCreator.Instance().MapLoad();
+            mapCreator.MapLoad();
         }
         gameMode = GameMode.Play;
         UIManager.Instance().Init();

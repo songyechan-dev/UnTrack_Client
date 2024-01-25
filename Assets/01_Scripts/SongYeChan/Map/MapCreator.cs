@@ -7,6 +7,7 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static FactoryManager;
 
 
 public class MapCreator : MonoBehaviour
@@ -53,11 +54,25 @@ public class MapCreator : MonoBehaviour
     public GameObject storagePrefab;
     public GameObject axPrefab;
     public GameObject pickPrefab;
+
+    GameObject obStoneObject;
+    GameObject trackObject;
+    GameObject obTreeObject;
+
+    GameObject factoryObject;
+    GameObject engineObject;
+    GameObject storageObject;
+
+    GameObject axObject;
+    GameObject pickObject;
+
     [Header("")]
     public TrackManager trackManager;
     public PhotonObjectCreator photonObjectCreator;
     private PhotonView pv;
     private GameObject planeObject;
+
+
 
     private static MapCreator instance;
     public static MapCreator Instance()
@@ -84,6 +99,7 @@ public class MapCreator : MonoBehaviour
         trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
         photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
         pv = GetComponent<PhotonView>();
+        photonObjectCreator.Create("Player", new Vector3(0, 0.5f, 0));
     }
 
     private void MapDataCreate()
@@ -294,147 +310,79 @@ public class MapCreator : MonoBehaviour
         GameObject mapParent = Instantiate(new GameObject());
         FactoriesObjectCreator.Instance().mapParent = mapParent.transform;
         mapParent.name = "MapParent";
-        float originX = startPosition.x;
 
+        float originX = startPosition.x;
         float x = startPosition.x;
         float y = startPosition.y;
         float z = startPosition.z;
-
         float prevCreatedYPos;
-
-        GameObject obStoneObject;
-        GameObject trackObject;
-        GameObject obTreeObject;
-
-        GameObject factoryObject;
-        GameObject engineObject;
-        GameObject storageObject;
-
-        GameObject axObject;
-        GameObject pickObject;
-        
 
         for (int i = 0; i < mapY; i++)
         {
             for (int j = 0; j < mapX; j++)
             {
-                pv.RPC("CreatePlane",RpcTarget.AllBuffered,x,y,z);
-                CreatePlane(x, y, z);
+                pv.RPC("CreatePlane_Master",RpcTarget.MasterClient,x,y,z);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
-                    prevCreatedYPos = 0;
-                    int yCount = Random.Range(1, 5);
-                    for (int k = 0; k < yCount; k++)
+                    if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                     {
-                        obStoneObject = Instantiate(obStonePrefab, mapParent.transform);
-                        obStoneObject.transform.position = new Vector3(x * objScale * 10, k == 0 ? planeObject.transform.position.y + objScale * 5 : (prevCreatedYPos + objScale * 10), z * objScale * 10);
-                        obStoneObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                        prevCreatedYPos = obStoneObject.transform.position.y;
+                        prevCreatedYPos = 0;
+                        int yCount = Random.Range(1, 5);
+                        for (int k = 0; k < yCount; k++)
+                        {
+                            GameObject _obj = PhotonNetwork.Instantiate(obStonePrefab.name, new Vector3(x * objScale * 10, prevCreatedYPos + objScale * 5, z * objScale * 10), Quaternion.identity);
+                            _obj.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                            prevCreatedYPos = _obj.transform.position.y;
+                        }
                     }
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
-                    obTreeObject = Instantiate(obTreePrefab, mapParent.transform);
-                    obTreeObject.transform.position = new Vector3(x * objScale * 10, obTreePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    obTreeObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    CreateObject_Master(x, y, z, obTreePrefab.name);
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.TRACK || mapInfo[i][j] == (int)MapInfo.Type.FiNISH_TRACK)
                 {
-                    trackObject = Instantiate(trackPrefab, mapParent.transform);
-                    trackObject.AddComponent<TrackInfo>();
-                    trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
-                    trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
-                    trackObject.tag = "Track";
-                    MapInfo.trackYscale = trackPrefab.transform.localScale.y;
-                    trackObject.transform.position = new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10);
-                    trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
-                    if (mapInfo[i][j] == (int)MapInfo.Type.TRACK)
-                    {
-                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[startTrackYRotationKeyName], 0);
-                        trackManager.finalTrack = trackObject;
-                    }
-                    else
-                    {
-                        trackObject.transform.localEulerAngles = new Vector3(0, rotationInfoDict[endTrackYRotationKeyName], 0);
-                        trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
-                    }
+                    CreateTrack_Master(x, y, z, trackPrefab.name, i, j);
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.FACTORY)
                 {
                     if (round == 1)
                     {
-                        factoryObject = Instantiate(productionMachinePrefab, mapParent.transform);
-                        factoryObject.transform.position = new Vector3(x * objScale * 10, productionMachinePrefab.transform.localScale.y / 2, z * objScale * 10);
-                        factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                        factoryObject.AddComponent<FactoryManager>();
-                        factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
-                        factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                        factoryObject.GetComponent<FactoryManager>().Init();
-                        factoryObject = null;
+                        CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.ProductionMachine);
                     }
                     else
                     {
                         if (StateManager.Instance().productionMachines.Count > 0)
                         {
-                            factoryObject = Instantiate(productionMachinePrefab, mapParent.transform);
-                            factoryObject.transform.position = new Vector3(x * objScale * 10, productionMachinePrefab.transform.localScale.y / 2, z * objScale * 10);
-                            factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                            factoryObject.AddComponent<FactoryManager>();
-                            factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
-                            factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.ProductionMachine;
-                            factoryObject.GetComponent<FactoryManager>().Init();
-                            factoryObject = null;
+                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.ProductionMachine);
                         }
                         else if (StateManager.Instance().waterTanks.Count > 0)
                         {
-                            factoryObject = Instantiate(waterTankPrefab, mapParent.transform);
-                            factoryObject.transform.position = new Vector3(x * objScale * 10, waterTankPrefab.transform.localScale.y / 2, z * objScale * 10);
-                            factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                            factoryObject.AddComponent<FactoryManager>();
-                            factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
-                            factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.WaterTank;
-                            factoryObject.GetComponent<FactoryManager>().Init();
-                            factoryObject = null;
+                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.WaterTank);
                         }
                         else if (StateManager.Instance().dynamiteMachines.Count > 0)
                         {
-                            factoryObject = Instantiate(dynamiteMachinePrefab, mapParent.transform);
-                            factoryObject.transform.position = new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10);
-                            factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-                            factoryObject.AddComponent<FactoryManager>();
-                            factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
-                            factoryObject.GetComponent<FactoryManager>().factoryType = FactoryManager.FACTORYTYPE.DynamiteMachine;
-                            factoryObject.GetComponent<FactoryManager>().Init();
-                            factoryObject = null;
+                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.DynamiteMachine);
                         }
                     }
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.STORAGE)
                 {
-                    storageObject = Instantiate(storagePrefab, mapParent.transform);
-                    storageObject.transform.position = new Vector3(x * objScale * 10, storagePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    storageObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
-
+                    CreateObject_Master(x, y, z, storagePrefab.name);
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.ENGINE)
                 {
                     Debug.Log("엔진생성 호출");
-                    engineObject = Instantiate(enginePrefab, mapParent.transform);
-                    engineObject.transform.position = new Vector3(x * objScale * 10, enginePrefab.transform.localScale.y / 2, z * objScale * 10);
-                    engineObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    CreateObject_Master(x, y, z, enginePrefab.name);
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.Ax)
                 {
                     Debug.Log("Ax 생성 호출");
-                    axObject = Instantiate(axPrefab, mapParent.transform);
-                    axObject.transform.position = new Vector3(x * objScale * 10, axPrefab.transform.localScale.y / 2, z * objScale * 10);
-                    axObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    CreateObject_Master(x, y, z, axPrefab.name);
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.Pick)
                 {
-                    pickObject = Instantiate(pickPrefab, mapParent.transform);
-                    pickObject.transform.position = new Vector3(x * objScale * 10, pickPrefab.transform.localScale.y / 2, z * objScale * 10);
-                    pickObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+                    CreateObject_Master(x, y, z, pickPrefab.name);
                 }
                 x++;
             }
@@ -445,15 +393,66 @@ public class MapCreator : MonoBehaviour
         //EditorUtility.SetDirty(mapParent.gameObject);
         //AssetDatabase.SaveAssets();
         //AssetDatabase.Refresh();
-        photonObjectCreator.Create("Player", new Vector3(0, 1, 0));
+        
     }
 
     [PunRPC]
-    void CreatePlane(float x, float y, float z)
+    void CreatePlane_Master(float x, float y, float z)
+    {
+        planeObject = Instantiate(planePrefab);
+        planeObject.tag = "Plane";
+        planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
+        planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
+        pv.RPC("CreatePlane_Others", RpcTarget.Others, x, y, z);
+    }
+    [PunRPC]
+    void CreatePlane_Others(float x, float y, float z)
     {
         planeObject = Instantiate(planePrefab);
         planeObject.tag = "Plane";
         planeObject.transform.position = new Vector3(x * objScale * 10, y, z * objScale * 10);
         planeObject.transform.localScale = new Vector3(objScale, objScale, objScale);
     }
+    void CreateObject_Master(float x, float y, float z,string name)
+    {
+        Debug.Log("마스터 호출");
+        GameObject _obj = PhotonNetwork.Instantiate(name, new Vector3(x, planeObject.transform.position.y + 0.5f, z), Quaternion.identity);
+        
+        _obj.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+    }
+
+    void CreateFactory_Master(float x, float y,float z, string name,FactoryManager.FACTORYTYPE _factoryType)
+    {
+        factoryObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10),Quaternion.identity);
+        factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+        factoryObject.AddComponent<FactoryManager>();
+        factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
+        factoryObject.GetComponent<FactoryManager>().factoryType = _factoryType;
+        factoryObject.GetComponent<FactoryManager>().Init();
+    }
+
+    void CreateTrack_Master(float x, float y, float z, string name,int i, int j)
+    {
+        trackObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10),Quaternion.Euler(new Vector3(0,MapInfo.startTrackYRotation,0)));
+        trackObject.AddComponent<TrackInfo>();
+        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
+        trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
+        trackObject.tag = "Track";
+        MapInfo.trackYscale = trackPrefab.transform.localScale.y;
+        trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
+        if (mapInfo[i][j] == (int)MapInfo.Type.TRACK)
+        {
+            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.startTrackYRotation, 0);
+            trackManager.finalTrack = trackObject;
+        }
+        else
+        {
+            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.endTrackYRotation, 0);
+            trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
+        }
+    }
+
+
+
+
 }

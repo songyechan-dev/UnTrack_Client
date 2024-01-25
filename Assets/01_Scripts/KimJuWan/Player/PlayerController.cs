@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -20,7 +21,7 @@ public enum PLAYERSTATE
     BUCKET
 
 }
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
 
     private float moveSpeed = 10f;
@@ -182,5 +183,39 @@ public class PlayerController : MonoBehaviour
             this.isReady = _isReady;
             teamManager.SetReadyUserCount(_isReady);
         }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (pv.Owner == otherPlayer)
+        {
+            if (photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
+    }
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        if (pv.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (pv.IsMine)
+        {
+            Debug.Log("나감");
+            pv.RPC("Delete", RpcTarget.Others);
+        }
+    }
+
+    [PunRPC]
+    void Delete()
+    {
+        Debug.Log("여기호출됨");
+        PhotonNetwork.Destroy(gameObject);
     }
 }

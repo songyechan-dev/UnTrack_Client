@@ -34,6 +34,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
+        
     }
     #region Callbacks
     public override void OnConnectedToMaster()
@@ -70,7 +71,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
         ro.IsOpen = true;       // 룸의 오픈 여부
         ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
-
+        ro.CleanupCacheOnLeave = false;
         Guid newUuid = Guid.NewGuid();
         // 룸 생성
         PhotonNetwork.CreateRoom(newUuid.ToString(),ro);
@@ -85,9 +86,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     //유저가 퇴장시 팀 UI 업데이트
     public override void OnPlayerLeftRoom(Player player)
     {
-        Debug.Log(player.NickName + "나감");
         teamManager.SetNeedReadyUserCount(false);
     }
+
+ 
 
 
     public override void OnJoinedRoom()
