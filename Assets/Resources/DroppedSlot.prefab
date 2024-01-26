@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -8938015127381963237}
   - component: {fileID: -1721122575175743158}
   - component: {fileID: -9117605917637916718}
+  - component: {fileID: 8144845120485494742}
   m_Layer: 0
   m_Name: DroppedSlot
   m_TagString: DroppedSlot
@@ -101,3 +102,15 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
   m_UseLocal: 0
+--- !u!114 &8144845120485494742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4188227089016237225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c331100fe43f34ca28b4da77ea3a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

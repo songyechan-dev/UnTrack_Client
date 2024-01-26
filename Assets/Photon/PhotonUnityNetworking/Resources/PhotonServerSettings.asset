@@ -67,6 +67,9 @@ MonoBehaviour:
   - Test_Sync
   - SetParentOnNetwork
   - SetParentOnNetwork_Dropped
+  - SetParent_Sync
+  - DroppedSlotIn_Sync
+  - DestroyObject_Sync
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
