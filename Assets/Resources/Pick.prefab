@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 477294265792755014}
   - component: {fileID: 7962006342166236999}
   - component: {fileID: 2939938766642958386}
-  - component: {fileID: 3933950297949591925}
+  - component: {fileID: -8338924331264151618}
   m_Layer: 0
   m_Name: Pick
   m_TagString: Item
@@ -129,13 +129,14 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -8338924331264151618}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3933950297949591925
+--- !u!114 &-8338924331264151618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,5 +150,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 0

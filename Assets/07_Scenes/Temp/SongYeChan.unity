@@ -484,12 +484,15 @@ MonoBehaviour:
   obStonePrefab: {fileID: 7328833125633006158, guid: 2997f8fc0e9f2f94fb80fe3a404fcfab, type: 3}
   obTreePrefab: {fileID: 6632435566270772146, guid: 752c2c0d1583c8948ac6b91f6466c42c, type: 3}
   trackPrefab: {fileID: 360271195562918375, guid: 123c9b7403beb8d4e97088d20c3027e8, type: 3}
-  DynamiteMachinePrefab: {fileID: 1414702916102547295, guid: e3f2d3fbc7b58bb4caf1f8758d890f99, type: 3}
+  dynamiteMachinePrefab: {fileID: 0}
   productionMachinePrefab: {fileID: 491123125678747441, guid: 8c01196e3c07e464ba114e48f7a1addb, type: 3}
   waterTankPrefab: {fileID: 3934003489838394548, guid: 863feb572dc9f504d8a5396422d983f9, type: 3}
   enginePrefab: {fileID: 2095702474359914223, guid: e570248b4402c8340816ab2a47a2f57d, type: 3}
   storagePrefab: {fileID: 3686851000239159954, guid: 902d60508499b4947916c14075054536, type: 3}
+  axPrefab: {fileID: 0}
+  pickPrefab: {fileID: 0}
   trackManager: {fileID: 820733338}
+  photonObjectCreator: {fileID: 0}
 --- !u!4 &722181249
 Transform:
   m_ObjectHideFlags: 0
@@ -601,6 +604,7 @@ MonoBehaviour:
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 072646592c73e174babb034ff5c22666, type: 3}
   mapCreator: {fileID: 722181248}
   gameState: 0
+  gameMode: 0
   timeManager: {fileID: 408781190}
   firstFactoriesObject: {fileID: 0}
 --- !u!4 &915295155

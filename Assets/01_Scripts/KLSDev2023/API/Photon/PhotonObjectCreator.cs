@@ -12,6 +12,14 @@ public class PhotonObjectCreator : MonoBehaviourPunCallbacks
         PhotonNetwork.Instantiate(objectName, _position,_rotation);
     }
 
+    public void Create_Tr(string objectName, Transform _transform,Transform _parentTransform)
+    {
+        Vector3 _position = _transform.position;
+        Quaternion _rotation = _transform.rotation;
+        PhotonNetwork.Instantiate(objectName, _position, _rotation).transform.SetParent(_parentTransform);
+    }
+
+
     public void Create(string objectName, Vector3 position)
     {
         //플레이어 생성 및 UIManager에 컨트롤러 

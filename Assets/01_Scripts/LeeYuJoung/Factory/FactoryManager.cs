@@ -189,7 +189,7 @@ public class FactoryManager : MonoBehaviour
     public GameObject ItemGenerate()
     {
         currentItemNum--;
-        return AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
+        return Resources.Load<GameObject>(generateItem);
     }
 
     // TODO : 이유정 2024.01.15 FactoryManager.cs FactoryJsonLoad(string path)

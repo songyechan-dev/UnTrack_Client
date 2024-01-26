@@ -83,11 +83,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log(newPlayer.NickName + "입장");
     }
 
-    //유저가 퇴장시 팀 UI 업데이트
-    public override void OnPlayerLeftRoom(Player player)
-    {
-        teamManager.SetNeedReadyUserCount(false);
-    }
 
  
 

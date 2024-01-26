@@ -326,11 +326,11 @@ public class MapCreator : MonoBehaviour
                 {
                     if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                     {
-                        prevCreatedYPos = 0;
+                        prevCreatedYPos = planeObject.transform.position.y;
                         int yCount = Random.Range(1, 5);
-                        for (int k = 0; k < yCount; k++)
+                        for (int k = 1; k <= yCount; k++)
                         {
-                            GameObject _obj = PhotonNetwork.Instantiate(obStonePrefab.name, new Vector3(x * objScale * 10, prevCreatedYPos + objScale * 5, z * objScale * 10), Quaternion.identity);
+                            GameObject _obj = PhotonNetwork.Instantiate(obStonePrefab.name, new Vector3(x * objScale * 10, (k == 1 ? planeObject.transform.position.y + 0.5f : prevCreatedYPos + 1), z * objScale * 10), Quaternion.identity);
                             _obj.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
                             prevCreatedYPos = _obj.transform.position.y;
                         }

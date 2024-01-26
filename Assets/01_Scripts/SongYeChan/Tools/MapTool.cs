@@ -7,9 +7,14 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
+
+public class MapTool
 #if UNITY_EDITOR
-public class MapTool : EditorWindow
+    : EditorWindow
+#endif
+
 {
+#if UNITY_EDITOR
     public enum MapMode
     {
         ShowMap,
@@ -358,7 +363,6 @@ public class MapTool : EditorWindow
         File.WriteAllText(startTrackRotationInfoFilePath, rotationInfo);
         AssetDatabase.Refresh();
     }
-
+#endif
 }
 
-#endif

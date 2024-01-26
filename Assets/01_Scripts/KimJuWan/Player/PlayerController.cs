@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private TeamManager teamManager;
 
     private bool isReady = false;
+    private bool isExit = false;
 
 
     // 시작
@@ -61,11 +62,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // 업데이트
     void FixedUpdate()
     {
-        if (pv == null || (pv != null && pv.IsMine))
+
+        if (pv == null || (pv != null && pv.IsMine && !isExit))
         {
             if (!isWorking)
                 PlayerMove();
         }
+        else if (PhotonNetwork.IsMasterClient && isExit)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+
     }
 
     void CheckPlayableButton_OnStay()
@@ -183,39 +190,40 @@ public class PlayerController : MonoBehaviourPunCallbacks
             this.isReady = _isReady;
             teamManager.SetReadyUserCount(_isReady);
         }
+        
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (pv.Owner == otherPlayer)
+        if (pv.CreatorActorNr == otherPlayer.ActorNumber)
         {
             if (photonView.IsMine)
             {
-                PhotonNetwork.Destroy(gameObject);
+                isExit = true;
             }
         }
     }
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        if (pv.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
-    }
+    //public override void OnDisconnected(DisconnectCause cause)
+    //{
+    //    if (pv.IsMine)
+    //    {
+    //        PhotonNetwork.Destroy(gameObject);
+    //    }
+    //}
 
-    private void OnApplicationQuit()
-    {
-        if (pv.IsMine)
-        {
-            Debug.Log("나감");
-            pv.RPC("Delete", RpcTarget.Others);
-        }
-    }
+    //private void OnApplicationQuit()
+    //{
+    //    if (pv.IsMine)
+    //    {
+    //        Debug.Log("나감");
+    //        pv.RPC("Delete", RpcTarget.Others);
+    //    }
+    //}
 
-    [PunRPC]
-    void Delete()
-    {
-        Debug.Log("여기호출됨");
-        PhotonNetwork.Destroy(gameObject);
-    }
+    //[PunRPC]
+    //void Delete()
+    //{
+    //    Debug.Log("여기호출됨");
+    //    PhotonNetwork.Destroy(gameObject);
+    //}
 }
