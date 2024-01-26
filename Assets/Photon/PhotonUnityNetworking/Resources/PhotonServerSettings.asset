@@ -63,6 +63,10 @@ MonoBehaviour:
   - CreateStone_Master
   - CreateStone_Others
   - Delete
+  - PickedItemSetPosition_Sync
+  - Test_Sync
+  - SetParentOnNetwork
+  - SetParentOnNetwork_Dropped
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

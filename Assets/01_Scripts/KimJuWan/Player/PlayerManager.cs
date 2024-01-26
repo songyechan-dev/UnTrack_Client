@@ -1,10 +1,13 @@
 using LeeYuJoung;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
     PlayerController playerController;
     private InventoryManager inventoryManager;
@@ -15,13 +18,18 @@ public class PlayerManager : MonoBehaviour
 
     public ItemManager itemManager;
 
+    
+
 
     private void Awake()
     {
         sensor = transform.GetChild(0).gameObject.GetComponent<Transform>();
         playerController = GetComponent<PlayerController>();
         inventoryManager = GetComponentInChildren<InventoryManager>();
+        
     }
+
+    
 
     //플레이어의 정면에 장애물이 있는 경우 파괴
     public void CollectIngredient()
@@ -33,6 +41,7 @@ public class PlayerManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, castRange, layerMask))
         {
             Debug.Log("태그명 !!! ::: " + hit.transform.tag);
+            int childCount = 0;
             switch (hit.transform.tag)
             {
                 case "Obstacle":
@@ -40,6 +49,16 @@ public class PlayerManager : MonoBehaviour
 
                     break;
                 case "Item":
+                    if (hit.transform.GetComponent<PhotonView>() != null)
+                    {
+                        hit.transform.GetComponent<PhotonView>().TransferOwnership(photonView.OwnerActorNr); // 소유자 변경
+                    }
+                    childCount = hit.transform.childCount;
+                    for (int i = 0; i < childCount; i++)
+                    {
+                        hit.transform.GetChild(i).transform.GetComponent<PhotonView>().TransferOwnership(photonView.OwnerActorNr); // 소유자 변경
+                    }
+                    childCount = 0;
                     Debug.Log("호출됨");
                     if (!playerController.isPick)
                     {
@@ -58,10 +77,10 @@ public class PlayerManager : MonoBehaviour
                             if (inventoryManager.SaveInventory(hit.transform.gameObject))
                             {
                                 hit.transform.SetParent(pickSlot.transform);
-                                pickSlot.GetChild(inventoryManager.itemNum-1).transform.position = 
+                                pickSlot.GetChild(inventoryManager.itemNum - 1).transform.position =
                                     pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
                             }
-                        }                                     
+                        }
                     }
 
                     break;
@@ -95,7 +114,7 @@ public class PlayerManager : MonoBehaviour
                     if (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
                         inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                     {
-                        if(StateManager.Instance().IngredientAdd(inventoryManager.itemType.ToString(), inventoryManager.itemNum))
+                        if (StateManager.Instance().IngredientAdd(inventoryManager.itemType.ToString(), inventoryManager.itemNum))
                         {
                             playerController.isPick = false;
                             castRange = 1f;
@@ -105,7 +124,7 @@ public class PlayerManager : MonoBehaviour
                                 Destroy(pickSlot.transform.GetChild(i).gameObject);
                                 inventoryManager.OutInventory();
                             }
-                        }                    
+                        }
                     }
 
                     break;
@@ -113,9 +132,10 @@ public class PlayerManager : MonoBehaviour
 
                     break;
                 case "DroppedSlot":
+                    
                     InventoryManager droppedSlot = hit.transform.GetComponent<InventoryManager>();
 
-                    if(playerController.currentTime>=playerController.spaceTime && playerController.isPick)
+                    if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
                     {
                         //바닥에 놓은 아이템들 위에 쌓기
                         if (inventoryManager.itemType.Equals(droppedSlot.itemType))
@@ -137,7 +157,7 @@ public class PlayerManager : MonoBehaviour
                     {
                         if (playerController.isPick)
                         {
-                            if(inventoryManager.itemType.Equals(droppedSlot.itemType))
+                            if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                             {
                                 if (inventoryManager.itemNum < 4)
                                 {
@@ -152,14 +172,14 @@ public class PlayerManager : MonoBehaviour
                         {
                             playerController.isPick = true;
                             castRange = 2.0f;
-
+                            Debug.Log(droppedSlot.itemNum);
                             inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
                             hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
                             pickSlot.GetChild(0).transform.position = pickSlot.position;
                             droppedSlot.DroppedSlotOut();
                         }
                         if (droppedSlot.itemNum <= 0)
-                            Destroy(hit.transform.gameObject);
+                            /*PhotonNetwork.*/Destroy(hit.transform.gameObject);
                     }
                     break;
                 case "Plane":
@@ -171,8 +191,7 @@ public class PlayerManager : MonoBehaviour
                         {
                             playerController.isPick = false;
                             castRange = 1.0f;
-                            GameObject _prefab = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/KimJuWan/DroppedSlot.prefab", typeof(GameObject)) as GameObject;
-                            GameObject _droppedSlot = Instantiate(_prefab, pickSlot.transform.position, Quaternion.identity);
+                            GameObject _droppedSlot = Instantiate(Resources.Load<GameObject>("DroppedSlot"), pickSlot.transform.position, Quaternion.identity);
                             _droppedSlot.name = "DroppedSlot";
 
                             int num = pickSlot.transform.childCount;
@@ -180,6 +199,7 @@ public class PlayerManager : MonoBehaviour
                             {
                                 _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                                 pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
+
                                 ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
                             }
                             inventoryManager.OutInventory();
@@ -196,7 +216,7 @@ public class PlayerManager : MonoBehaviour
                                     playerController.isPick = false;
                                     castRange = 1.0f;
 
-                                    Destroy(pickSlot.transform.GetChild(0).gameObject);
+                                    PhotonNetwork.Destroy(pickSlot.transform.GetChild(0).gameObject);
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }
@@ -204,7 +224,7 @@ public class PlayerManager : MonoBehaviour
                                 {
 
                                     //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                    Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
+                                    PhotonNetwork.Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }
@@ -213,6 +233,7 @@ public class PlayerManager : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log("여기호출인가");
                             playerController.isPick = false;
                             castRange = 1.0f;
 
@@ -228,7 +249,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
- 
+
         }
     }
 
@@ -269,8 +290,8 @@ public class PlayerManager : MonoBehaviour
     //            {
     //                playerController.keyCode = 0;
     //            }
-            
+
     //    }
-        
+
     //}
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using SimpleJSON;
 using System;
+using Photon.Pun;
+
 
 public class ObstacleManager : MonoBehaviour
 {
@@ -81,7 +83,7 @@ public class ObstacleManager : MonoBehaviour
 
                 _player.isWorking = false;
                 GenerateIngredient(_player);
-                Destroy(gameObject);
+                PhotonNetwork.Destroy(gameObject);
             }
 
             // 무한 루프 방지 예외처리
@@ -95,9 +97,7 @@ public class ObstacleManager : MonoBehaviour
     {
         Debug.Log("Generate ::: " + generateItem);
         QuestManager.Instance().UpdateProgress(generateItem, 1);
-        GameObject _item = AssetDatabase.LoadAssetAtPath($"Assets/02_Prefabs/LeeYouJoung/Item/{generateItem}.prefab", typeof(GameObject)) as GameObject;
-        GameObject _object =  Instantiate(_item, transform.position, transform.rotation);
-        _object.transform.position = _player.transform.position;
+        GameObject _object = PhotonNetwork.Instantiate(generateItem, _player.transform.position, transform.rotation);
         _object.name = generateItem;
     }
 
