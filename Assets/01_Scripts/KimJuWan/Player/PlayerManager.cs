@@ -45,6 +45,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             switch (hit.transform.tag)
             {
                 case "Obstacle":
+                    if (hit.transform.GetComponent<PhotonView>() != null)
+                    {
+                        hit.transform.GetComponent<PhotonView>().TransferOwnership(photonView.OwnerActorNr); // 소유자 변경
+                    }
                     hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
 
                     break;
@@ -132,8 +136,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
                     break;
                 case "DroppedSlot":
-                    
+                
                     InventoryManager droppedSlot = hit.transform.GetComponent<InventoryManager>();
+                    Debug.Log("카운트 ::::" + droppedSlot.transform.childCount);
+                    Debug.Log("카운트2 ::::" + droppedSlot.itemNum);
 
                     if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
                     {
@@ -170,16 +176,34 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         }
                         else
                         {
+                            if (hit.transform.GetComponent<PhotonView>() != null)
+                            {
+                                hit.transform.GetComponent<PhotonView>().TransferOwnership(photonView.OwnerActorNr); // 소유자 변경
+                            }
+                            childCount = hit.transform.childCount;
+                            for (int i = 0; i < childCount; i++)
+                            {
+                                hit.transform.GetChild(i).transform.GetComponent<PhotonView>().TransferOwnership(photonView.OwnerActorNr); // 소유자 변경
+                            }
+                            childCount = 0;
                             playerController.isPick = true;
                             castRange = 2.0f;
                             Debug.Log(droppedSlot.itemNum);
                             inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
-                            hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
-                            pickSlot.GetChild(0).transform.position = pickSlot.position;
+                            Debug.Log("pickSlot child 갯수 :::" + pickSlot.childCount);
+                            //
+                            hit.transform.GetChild(droppedSlot.itemNum - 1).GetComponent<PhotonSyncManager>().SetParent(pickSlot);
+                            pickSlot.GetChild(0).GetComponent<PhotonSyncManager>().SetPosition(pickSlot.position);
+                            //hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
+                            //pickSlot.GetChild(0).transform.position = pickSlot.position;
                             droppedSlot.DroppedSlotOut();
                         }
                         if (droppedSlot.itemNum <= 0)
-                            /*PhotonNetwork.*/Destroy(hit.transform.gameObject);
+                        {
+                            Debug.Log("여기는통과");
+                            DestroyOnNetwork(hit.transform.GetComponent <PhotonSyncManager>());
+                        }
+
                     }
                     break;
                 case "Plane":
@@ -191,14 +215,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         {
                             playerController.isPick = false;
                             castRange = 1.0f;
-                            GameObject _droppedSlot = Instantiate(Resources.Load<GameObject>("DroppedSlot"), pickSlot.transform.position, Quaternion.identity);
+                            GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot", pickSlot.transform.position, Quaternion.identity);
                             _droppedSlot.name = "DroppedSlot";
 
                             int num = pickSlot.transform.childCount;
                             for (int i = 0; i < num; i++)
                             {
-                                _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                                pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
+                                //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
+
+                                //pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
+                                pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().DroppedSlotIn(_droppedSlot.transform, pickSlot.transform.GetChild(0).gameObject);
+                                pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().SetParent(_droppedSlot.transform);
+                                
+
 
                                 ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
                             }
@@ -215,16 +244,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                                 {
                                     playerController.isPick = false;
                                     castRange = 1.0f;
-
-                                    PhotonNetwork.Destroy(pickSlot.transform.GetChild(0).gameObject);
+                                    Debug.Log("여기는통과");
+                                    DestroyOnNetwork(pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>());
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }
                                 else
                                 {
-
+                                    Debug.Log("여기는통과");
                                     //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                    PhotonNetwork.Destroy(pickSlot.transform.GetChild(num - 1).gameObject);
+                                    DestroyOnNetwork(pickSlot.transform.GetChild(num - 1).GetComponent<PhotonSyncManager>());
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }
@@ -253,6 +282,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    void DestroyOnNetwork(PhotonSyncManager _photonSyncManager)
+    {
+        _photonSyncManager.DestroyObject();
+    }
     //플레이어가 바라보는 방향에 따라 아이템의 각도 변경
     public void ObjectRotationCheck(GameObject _gameObject)
     {
