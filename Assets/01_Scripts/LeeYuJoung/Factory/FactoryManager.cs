@@ -5,6 +5,7 @@ using UnityEditor;
 using SimpleJSON;
 using System;
 using LeeYuJoung;
+using Photon.Pun;
 
 public class FactoryManager : MonoBehaviour
 {
@@ -126,10 +127,13 @@ public class FactoryManager : MonoBehaviour
     // 아이템 제작할 수 있는지 확인
     public void ItemProductionCheck()
     {
-        if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
+        if (PhotonNetwork.IsMasterClient)
         {
-            Debug.Log($":::: {generateItem} 제작 시작 ::::");
-            StartCoroutine(ItemProduction());
+            if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
+            {
+                Debug.Log($":::: {generateItem} 제작 시작 ::::");
+                StartCoroutine(ItemProduction());
+            }
         }
     }
 
@@ -168,6 +172,7 @@ public class FactoryManager : MonoBehaviour
     public void ItemAdd()
     {
         currentItemNum++;
+        Debug.Log("아이템 생성됨");
         QuestManager.Instance().UpdateProgress(generateItem, 1);
     }
 

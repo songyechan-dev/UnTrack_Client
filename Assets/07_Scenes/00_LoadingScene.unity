@@ -1010,7 +1010,11 @@ MonoBehaviour:
   playableButton_Back02: {fileID: 0}
   playableButton_FindRoom02: {fileID: 0}
   roomListPanel02: {fileID: 0}
-  roomIdText: {fileID: 0}
+  roomIdText02: {fileID: 0}
+  rDVindex03: {fileID: 0}
+  speedIndex03: {fileID: 0}
+  questIndex03: {fileID: 0}
+  distance03: {fileID: 0}
 --- !u!4 &1607778135
 Transform:
   m_ObjectHideFlags: 0

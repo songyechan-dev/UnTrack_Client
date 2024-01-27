@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Web;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -92,6 +93,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
                     readyUserCount++;
                     Debug.Log("게임시작");
                     PhotonNetwork.LoadLevel(3);
+                    return;
                 }
                 else
                 {
@@ -105,6 +107,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
             }
             Debug.Log(readyUserCount);
             pv.RPC("SyncReadyUserCount", RpcTarget.Others, readyUserCount);
+
         }
     }
     [PunRPC]

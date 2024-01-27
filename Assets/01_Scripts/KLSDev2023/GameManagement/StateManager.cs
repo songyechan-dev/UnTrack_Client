@@ -1,3 +1,6 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +9,7 @@ using UnityEngine.UI;
 
 namespace LeeYuJoung
 {
-    public class StateManager : MonoBehaviour
+    public class StateManager : MonoBehaviourPun
     {
         private static StateManager instance;
         public static StateManager Instance()
@@ -49,11 +52,11 @@ namespace LeeYuJoung
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
-
             storages.Add("WOOD", 0);
             storages.Add("STEEL", 0);
-            sceneFactorys = GameObject.FindGameObjectsWithTag("Factory").ToList();
         }
+
+
 
         private void Update()
         {
@@ -124,7 +127,6 @@ namespace LeeYuJoung
             {
                 storages.Add(_ingredient, 0);
             }
-
             List<string> _keys = new List<string>(storages.Keys);
             int storageTotalNum = 0;
 
@@ -141,7 +143,7 @@ namespace LeeYuJoung
             else
             {
                 storages[_ingredient] += _amount;
-
+                Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
                 for (int i = 0; i < sceneFactorys.Count; i++)
                 {
                     FactoryManager _fm = sceneFactorys[i].GetComponent<FactoryManager>();
@@ -151,7 +153,9 @@ namespace LeeYuJoung
                         _fm.ItemProductionCheck();
                     }
                 }
-
+                object[] data = new object[] { _ingredient,_amount };
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.ITEM_ADD_STORAGEE, data, raiseEventOptions, SendOptions.SendReliable);
                 OnUIExample(storages["WOOD"] + storages["STEEL"]);
                 return true;
             }
@@ -208,5 +212,35 @@ namespace LeeYuJoung
                 }
             }
         }
+
+        void OnEvent(EventData photonEvent)
+        {
+            if (photonEvent.Code == (int)DataSendInfo.Info.ITEM_ADD_STORAGEE)
+            {
+                object[] receivedData = (object[])photonEvent.CustomData;
+                string _ingredient = (string)receivedData[0];
+                int _amount = (int)receivedData[1];
+                if (!storages.ContainsKey(_ingredient))
+                {
+                    storages.Add(_ingredient, 0);
+                }
+                storages[_ingredient] += _amount;
+
+                Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
+            }
+        }
+
+
+        void OnEnable()
+        {
+            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+        }
+
+        void OnDisable()
+        {
+            PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        }
+
     }
+
 }

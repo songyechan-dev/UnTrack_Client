@@ -34,7 +34,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-        
+        PhotonNetwork.SendRate = 60;
+        PhotonNetwork.SerializationRate = 60;
+
     }
     #region Callbacks
     public override void OnConnectedToMaster()
@@ -116,7 +118,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 //gameStartBtn.onClick.AddListener(() => Onstart(PhotonNetwork.CurrentRoom.Name)); ;
             }
 
-            UIManager.Instance().SetText(UIManager.Instance().roomIdText, PhotonNetwork.CurrentRoom.Name);
+            UIManager.Instance().SetText(UIManager.Instance().roomIdText02, PhotonNetwork.CurrentRoom.Name);
 
             //TODO : 송예찬 수정해야됨
             photonObjectCreator.Create("Player", new Vector3(0,20,0));

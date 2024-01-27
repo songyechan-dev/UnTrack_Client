@@ -40,8 +40,17 @@ public class UIManager : MonoBehaviour
     [Header("Panel")]
     public GameObject roomListPanel02;
     [Header("Text")]
-    public TextMesh roomIdText; 
+    public TextMesh roomIdText02;
+    #endregion
 
+    #region Scene03
+    [Header("Panel")]
+    public GameObject rDVindex03;
+    public GameObject speedIndex03;
+    public GameObject questIndex03;
+
+    [Header("Text")]
+    public Text distance03;
     #endregion
 
     private void Awake()
@@ -197,10 +206,21 @@ public class UIManager : MonoBehaviour
 
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
 
-            roomIdText = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
+            roomIdText02 = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
         }
         #endregion
+        #region Scene03
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            canvas = GameObject.Find("Canvas");
+            rDVindex03 = canvas.transform.Find("RDVIndex").gameObject;
+            speedIndex03 = canvas.transform.Find("SpeedIndex").gameObject;
+            questIndex03 = canvas.transform.Find("QuestIndex").gameObject;
+            distance03 = rDVindex03.transform.Find("Distance").GetComponent<Text>();
+        }
+            
 
+        #endregion
     }
 
 }

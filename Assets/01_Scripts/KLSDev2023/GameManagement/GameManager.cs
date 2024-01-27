@@ -1,9 +1,11 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPun
 {
     #region Enum
     public enum GameState 
@@ -163,12 +165,41 @@ public class GameManager : MonoBehaviour
 
     public void MeterCalculate()
     {
-        if (firstFactoriesObject != null)
+        if (firstFactoriesObject != null && PhotonNetwork.IsMasterClient)
         {
             meter = Mathf.InverseLerp(MapInfo.defaultStartTrackX, MapInfo.finishEndTrackX, firstFactoriesObject.transform.position.x);
-            //Debug.Log((int)(meter *100) +"미터");
+            UIManager.Instance().SetText(UIManager.Instance().distance03,(int)(meter *100) +"M");
+
+            object[] data = new object[] { meter };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.METER, data, raiseEventOptions, SendOptions.SendReliable);
+
         }
 
     }
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)DataSendInfo.Info.METER)
+        {
+            // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            object[] receivedData = (object[])photonEvent.CustomData;
+            float receivedMeter = (float)receivedData[0];
+
+            UIManager.Instance().SetText(UIManager.Instance().distance03, (int)(receivedMeter * 100) + "m");
+        }
+    }
+
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
     #endregion
 }
