@@ -1,11 +1,14 @@
+using ExitGames.Client.Photon;
 using JetBrains.Annotations;
 using LeeYuJoung;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.iOS;
 using UnityEngine;
 using static FactoryManager;
 
@@ -393,7 +396,15 @@ public class MapCreator : MonoBehaviour
         //EditorUtility.SetDirty(mapParent.gameObject);
         //AssetDatabase.SaveAssets();
         //AssetDatabase.Refresh();
-        
+        StateManager.Instance().sceneFactorys = new List<GameObject>(GameObject.FindGameObjectsWithTag("Factory"));
+        pv.RPC("SetSceneFactorys_Others", RpcTarget.Others);
+        Debug.Log("찾았다 ::::" + StateManager.Instance().sceneFactorys.Count);
+    }
+    [PunRPC]
+    void SetSceneFactorys_Others()
+    {
+        StateManager.Instance().sceneFactorys = new List<GameObject>(GameObject.FindGameObjectsWithTag("Factory"));
+        Debug.Log("찾았다 ::::" + StateManager.Instance().sceneFactorys.Count);
     }
 
     [PunRPC]
@@ -423,13 +434,26 @@ public class MapCreator : MonoBehaviour
 
     void CreateFactory_Master(float x, float y,float z, string name,FactoryManager.FACTORYTYPE _factoryType)
     {
-        factoryObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10),Quaternion.identity);
+        factoryObject = Instantiate(Resources.Load<GameObject>(name), new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10), Quaternion.identity);
+        factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
+        factoryObject.AddComponent<FactoryManager>();
+        factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
+        factoryObject.GetComponent<FactoryManager>().factoryType = _factoryType;
+        factoryObject.GetComponent<FactoryManager>().Init();
+        pv.RPC("CreateFactory_Others", RpcTarget.Others, x, y, z, name, _factoryType);
+    }
+
+    [PunRPC]
+    void CreateFactory_Others(float x, float y, float z, string name, FactoryManager.FACTORYTYPE _factoryType)
+    {
+        factoryObject = Instantiate(Resources.Load<GameObject>(name), new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10), Quaternion.identity);
         factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
         factoryObject.AddComponent<FactoryManager>();
         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
         factoryObject.GetComponent<FactoryManager>().factoryType = _factoryType;
         factoryObject.GetComponent<FactoryManager>().Init();
     }
+
 
     void CreateTrack_Master(float x, float y, float z, string name,int i, int j)
     {
@@ -450,6 +474,40 @@ public class MapCreator : MonoBehaviour
             trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.endTrackYRotation, 0);
             trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
         }
+    }
+
+    void AddComponent(Transform _tr, FactoryManager.FACTORYTYPE _factoryType)
+    {
+        int viewId = _tr.GetComponent<PhotonView>().ViewID;
+        object[] data = new object[] { viewId, (int)_factoryType };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.FACTORY_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)DataSendInfo.Info.FACTORY_INFO)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            int viewId = (int)receivedData[0];
+            FACTORYTYPE _factoryType = (FACTORYTYPE)(int)receivedData[1];
+            PhotonView factoryView = PhotonView.Find(viewId);
+
+            factoryView.AddComponent<FactoryManager>();
+            factoryView.GetComponent<FactoryManager>().dataPath = "FactoryData";
+            factoryView.GetComponent<FactoryManager>().factoryType = _factoryType;
+            factoryView.GetComponent<FactoryManager>().Init();
+        }
+    }
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
 

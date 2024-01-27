@@ -34,42 +34,31 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - OnRoomListUpdate
-  - SetName
-  - SyncChangeTeam
-  - SyncKillCount
-  - SyncRemoveTeam
-  - SyncTeamList
-  - SyncTeamSet
-  - TeamListChange
-  - SetNeedReadyUserCount_Sync
-  - SyncNeedReadyUserCount
-  - SyncReadyUserCount
-  - SetReadyUserCount_Sync
-  - CreatePlane
+  - HeresWhy
   - CreatePlane_Master
   - CreatePlane_Others
-  - CreateObject_Master
-  - CreateObject_Others
-  - CreateFactory_Master
-  - CreateFactory_Others
-  - CreateTrack_Master
-  - CreateTrack_Others
-  - CreateStone_Master
-  - CreateStone_Others
-  - Delete
-  - PickedItemSetPosition_Sync
-  - Test_Sync
-  - SetParentOnNetwork
-  - SetParentOnNetwork_Dropped
-  - SetParent_Sync
-  - DroppedSlotIn_Sync
   - DestroyObject_Sync
+  - DestroySpaceship
+  - DroppedSlotIn_Sync
+  - DroppedSlotOut_Sync
+  - Fire
+  - OnRoomListUpdate
+  - RespawnSpaceship
+  - SetNeedReadyUserCount_Sync
+  - SetParent_Sync
+  - SetPosition_Sync
+  - SetReadyUserCount_Sync
+  - SyncKillCount
+  - SyncNeedReadyUserCount
+  - SyncReadyUserCount
+  - SyncRemoveTeam
+  - SyncTeamList
+  - CreateFactory_Others
+  - SetSceneFactorys_Others
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
