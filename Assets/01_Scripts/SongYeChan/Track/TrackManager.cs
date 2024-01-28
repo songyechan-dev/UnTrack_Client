@@ -1,9 +1,13 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class TrackManager : MonoBehaviour
+public class TrackManager : MonoBehaviourPun
 {
     public string planeTagName = "Plane";
     public string trackTagName = "Track";
@@ -32,6 +36,12 @@ public class TrackManager : MonoBehaviour
     private List<Transform> electricityFlowingList = new List<Transform>();
     public GameObject factoriesObjectPrefab;
 
+    void AddComponent(int viewID)
+    {
+        GameObject go = PhotonView.Find(viewID).gameObject;
+        go.AddComponent<TrackInfo>();
+    }
+
     public void TrackCreate(Ray _ray)
     {
         RaycastHit hit;
@@ -40,10 +50,13 @@ public class TrackManager : MonoBehaviour
             Debug.Log($"_ray.origin :: {_ray.origin}");
             Debug.Log($"hit.transform :: {hit.transform.position}");
 
-            GameObject track = Instantiate(trackPrefab);
-            track.transform.position = new Vector3(Mathf.Round(_ray.origin.x), 0 + (trackPrefab.transform.localScale.y / 2), Mathf.Round(_ray.origin.z));
-            track.AddComponent<TrackInfo>();
+            GameObject track = PhotonNetwork.Instantiate("Track", new Vector3(Mathf.Round(_ray.origin.x), 0 + (trackPrefab.transform.localScale.y / 2), Mathf.Round(_ray.origin.z)),Quaternion.identity);
             track.tag = trackTagName;
+            track.AddComponent<TrackInfo>();
+            object[] data = new object[] { track.GetComponent<PhotonView>().ViewID};
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_CRAETED_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+
             TrackInfo _trackInfo = track.GetComponent<TrackInfo>();
             RaycastHit leftHit, rightHit, forwardHit, backHit;
 
@@ -200,6 +213,7 @@ public class TrackManager : MonoBehaviour
                 track.AddComponent<Outline>();
                 track.GetComponent<Outline>().OutlineColor = Color.white;
                 track.GetComponent<Outline>().OutlineMode = Outline.Mode.OutlineHidden;
+                PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_CRAETED_INFO, data, raiseEventOptions, SendOptions.SendReliable);
                 if (leftHit.transform != null && leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                 {
                     leftHit.transform.GetComponent<TrackInfo>().GetOnFactoriesObject();
@@ -256,7 +270,7 @@ public class TrackManager : MonoBehaviour
     void TrackConnectFailed(GameObject track)
     {
         trackConnectFailed = true;
-        GameObject _droppedSlot = Instantiate(droppedSlotPrefab,track.transform.position,track.transform.rotation);
+        GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot",track.transform.position,track.transform.rotation);
         _droppedSlot.tag = "DroppedSlot";
         _droppedSlot.name = "DroppedSlot";
 
@@ -270,10 +284,68 @@ public class TrackManager : MonoBehaviour
 
         _droppedSlot.GetComponent<InventoryManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
         _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(track);
-
-
         //track.layer = 0;
 
+
+        object[] data = new object[] { track.GetComponent<PhotonView>().ViewID,_droppedSlot.GetComponent<PhotonView>().ViewID };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_INFO, data, raiseEventOptions, SendOptions.SendReliable);
     }
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)SendDataInfo.Info.TRACK_CRAETED_INFO)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            int trackViewId = (int)receivedData[0];
+            if (PhotonView.Find(trackViewId).GetComponent<TrackInfo>() == null)
+            {
+                AddComponent(trackViewId);
+            }
+            else
+            {
+                GameObject track = PhotonView.Find(trackViewId).gameObject;
+                finalTrack = track;
+                track.AddComponent<Outline>();
+                track.GetComponent<Outline>().OutlineColor = Color.white;
+                track.GetComponent<Outline>().OutlineMode = Outline.Mode.OutlineHidden;
+            }
+        }
+        if (photonEvent.Code == (int)SendDataInfo.Info.TRACK_INFO)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            int trackViewId = (int)receivedData[0];
+            int droppedSlotViewID = (int)receivedData[1];
+
+            GameObject _droppedSlot = PhotonView.Find(droppedSlotViewID).gameObject;
+            GameObject track = PhotonView.Find(trackViewId).gameObject;
+            trackConnectFailed = true;
+            _droppedSlot.tag = "DroppedSlot";
+            _droppedSlot.name = "DroppedSlot";
+
+            track.transform.parent = _droppedSlot.transform;
+            track.GetComponent<MeshRenderer>().material = droppedTrackPrefabMaterial;
+            track.tag = "Item";
+            track.GetComponent<TrackInfo>().isElectricityFlowing = false;
+            track.AddComponent<ItemManager>();
+            track.GetComponent<ItemManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
+
+
+            _droppedSlot.GetComponent<InventoryManager>().itemType = ItemManager.ITEMTYPE.DROPPEDTRACK;
+            _droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(track);
+
+        }
+    }
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
 
 }

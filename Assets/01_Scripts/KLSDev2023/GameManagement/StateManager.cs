@@ -153,9 +153,9 @@ namespace LeeYuJoung
                         _fm.ItemProductionCheck();
                     }
                 }
-                object[] data = new object[] { _ingredient,_amount };
+                object[] data = new object[] { _ingredient,_amount,true };
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.ITEM_ADD_STORAGEE, data, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.ITEM_ADD_STORAGEE, data, raiseEventOptions, SendOptions.SendReliable);
                 OnUIExample(storages["WOOD"] + storages["STEEL"]);
                 return true;
             }
@@ -176,7 +176,9 @@ namespace LeeYuJoung
             }
 
             storages[_ingredient] -= _amount;
-
+            object[] data = new object[] { _ingredient, _amount, false };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.ITEM_ADD_STORAGEE, data, raiseEventOptions, SendOptions.SendReliable);
             OnUIExample(storages["WOOD"] + storages["STEEL"]);
             Debug.Log($":::: 저장소 재료 사용 :::: {_ingredient} :: {storages[_ingredient]}");
         }
@@ -215,16 +217,25 @@ namespace LeeYuJoung
 
         void OnEvent(EventData photonEvent)
         {
-            if (photonEvent.Code == (int)DataSendInfo.Info.ITEM_ADD_STORAGEE)
+            if (photonEvent.Code == (int)SendDataInfo.Info.ITEM_ADD_STORAGEE)
             {
                 object[] receivedData = (object[])photonEvent.CustomData;
                 string _ingredient = (string)receivedData[0];
                 int _amount = (int)receivedData[1];
+                bool isAdd = (bool)receivedData[2];
                 if (!storages.ContainsKey(_ingredient))
                 {
                     storages.Add(_ingredient, 0);
                 }
-                storages[_ingredient] += _amount;
+                if (isAdd)
+                {
+                    storages[_ingredient] += _amount;
+                }
+                else
+                {
+                    storages[_ingredient] -= _amount;
+                }
+                
 
                 Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
             }

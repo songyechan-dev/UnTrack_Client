@@ -111,7 +111,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         playerController.isPick = true;
                         castRange = 2f;
 
-                        GameObject _object = Instantiate(_fm.ItemGenerate());
+                        GameObject _object = (_fm.ItemGenerate());
                         inventoryManager.SaveInventory(_object.transform.gameObject);
                         _object.transform.SetParent(pickSlot.transform);
                         _object.transform.position = pickSlot.position;
@@ -247,6 +247,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         }
                         else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
                         {
+                            Debug.Log("생성이되나?");
 
                             if (hit.transform.CompareTag("Plane"))
                             {

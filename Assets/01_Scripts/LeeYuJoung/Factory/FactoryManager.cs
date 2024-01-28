@@ -127,14 +127,11 @@ public class FactoryManager : MonoBehaviour
     // 아이템 제작할 수 있는지 확인
     public void ItemProductionCheck()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
         {
-            if (StateManager.Instance().IngredientCheck(ingredient_1, ingredient_2, amount_1, amount_2) && currentItemNum < itemMaxVolume)
-            {
-                Debug.Log($":::: {generateItem} 제작 시작 ::::");
-                StartCoroutine(ItemProduction());
-            }
-        }
+            Debug.Log($":::: {generateItem} 제작 시작 ::::");
+            StartCoroutine(ItemProduction());
+        }  
     }
 
     // 아이템 제작 실행
@@ -194,7 +191,7 @@ public class FactoryManager : MonoBehaviour
     public GameObject ItemGenerate()
     {
         currentItemNum--;
-        return Resources.Load<GameObject>(generateItem);
+        return PhotonNetwork.Instantiate(generateItem,new Vector3(0,0,0),Quaternion.identity);
     }
 
     // TODO : 이유정 2024.01.15 FactoryManager.cs FactoryJsonLoad(string path)
