@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using LeeYuJoung;
 using Photon.Pun;
 using Photon.Realtime;
+using SimpleJSON;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -230,6 +231,26 @@ public class MapCreator : MonoBehaviour
         isCreatedStorage = false;
     }
 
+    List<List<int>> DeserializeMapInfo(string jsonMapInfo)
+    {
+        JSONNode jsonNode = JSON.Parse(jsonMapInfo);
+        List<List<int>> deserializedMapInfo = new List<List<int>>();
+
+        foreach (JSONNode rowNode in jsonNode.Children)
+        {
+            List<int> row = new List<int>();
+            foreach (JSONNode cellNode in rowNode.Children)
+            {
+                row.Add(cellNode.AsInt);
+            }
+            deserializedMapInfo.Add(row);
+        }
+
+        return deserializedMapInfo;
+    }
+
+    
+
     private IEnumerator DataLoad()
     {
         MapDataCreate();
@@ -281,6 +302,7 @@ public class MapCreator : MonoBehaviour
             Debug.Log("로드 에러");
             yield return null; // 실패 시 종료
         }
+
 
     }
 
@@ -457,6 +479,8 @@ public class MapCreator : MonoBehaviour
 
     void CreateTrack_Master(float x, float y, float z, string name,int i, int j)
     {
+        bool isTrack = false;
+
         trackObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10),Quaternion.Euler(new Vector3(0,MapInfo.startTrackYRotation,0)));
         trackObject.AddComponent<TrackInfo>();
         trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
@@ -465,6 +489,32 @@ public class MapCreator : MonoBehaviour
         MapInfo.trackYscale = trackPrefab.transform.localScale.y;
         trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
         if (mapInfo[i][j] == (int)MapInfo.Type.TRACK)
+        {
+            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.startTrackYRotation, 0);
+            trackManager.finalTrack = trackObject;
+            isTrack = true;
+        }
+        else
+        {
+            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.endTrackYRotation, 0);
+            trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
+            isTrack = false;
+        }
+        pv.RPC("CreateTrack_Others", RpcTarget.Others,x, y, z, trackObject.GetComponent<PhotonView>().ViewID, i, j, isTrack);
+    }
+
+    [PunRPC]
+    void CreateTrack_Others(float x, float y, float z, int ViewID, int i, int j,bool isTrack)
+    {
+        Debug.Log("map count 는 ==" + mapInfo.Count);
+        trackObject = PhotonView.Find(ViewID).gameObject;
+        trackObject.AddComponent<TrackInfo>();
+        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
+        trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
+        trackObject.tag = "Track";
+        MapInfo.trackYscale = trackPrefab.transform.localScale.y;
+        trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
+        if (isTrack)
         {
             trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.startTrackYRotation, 0);
             trackManager.finalTrack = trackObject;
@@ -481,12 +531,12 @@ public class MapCreator : MonoBehaviour
         int viewId = _tr.GetComponent<PhotonView>().ViewID;
         object[] data = new object[] { viewId, (int)_factoryType };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.FACTORY_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_INFO, data, raiseEventOptions, SendOptions.SendReliable);
     }
 
     void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == (int)DataSendInfo.Info.FACTORY_INFO)
+        if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_INFO)
         {
             object[] receivedData = (object[])photonEvent.CustomData;
             int viewId = (int)receivedData[0];

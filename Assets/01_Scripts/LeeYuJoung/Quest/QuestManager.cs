@@ -76,7 +76,7 @@ public class QuestManager : MonoBehaviourPun
                 }
                 object[] data = new object[] { _amount };
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.QUEST_PROGRESS, data, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.QUEST_PROGRESS, data, raiseEventOptions, SendOptions.SendReliable);
 
             }
         }
@@ -147,12 +147,12 @@ public class QuestManager : MonoBehaviourPun
 
         object[] data = new object[] { content,questType,progressType,progressGoal,reward };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.QUEST_JSON_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.QUEST_JSON_INFO, data, raiseEventOptions, SendOptions.SendReliable);
     }
 
     void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == (int)DataSendInfo.Info.QUEST_JSON_INFO)
+        if (photonEvent.Code == (int)SendDataInfo.Info.QUEST_JSON_INFO)
         {
             // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
             isCompleted = false;
@@ -166,7 +166,7 @@ public class QuestManager : MonoBehaviourPun
             reward = (int)receivedData[4];
             QuestTextChange(content, progress, progressGoal);
         }
-        else if (photonEvent.Code == (int)DataSendInfo.Info.QUEST_PROGRESS)
+        else if (photonEvent.Code == (int)SendDataInfo.Info.QUEST_PROGRESS)
         {
             object[] receivedData = photonEvent.CustomData as object[];
             int _amount = (int)receivedData[0];

@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviourPun
 
             object[] data = new object[] { meter };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-            PhotonNetwork.RaiseEvent((int)DataSendInfo.Info.METER, data, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.METER, data, raiseEventOptions, SendOptions.SendReliable);
 
         }
 
@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviourPun
 
     void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == (int)DataSendInfo.Info.METER)
+        if (photonEvent.Code == (int)SendDataInfo.Info.METER)
         {
             // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
             object[] receivedData = (object[])photonEvent.CustomData;

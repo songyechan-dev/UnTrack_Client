@@ -7,7 +7,7 @@
   "INGREDIENT_2": "STEEL",
   "AMOUNT_2": 1,
   "GENERATE_TIME": 10,
-  "GENERATE": "Track"
+  "GENERATE": "DroppedTrack"
  },
  {
   "IDX": 2,

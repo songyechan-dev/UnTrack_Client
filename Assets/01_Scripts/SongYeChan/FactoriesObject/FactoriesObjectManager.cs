@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -7,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
-public class FactoriesObjectManager : MonoBehaviour
+public class FactoriesObjectManager : MonoBehaviourPun
 {
     enum MyState 
     {

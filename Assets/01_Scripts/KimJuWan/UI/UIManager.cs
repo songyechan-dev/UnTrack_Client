@@ -48,6 +48,7 @@ public class UIManager : MonoBehaviour
     public GameObject rDVindex03;
     public GameObject speedIndex03;
     public GameObject questIndex03;
+    public GameObject chat;
 
     [Header("Text")]
     public Text distance03;
@@ -216,7 +217,10 @@ public class UIManager : MonoBehaviour
             rDVindex03 = canvas.transform.Find("RDVIndex").gameObject;
             speedIndex03 = canvas.transform.Find("SpeedIndex").gameObject;
             questIndex03 = canvas.transform.Find("QuestIndex").gameObject;
+            chat = canvas.transform.Find("Chat").gameObject;
+
             distance03 = rDVindex03.transform.Find("Distance").GetComponent<Text>();
+            
         }
             
 

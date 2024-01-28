@@ -68,30 +68,39 @@ public class ObstacleManager : MonoBehaviour
     {
         // 점점 작아지는 효과 구현하기
 
-        if (PhotonNetwork.IsMasterClient)
+ 
+        int loopNum = 0;
+
+        while (isWorking)
         {
-            int loopNum = 0;
+            yield return new WaitForEndOfFrame();
+            currentTime += Time.deltaTime;
 
-            while (isWorking)
+            if (currentTime > workTime)
             {
-                yield return new WaitForEndOfFrame();
-                currentTime += Time.deltaTime;
+                currentTime = 0;
+                isWorking = false;
 
-                if (currentTime > workTime)
+                _player.isWorking = false;
+                GenerateIngredient(_player);
+                PhotonView photonView = gameObject.GetComponent<PhotonView>();
+                if (photonView.IsMine || PhotonNetwork.IsMasterClient)
                 {
-                    currentTime = 0;
-                    isWorking = false;
-
-                    _player.isWorking = false;
-                    GenerateIngredient(_player);
+                    if (!photonView.IsMine)
+                    {
+                        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+                    }
+                    // 마스터 클라이언트에서만 삭제를 시도
                     PhotonNetwork.Destroy(gameObject);
                 }
 
-                // 무한 루프 방지 예외처리
-                if (loopNum++ > 10000)
-                    throw new Exception("Infinite Loop");
             }
+
+            // 무한 루프 방지 예외처리
+            if (loopNum++ > 10000)
+                throw new Exception("Infinite Loop");
         }
+     
 
     }
 

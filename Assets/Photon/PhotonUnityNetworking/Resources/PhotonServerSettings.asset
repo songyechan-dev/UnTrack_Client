@@ -59,6 +59,11 @@ MonoBehaviour:
   - SyncTeamList
   - CreateFactory_Others
   - SetSceneFactorys_Others
+  - AddComponent
+  - CreateTrack_Others
+  - SetMapInfo_Otehrs
+  - SetMapInfo_Others
+  - AddedComponent
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
