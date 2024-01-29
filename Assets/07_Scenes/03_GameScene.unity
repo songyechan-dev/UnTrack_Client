@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b142012db2d45f24ca33a48d5d99c821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 072646592c73e174babb034ff5c22666, type: 3}
+  factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 2cff81f1139ff6b41adb4e846d5dd8fe, type: 3}
   mapParent: {fileID: 0}
   createdTime: 30000
   count: 0
@@ -1833,9 +1833,9 @@ MonoBehaviour:
   planeTagName: Plane
   trackTagName: Track
   droppedTrackTagName: DroppedTrack
-  trackPrefab: {fileID: 360271195562918375, guid: 123c9b7403beb8d4e97088d20c3027e8, type: 3}
+  trackPrefab: {fileID: 4638461518488203170, guid: 80a44352fe4849241af79b4a0fdda401, type: 3}
   droppedTrackPrefabMaterial: {fileID: 2100000, guid: da748394d3598ac4fb14392cc2659201, type: 2}
-  trackPrefabMaterial: {fileID: 0}
+  trackPrefabMaterial: {fileID: 5989096531607536328, guid: d9f3fe1a25c99cd45b8ec1db0da5abde, type: 3}
   maxDistance: 1
   isChangedDistance: 0
   finalTrack: {fileID: 0}
@@ -1849,7 +1849,10 @@ MonoBehaviour:
   forwardTrackPrevAngle: {x: 0, y: 0, z: 0}
   backTrackPrevDirection: 0
   backTrackPrevAngle: {x: 0, y: 0, z: 0}
+  electricityFlowingList: []
   factoriesObjectPrefab: {fileID: 0}
+  trackLeftMesh: {fileID: -6195529376181652412, guid: 101f4db29889512449b6ba48213bdf91, type: 3}
+  trackRightMesh: {fileID: 3157422415149527219, guid: 12068125e19509341aa74593fc4fd67e, type: 3}
 --- !u!4 &1288476560
 Transform:
   m_ObjectHideFlags: 0
@@ -2429,19 +2432,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fd6a1743461f1498d70ec2e183a755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planePrefab: {fileID: 182608508188195332, guid: 5da078673d7795443aad0b01819612f9, type: 3}
-  obStonePrefab: {fileID: 7328833125633006158, guid: 2997f8fc0e9f2f94fb80fe3a404fcfab, type: 3}
-  obTreePrefab: {fileID: 6632435566270772146, guid: 752c2c0d1583c8948ac6b91f6466c42c, type: 3}
-  trackPrefab: {fileID: 360271195562918375, guid: 123c9b7403beb8d4e97088d20c3027e8, type: 3}
-  dynamiteMachinePrefab: {fileID: 1414702916102547295, guid: e3f2d3fbc7b58bb4caf1f8758d890f99, type: 3}
-  productionMachinePrefab: {fileID: 491123125678747441, guid: 8c01196e3c07e464ba114e48f7a1addb, type: 3}
-  waterTankPrefab: {fileID: 3934003489838394548, guid: 863feb572dc9f504d8a5396422d983f9, type: 3}
-  enginePrefab: {fileID: 2095702474359914223, guid: e570248b4402c8340816ab2a47a2f57d, type: 3}
-  storagePrefab: {fileID: 3686851000239159954, guid: 902d60508499b4947916c14075054536, type: 3}
-  axPrefab: {fileID: 477294265792755017, guid: ebb538f5121c5e444b1d6c6a8a43b148, type: 3}
-  pickPrefab: {fileID: 477294265792755017, guid: 7c49dd66c4cbde94eb19922d6ed83b66, type: 3}
-  trackManager: {fileID: 0}
-  photonObjectCreator: {fileID: 0}
+  planePrefab: {fileID: 182608508188195332, guid: 01e12184ff81aea49ae49642e3ec8d0a, type: 3}
+  obStonePrefab: {fileID: 919132149155446097, guid: 4e900c1b093e3054d80fced03d984aab, type: 3}
+  obTreePrefab: {fileID: 6632435566270772146, guid: f7a3c9d37e6df9b41845f0e648756643, type: 3}
+  trackPrefab: {fileID: 4638461518488203170, guid: 80a44352fe4849241af79b4a0fdda401, type: 3}
+  dynamiteMachinePrefab: {fileID: 1414702916102547295, guid: b1eda0730ab4139458ccc656ea8f8cbe, type: 3}
+  productionMachinePrefab: {fileID: 491123125678747441, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+  waterTankPrefab: {fileID: 3934003489838394548, guid: 21df4f20ad1bbd54a860277029df7b06, type: 3}
+  enginePrefab: {fileID: 2095702474359914223, guid: 8583f2360b93e704586e5d8203af1f89, type: 3}
+  storagePrefab: {fileID: 3686851000239159954, guid: e777703bf66a5484c806eed6ef40d9db, type: 3}
+  axPrefab: {fileID: 477294265792755017, guid: 4413acb013bb9464cb2dc294529f3956, type: 3}
+  pickPrefab: {fileID: 477294265792755017, guid: d45de115bb345f542b5ef636ff21dea7, type: 3}
+  trackManager: {fileID: 1288476559}
+  photonObjectCreator: {fileID: 1612677541}
 --- !u!4 &1933982561
 Transform:
   m_ObjectHideFlags: 0
