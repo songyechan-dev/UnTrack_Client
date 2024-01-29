@@ -315,6 +315,8 @@ GameObject:
   - component: {fileID: 9017414315893891912}
   - component: {fileID: 9017414315893891908}
   - component: {fileID: 9017414315893891907}
+  - component: {fileID: -482669073529749514}
+  - component: {fileID: 6258059926074263839}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -480,7 +482,6 @@ MonoBehaviour:
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1001 &2665289529979239190
-
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
