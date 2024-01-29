@@ -417,6 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d9c71cfc460e5488310860c45a6c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerState: 0
+  playerAnim: {fileID: 0}
+  dropCurTime: 0
   isPick: 0
   isWorking: 0
   currentTime: 0

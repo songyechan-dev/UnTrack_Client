@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     public GameObject loginPanel01;
     public GameObject settingPanel01;
     public GameObject loginFailPanel01;
+    
     #endregion
 
     #region Scene02
@@ -83,6 +84,7 @@ public class UIManager : MonoBehaviour
             case PlayableButtonInfo.Info.GAME_EXIT_01:
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
+                
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 break;
@@ -153,6 +155,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
 
+    
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -185,6 +188,7 @@ public class UIManager : MonoBehaviour
             loginPanel01.transform.Find("LoginBtn").GetComponent<Button>().onClick.AddListener(LoginButtonOnClick_01);
             settingPanel01 = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
+            
         }
         #endregion
         #region Scene02
