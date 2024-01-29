@@ -704,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 072646592c73e174babb034ff5c22666, type: 3}
   mapParent: {fileID: 0}
-  createdTime: 15
+  createdTime: 30000
   count: 0
 --- !u!4 &643903637
 Transform:

@@ -438,13 +438,6 @@ public class TrackManager : MonoBehaviourPun
             Vector3 prevAngle = (Vector3)receivedData[2];
             ResetTrackRotation(_trackViewID, _trackPrevDirection, prevAngle);
         }
-        if (photonEvent.Code == (int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO)
-        {
-            object[] receivedData = (object[])photonEvent.CustomData;
-            int _trackViewID = (int)receivedData[0];
-            TrackInfo _trackInfo = PhotonView.Find(_trackViewID).GetComponent<TrackInfo>();
-            _trackInfo.GetOnFactoriesObject();
-        }
     }
 
     void OnEnable()

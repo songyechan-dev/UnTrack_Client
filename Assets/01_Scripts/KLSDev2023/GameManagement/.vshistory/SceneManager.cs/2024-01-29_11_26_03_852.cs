@@ -12,22 +12,15 @@ namespace KLSDev2023
         {
             UIManager.Instance().Init();
             //TODO : 테스트 코드 삭제 필요 송예찬
-
-            
-
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 2 && !PhotonNetwork.IsMasterClient && PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.LoadLevel(3);
+            }
         }
 
         public void NextScene()
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
-        }
-
-        public void Test()
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel(3);
-            }
         }
     }
 }
