@@ -7,7 +7,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
 
-
 //Player 애니메이션용 STATE
 public enum PLAYERSTATE
 {
@@ -15,21 +14,35 @@ public enum PLAYERSTATE
     WALK,
     PICKUP,
     DROP,
-    EQUIP_AX,
-    EQUIP_PICK,
-    DYNAMITE,
-    BUCKET
+    EQUIPMENT,
+    
+    PICK
 
 }
+
 public class PlayerController : MonoBehaviourPunCallbacks
 {
+    //Player 애니메이션용 STATE
+    public enum PLAYERSTATE
+    {
+        IDLE = 0,
+        WALK,
+        PICKUP,
+        DROP,
+        EQUIPMENTACTION,
+        
+        PICK
 
+    }
     private float moveSpeed = 10f;
 
     Vector3 moveDirection;
     //Rigidbody rb;
     PlayerManager playerManager;
-
+    public PLAYERSTATE playerState;
+    public Animator playerAnim;
+    public float dropCurTime;
+    public float pickCurTime;
     public bool isPick;
     public bool isWorking;
 
@@ -56,7 +69,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
         }
         //rb = GetComponent<Rigidbody>();
-
+        playerAnim = GetComponentInChildren<Animator>();
     }
 
     // 업데이트
@@ -149,7 +162,44 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
 
+        switch (playerState)
+        {
+            case PLAYERSTATE.IDLE:
+                playerAnim.SetInteger("PLAYERSTATE", 0);
+                break;
+            case PLAYERSTATE.WALK:
+                playerAnim.SetInteger("PLAYERSTATE", 1);
+                break;
+            case PLAYERSTATE.PICKUP:
+                playerAnim.SetInteger("PLAYERSTATE", 2);
+                AnimatorClipInfo[] curClipInfo_1;
+                curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                if (pickCurTime > curClipInfo_1[0].clip.length)
+                {
+                    pickCurTime = 0;
+                    playerState = PLAYERSTATE.PICK;
+                }
+                break;
+            case PLAYERSTATE.DROP:
+                playerAnim.SetInteger("PLAYERSTATE", 3);
+                dropCurTime += Time.deltaTime;
+                AnimatorClipInfo[] curClipInfo;
+                curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                if (dropCurTime> curClipInfo[0].clip.length)
+                {
+                    dropCurTime = 0;
+                    playerState = PLAYERSTATE.IDLE;
+                }
+                break;
+            case PLAYERSTATE.EQUIPMENTACTION:
+                playerAnim.SetInteger("PLAYERSTATE", 4);
+                break;
+            
+            case PLAYERSTATE.PICK:
+                playerAnim.SetInteger("PLAYERSTATE", 5);
+                break;
 
+        }
 
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -170,6 +220,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             transform.position += moveDirection;
             transform.rotation = Quaternion.LookRotation(moveDirection);
+            playerState = PLAYERSTATE.WALK;
+        }
+        else
+        {
+            playerState = PLAYERSTATE.IDLE;
         }
     }
 
