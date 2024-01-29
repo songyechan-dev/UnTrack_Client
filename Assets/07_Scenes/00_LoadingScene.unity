@@ -1014,6 +1014,7 @@ MonoBehaviour:
   rDVindex03: {fileID: 0}
   speedIndex03: {fileID: 0}
   questIndex03: {fileID: 0}
+  chat: {fileID: 0}
   distance03: {fileID: 0}
 --- !u!4 &1607778135
 Transform:
