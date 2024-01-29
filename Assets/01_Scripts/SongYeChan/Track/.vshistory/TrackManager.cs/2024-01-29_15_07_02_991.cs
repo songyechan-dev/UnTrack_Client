@@ -258,31 +258,21 @@ public class TrackManager : MonoBehaviourPun
                 if (leftHit.transform != null && leftHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                 {
                     leftHit.transform.GetComponent<TrackInfo>().GetOnFactoriesObject();
-                    object[] factoriesObjectData = new object[] { leftHit.transform.GetComponent<PhotonView>().ViewID};
+                    object[] trackData = new object[] { _trackInfo.GetComponent<PhotonView>().ViewID};
                     RaiseEventOptions rEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO, factoriesObjectData, raiseEventOptions, SendOptions.SendReliable);
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.AROUND_TRACK_INFO, trackData, raiseEventOptions, SendOptions.SendReliable);
                 }
                 if (rightHit.transform != null && rightHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                 {
                     rightHit.transform.GetComponent<TrackInfo>().GetOnFactoriesObject();
-                    object[] factoriesObjectData = new object[] { rightHit.transform.GetComponent<PhotonView>().ViewID };
-                    RaiseEventOptions rEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO, factoriesObjectData, raiseEventOptions, SendOptions.SendReliable);
                 }
                 if (forwardHit.transform != null && forwardHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                 {
                     forwardHit.transform.GetComponent<TrackInfo>().GetOnFactoriesObject();
-                    object[] factoriesObjectData = new object[] { forwardHit.transform.GetComponent<PhotonView>().ViewID };
-                    RaiseEventOptions rEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO, factoriesObjectData, raiseEventOptions, SendOptions.SendReliable);
-
                 }
                 if (backHit.transform != null && backHit.transform.GetComponent<TrackInfo>().isElectricityFlowing)
                 {
                     backHit.transform.GetComponent<TrackInfo>().GetOnFactoriesObject();
-                    object[] factoriesObjectData = new object[] { backHit.transform.GetComponent<PhotonView>().ViewID };
-                    RaiseEventOptions rEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO, factoriesObjectData, raiseEventOptions, SendOptions.SendReliable);
                 }
             }
             else
@@ -437,13 +427,6 @@ public class TrackManager : MonoBehaviourPun
             int _trackPrevDirection = (int)receivedData[1];
             Vector3 prevAngle = (Vector3)receivedData[2];
             ResetTrackRotation(_trackViewID, _trackPrevDirection, prevAngle);
-        }
-        if (photonEvent.Code == (int)SendDataInfo.Info.TRACK_FACTORIESOBJECT_INFO)
-        {
-            object[] receivedData = (object[])photonEvent.CustomData;
-            int _trackViewID = (int)receivedData[0];
-            TrackInfo _trackInfo = PhotonView.Find(_trackViewID).GetComponent<TrackInfo>();
-            _trackInfo.GetOnFactoriesObject();
         }
     }
 

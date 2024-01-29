@@ -29,9 +29,9 @@ public class ObstacleManager : MonoBehaviour
     // 현재 Obstacle의 작업 가능 여부 확인
     public void ObstacleWorking(string _equipment, PlayerController _player)
     {
-        if (isWorking || !equipmentType.Equals(_equipment) || _player.gameObject.transform.Find("PickSlot").GetComponent<InventoryManager>().itemNum <= 0)
+        if (isWorking || !equipmentType.Equals(_equipment))
         {
-            Debug.Log("::: 이미 작업 중 이거나 장비가 맞지 않음 혹은 이미 내려놓은상태임:::");
+            Debug.Log("::: 이미 작업 중 이거나 장비가 맞지 않음 :::");
             return;
         }
         else

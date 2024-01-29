@@ -17,7 +17,6 @@ public class SendDataInfo
         CHAT = 7,
         AROUND_TRACK_INFO =8,
         TRACK_PREV_INFO = 9,
-        TRACK_FACTORIESOBJECT_INFO = 10
 
     }
 }

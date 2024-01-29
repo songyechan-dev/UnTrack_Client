@@ -443,7 +443,6 @@ public class TrackManager : MonoBehaviourPun
             object[] receivedData = (object[])photonEvent.CustomData;
             int _trackViewID = (int)receivedData[0];
             TrackInfo _trackInfo = PhotonView.Find(_trackViewID).GetComponent<TrackInfo>();
-            _trackInfo.GetOnFactoriesObject();
         }
     }
 
