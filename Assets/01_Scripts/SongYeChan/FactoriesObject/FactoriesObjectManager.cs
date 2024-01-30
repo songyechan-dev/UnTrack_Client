@@ -177,7 +177,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
         Quaternion startRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(0, _targetTransform.eulerAngles.y, 0);
         Vector3 startPosition = transform.position;
-        Vector3 endPosition = _targetTransform.position + new Vector3(0, _targetTransform.localScale.y / 2 + transform.localScale.y / 2, 0);
+        Vector3 endPosition = _targetTransform.position + new Vector3(0, 0.75f,0);
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
