@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 using static GameManager;
 
 
@@ -41,7 +42,7 @@ public class UIManager : MonoBehaviour
     [Header("Panel")]
     public GameObject roomListPanel02;
     [Header("Text")]
-    public TextMesh roomIdText02;
+    public TextMeshPro roomIdText02;
     #endregion
 
     #region Scene03
@@ -143,7 +144,7 @@ public class UIManager : MonoBehaviour
     {
         _text.text = _str;
     }
-    public void SetText(TextMesh _text, string _str)
+    public void SetText(TextMeshPro _text, string _str)
     {
         _text.text = _str;
     }
@@ -211,7 +212,7 @@ public class UIManager : MonoBehaviour
 
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
 
-            roomIdText02 = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMesh>();
+            roomIdText02 = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMeshPro>();
         }
         #endregion
         #region Scene03

@@ -420,6 +420,7 @@ MonoBehaviour:
   playerState: 0
   playerAnim: {fileID: 0}
   dropCurTime: 0
+  pickCurTime: 0
   isPick: 0
   isWorking: 0
   currentTime: 0
