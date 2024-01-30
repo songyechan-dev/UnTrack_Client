@@ -45,6 +45,7 @@ public class TrackInfo : MonoBehaviour
     public string factoriesObjectTagName = "FactoriesObject";
 
     public Vector3 prevAngle;
+    public Mesh prevMyMesh;
 
     public void SetArroundTrackInfo(ArroundTrackDirection _arroundTrackDirection,bool _isElectricityFlowing)
     {

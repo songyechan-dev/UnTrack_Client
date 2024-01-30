@@ -75,6 +75,10 @@ public class MapCreator : MonoBehaviour
     private PhotonView pv;
     private GameObject planeObject;
 
+    
+    
+
+
 
 
     private static MapCreator instance;
@@ -480,22 +484,22 @@ public class MapCreator : MonoBehaviour
     {
         bool isTrack = false;
 
-        trackObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, trackPrefab.transform.localScale.y / 2, z * objScale * 10),Quaternion.Euler(new Vector3(0,MapInfo.startTrackYRotation,0)));
+        trackObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, planeObject.transform.localPosition.y +(0.05f), z * objScale * 10),Quaternion.Euler(new Vector3(0,MapInfo.startTrackYRotation,0)));
         trackObject.AddComponent<TrackInfo>();
-        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
+        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(trackPrefab.transform.localRotation.x, trackPrefab.transform.rotation.y, trackPrefab.transform.localRotation.z));
         trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
         trackObject.tag = "Track";
         MapInfo.trackYscale = trackPrefab.transform.localScale.y;
-        trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
+        //trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
         if (mapInfo[i][j] == (int)MapInfo.Type.TRACK)
         {
-            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.startTrackYRotation, 0);
+            trackObject.transform.localEulerAngles = new Vector3(MapInfo.trackDefaultXRotation, MapInfo.startTrackYRotation, MapInfo.trackDefaultZRotation);
             trackManager.finalTrack = trackObject;
             isTrack = true;
         }
         else
         {
-            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.endTrackYRotation, 0);
+            trackObject.transform.localEulerAngles = new Vector3(MapInfo.trackDefaultXRotation, MapInfo.endTrackYRotation, MapInfo.trackDefaultZRotation);
             trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
             isTrack = false;
         }
@@ -508,19 +512,19 @@ public class MapCreator : MonoBehaviour
         Debug.Log("map count 는 ==" + mapInfo.Count);
         trackObject = PhotonView.Find(ViewID).gameObject;
         trackObject.AddComponent<TrackInfo>();
-        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(0, 0, 0));
+        trackObject.GetComponent<TrackInfo>().SetMyDirection(TrackInfo.MyDirection.FORWARD, new Vector3(MapInfo.trackDefaultXRotation, trackPrefab.transform.rotation.y, MapInfo.trackDefaultZRotation));
         trackObject.GetComponent<TrackInfo>().isElectricityFlowing = true;
         trackObject.tag = "Track";
         MapInfo.trackYscale = trackPrefab.transform.localScale.y;
         trackObject.transform.localScale = new Vector3(objScale * 10, trackPrefab.transform.localScale.y, objScale * 10);
         if (isTrack)
         {
-            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.startTrackYRotation, 0);
+            trackObject.transform.localEulerAngles = new Vector3(MapInfo.trackDefaultXRotation, MapInfo.startTrackYRotation, MapInfo.trackDefaultZRotation);
             trackManager.finalTrack = trackObject;
         }
         else
         {
-            trackObject.transform.localEulerAngles = new Vector3(0, MapInfo.endTrackYRotation, 0);
+            trackObject.transform.localEulerAngles = new Vector3(MapInfo.trackDefaultXRotation, MapInfo.endTrackYRotation, MapInfo.trackDefaultZRotation);
             trackObject.GetComponent<TrackInfo>().isFinishedTrack = true;
         }
     }

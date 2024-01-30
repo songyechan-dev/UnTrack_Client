@@ -46,4 +46,8 @@ public static class MapInfo
 
     public static float trackYscale = 0.2f;
 
+    public static float trackDefaultXRotation = 0f;
+    public static float trackDefaultYRotation = 0f;
+    public static float trackDefaultZRotation = 0f;
+
 }

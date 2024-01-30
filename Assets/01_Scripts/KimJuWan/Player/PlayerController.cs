@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
         }
         //rb = GetComponent<Rigidbody>();
-        playerAnim = GetComponentInChildren<Animator>();
+        playerAnim = transform.Find("Duck").GetComponent<Animator>();
     }
 
     // 업데이트

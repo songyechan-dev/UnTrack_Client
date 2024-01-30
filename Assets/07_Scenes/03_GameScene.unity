@@ -704,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 2cff81f1139ff6b41adb4e846d5dd8fe, type: 3}
   mapParent: {fileID: 0}
-  createdTime: 30000
+  createdTime: 30
   count: 0
 --- !u!4 &643903637
 Transform:
@@ -1833,9 +1833,9 @@ MonoBehaviour:
   planeTagName: Plane
   trackTagName: Track
   droppedTrackTagName: DroppedTrack
-  trackPrefab: {fileID: 4638461518488203170, guid: 80a44352fe4849241af79b4a0fdda401, type: 3}
+  trackPrefab: {fileID: 2458459440035365112, guid: c576ba09449be154899488efd79b5ea1, type: 3}
   droppedTrackPrefabMaterial: {fileID: 2100000, guid: da748394d3598ac4fb14392cc2659201, type: 2}
-  trackPrefabMaterial: {fileID: 5989096531607536328, guid: d9f3fe1a25c99cd45b8ec1db0da5abde, type: 3}
+  trackPrefabMaterial: {fileID: 2100000, guid: 5c2af7023a86ef344bf8bc0d7464ccb1, type: 2}
   maxDistance: 1
   isChangedDistance: 0
   finalTrack: {fileID: 0}
@@ -1851,8 +1851,9 @@ MonoBehaviour:
   backTrackPrevAngle: {x: 0, y: 0, z: 0}
   electricityFlowingList: []
   factoriesObjectPrefab: {fileID: 0}
-  trackLeftMesh: {fileID: -6195529376181652412, guid: 101f4db29889512449b6ba48213bdf91, type: 3}
-  trackRightMesh: {fileID: 3157422415149527219, guid: 12068125e19509341aa74593fc4fd67e, type: 3}
+  trackLeftMesh: {fileID: 4300000, guid: 33e58982e67908442b36bc976ecdd8b3, type: 2}
+  trackRightMesh: {fileID: 4300000, guid: d58bdddf49b28604eb7e7929665d3522, type: 2}
+  trackOriginMesh: {fileID: 4300000, guid: 6d4a65b1560a43144af6fa4c83ff9ed3, type: 2}
 --- !u!4 &1288476560
 Transform:
   m_ObjectHideFlags: 0
@@ -2435,7 +2436,7 @@ MonoBehaviour:
   planePrefab: {fileID: 182608508188195332, guid: 01e12184ff81aea49ae49642e3ec8d0a, type: 3}
   obStonePrefab: {fileID: 919132149155446097, guid: 4e900c1b093e3054d80fced03d984aab, type: 3}
   obTreePrefab: {fileID: 6632435566270772146, guid: f7a3c9d37e6df9b41845f0e648756643, type: 3}
-  trackPrefab: {fileID: 4638461518488203170, guid: 80a44352fe4849241af79b4a0fdda401, type: 3}
+  trackPrefab: {fileID: 2458459440035365112, guid: c576ba09449be154899488efd79b5ea1, type: 3}
   dynamiteMachinePrefab: {fileID: 1414702916102547295, guid: b1eda0730ab4139458ccc656ea8f8cbe, type: 3}
   productionMachinePrefab: {fileID: 491123125678747441, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
   waterTankPrefab: {fileID: 3934003489838394548, guid: 21df4f20ad1bbd54a860277029df7b06, type: 3}

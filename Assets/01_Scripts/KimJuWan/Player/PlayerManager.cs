@@ -217,7 +217,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             droppedSlot.GetComponent<PhotonSyncManager>().DroppedSlotOut(droppedSlot.GetComponent<PhotonView>().ViewID);
                         }
                         Debug.Log("ItemNum ::::" + droppedSlot.itemNum);
-                        if (droppedSlot.itemNum <= 0)
+                        if (droppedSlot.itemNum <= 1)
                         {
                             Debug.Log("삭제되어야됩니다.");
                             DestroyOnNetwork(droppedSlot.transform.GetComponent<PhotonSyncManager>());

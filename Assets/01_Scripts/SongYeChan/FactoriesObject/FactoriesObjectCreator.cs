@@ -54,7 +54,7 @@ public class FactoriesObjectCreator : MonoBehaviour
 
     public void Create_Master()
     {
-        GameObject factoriesObject = PhotonNetwork.Instantiate("FactoriesObject", new Vector3(MapInfo.defaultStartTrackX * MapInfo.objScale * 10, (factoriesObjectPrefab.transform.localScale.y / 2) + (MapInfo.trackYscale / 2) * 2, MapInfo.defaultStartTrackZ * MapInfo.objScale * 10),Quaternion.Euler(new Vector3(0, MapInfo.startTrackYRotation, 0)));
+        GameObject factoriesObject = PhotonNetwork.Instantiate("FactoriesObject", new Vector3(MapInfo.defaultStartTrackX * MapInfo.objScale * 10, 0.75f, MapInfo.defaultStartTrackZ * MapInfo.objScale * 10),Quaternion.Euler(new Vector3(0, MapInfo.startTrackYRotation, 0)));
         factoriesObject.AddComponent<FactoriesObjectManager>();
         factoriesObject.GetComponent<FactoriesObjectManager>().tagToBeDetected = "Track";
         factoriesObject.GetComponent<FactoriesObjectManager>().Init();
@@ -63,7 +63,7 @@ public class FactoriesObjectCreator : MonoBehaviour
 
     public void FirstCreate_Master()
     {
-        GameObject factoriesObject = Instantiate(factoriesObjectPrefab, new Vector3(MapInfo.defaultStartTrackX * MapInfo.objScale * 10, (factoriesObjectPrefab.transform.localScale.y / 2) + (MapInfo.trackYscale / 2) * 2, MapInfo.defaultStartTrackZ * MapInfo.objScale * 10), Quaternion.Euler(new Vector3(0, MapInfo.startTrackYRotation, 0)));
+        GameObject factoriesObject = Instantiate(factoriesObjectPrefab, new Vector3(MapInfo.defaultStartTrackX * MapInfo.objScale * 10, 0.75f, MapInfo.defaultStartTrackZ * MapInfo.objScale * 10), Quaternion.Euler(new Vector3(0, MapInfo.startTrackYRotation, 0)));
         factoriesObject.AddComponent<FactoriesObjectManager>();
         factoriesObject.GetComponent<FactoriesObjectManager>().tagToBeDetected = "Track";
         factoriesObject.GetComponent<FactoriesObjectManager>().Init();
