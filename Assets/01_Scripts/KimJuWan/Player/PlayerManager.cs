@@ -56,7 +56,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
                     }
                     hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
-
+                    if (hit.transform.GetComponent<ObstacleManager>().isWorking)
+                        playerController.playerState = PlayerController.PLAYERSTATE.EQUIPMENTACTION;
+                    else
+                        playerController.playerState = PlayerController.PLAYERSTATE.PICK;
+                    
                     break;
                 case "Item":
                     if (hit.transform.GetComponent<PhotonView>() != null)
