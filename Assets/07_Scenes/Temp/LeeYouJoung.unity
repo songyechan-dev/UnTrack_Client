@@ -1343,6 +1343,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776786812}
   m_CullTransparentMesh: 1
+--- !u!1 &850839292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3686851000239159954, guid: e777703bf66a5484c806eed6ef40d9db, type: 3}
+  m_PrefabInstance: {fileID: 5666962745280691537}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &850839298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850839292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ef8f6c9f0c9754087f08e6319e9972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factoryManager: {fileID: 0}
+  targetPosition: {fileID: 0}
+  descriptionText: {fileID: 0}
+  smokeEffect: {fileID: 0}
+  currentTime: 0
+  generateTime: 0
+--- !u!114 &850839299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850839292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factoryType: 0
+  dataPath: 
+  ingredient_1: 
+  amount_1: 0
+  ingredient_2: 
+  amount_2: 0
+  generateTime: 0
+  generateItem: 
+  fireDeadTime: 50
+  currentFireTime: 0
+  currentGenerateTime: 0
+  currentItemNum: 0
+  itemMaxVolume: 5
+  isWorking: 0
+  isHeating: 0
 --- !u!1 &893571480
 GameObject:
   m_ObjectHideFlags: 0
@@ -3163,8 +3213,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040805875}
-  m_LocalRotation: {x: 0.17545068, y: -0.7766479, z: 0.24663855, w: 0.55245316}
-  m_LocalPosition: {x: 12.660201, y: 14.684562, z: -2.4058013}
+  m_LocalRotation: {x: 0.31684425, y: -0.63662744, z: 0.32297373, w: 0.6245025}
+  m_LocalPosition: {x: 12.568176, y: 15.817284, z: -6.367839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3842,6 +3892,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 937919663, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 937919664, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 937919664, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 937919664, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 491123125678747441, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
       propertyPath: m_Name
       value: ProductionMachine

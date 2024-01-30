@@ -75,16 +75,11 @@ public class FactoryController : MonoBehaviour
     {
         if (GetDistance(transform.position, targetPosition.position) <= 2.5f)
         {
-            if (factoryManager != null)
-                descriptionText.GetComponent<TextMeshPro>().text = $"{factoryManager.currentItemNum}/{factoryManager.itemMaxVolume}";
-            else
-                descriptionText.GetComponent<TextMeshPro>().text = $"{StateManager.Instance().storages["WOOD"] + StateManager.Instance().storages["STEEL"]}/{StateManager.Instance().storageMaxVolume}";
-
-            descriptionText.SetActive(true);
+            OpenDescription();
         }
         else
         {
-            descriptionText.SetActive(false);
+            CloseDescription();
         }
     }
 
@@ -94,5 +89,28 @@ public class FactoryController : MonoBehaviour
         float dist = Vector3.Magnitude(dir);
 
         return dist;
+    }
+
+    public void OpenDescription()
+    {
+        if (factoryManager != null)
+        {
+            if (factoryManager.currentItemNum >= factoryManager.itemMaxVolume)
+                descriptionText.GetComponent<TextMeshPro>().color = Color.red;
+            descriptionText.GetComponent<TextMeshPro>().text = $"{factoryManager.currentItemNum}/{factoryManager.itemMaxVolume}";
+
+        }
+        else
+        {
+            descriptionText.GetComponent<TextMeshPro>().text = $"{StateManager.Instance().storages["WOOD"] + StateManager.Instance().storages["STEEL"]}/{StateManager.Instance().storageMaxVolume}";
+        }
+
+        descriptionText.SetActive(true);
+        descriptionText.transform.DOScale(new Vector3(1.0f,1.0f,1.0f), 0.25f).SetEase(Ease.InExpo).SetEase(Ease.OutBounce);
+    }
+
+    public void CloseDescription()
+    {
+        descriptionText.transform.DOScale(new Vector3(0.05f, 0.05f, 0.05f), 0.25f).SetEase(Ease.InOutExpo).OnComplete(() => descriptionText.SetActive(false));
     }
 }
