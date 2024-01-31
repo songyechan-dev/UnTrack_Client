@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,7 @@ namespace LeeYuJoung
         public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
         public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
 
-        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
+        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들f
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
         public float currentTime = 0;
@@ -60,13 +61,16 @@ namespace LeeYuJoung
 
         private void Update()
         {
-            currentTime += Time.deltaTime;
-
-            if (currentTime > fireTime)
+            if (PhotonNetwork.IsMasterClient)
             {
-                currentTime = 0;
-                //Fire();
+                currentTime += Time.deltaTime;
+
+                if (currentTime > fireTime)
+                {
+                    Fire();
+                }
             }
+            
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
@@ -110,13 +114,30 @@ namespace LeeYuJoung
         {
             int _idx = Random.Range(0, sceneFactorys.Count);
 
-            if (!sceneFactorys[_idx].GetComponent<FactoryManager>().isHeating)
+            if (_idx < sceneFactorys.Count && sceneFactorys[_idx] != null)
             {
-                sceneFactorys[_idx].GetComponent<FactoryManager>().EngineOverheating();
+                FactoryManager factoryManager = sceneFactorys[_idx].GetComponent<FactoryManager>();
+
+                if (factoryManager != null)
+                {
+                    if (!factoryManager.isHeating && PhotonNetwork.IsMasterClient)
+                    {
+                        factoryManager.EngineOverheating();
+                        currentTime = 0;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("[" + _idx + "]");
+                }
             }
             else
             {
-                Fire();
+                Debug.LogError("[" + _idx + "]");
             }
         }
 

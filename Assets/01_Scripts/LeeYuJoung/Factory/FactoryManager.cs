@@ -6,8 +6,11 @@ using SimpleJSON;
 using System;
 using LeeYuJoung;
 using Photon.Pun;
+using ExitGames.Client.Photon;
+using static GameManager;
+using Photon.Realtime;
 
-public class FactoryManager : MonoBehaviour
+public class FactoryManager : MonoBehaviourPun
 {
     public enum FACTORYTYPE
     {
@@ -86,7 +89,10 @@ public class FactoryManager : MonoBehaviour
     // 엔진이 일정 시간마다 불나는 이벤트
     public void EngineOverheating()
     {
-        Debug.Log($":::: {gameObject.name}에 불이 났습니다 ::::");
+        object[] data = new object[] { false };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
+
         StartCoroutine(FactoryInFire());
     }
 
@@ -94,6 +100,9 @@ public class FactoryManager : MonoBehaviour
     {
         int loopNum = 0;
         isHeating = true;
+        Debug.Log($":::: {gameObject.name}에 불이 났습니다 ::::");
+
+
 
         while (true)
         {
@@ -118,10 +127,13 @@ public class FactoryManager : MonoBehaviour
     // PlayerManager.cs에서 hit 태그가 Factory 이며 & 플레이어가 물통을 들고 있다면 실행
     public void FireSuppression()
     {
-        Debug.Log("::::: 화재 진압 완료 :::::");
         StopCoroutine(FactoryInFire());
         isHeating = false;
         currentFireTime = 0;
+
+        object[] data = new object[] { true };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
     }
 
     // 아이템 제작할 수 있는지 확인
@@ -131,6 +143,11 @@ public class FactoryManager : MonoBehaviour
         {
             Debug.Log($":::: {generateItem} 제작 시작 ::::");
             StartCoroutine(ItemProduction());
+            //otehrs에서도 실행
+            object[] data = new object[] { false,-1 };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_ACTION, data, raiseEventOptions, SendOptions.SendReliable);
+            QuestManager.Instance().UpdateProgress(generateItem, 1);
         }  
     }
 
@@ -169,14 +186,13 @@ public class FactoryManager : MonoBehaviour
     public void ItemAdd()
     {
         currentItemNum++;
-        Debug.Log("아이템 생성됨");
         QuestManager.Instance().UpdateProgress(generateItem, 1);
     }
 
     // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 
     public bool ItemUse()
     {
-        if(currentItemNum <= 0 && 1==2)
+        if(currentItemNum <= 0 /*&& 1==2*/)
         {
             Debug.Log($"{gameObject.name} 아이템이 없습니다....");
             return false;
@@ -190,7 +206,11 @@ public class FactoryManager : MonoBehaviour
     // 아이템 생성 → 플레이어 손에 생성
     public GameObject ItemGenerate()
     {
+        //이구간 others에서도 실행
         currentItemNum--;
+        object[] data = new object[] { true };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_ACTION, data, raiseEventOptions, SendOptions.SendReliable);
         return PhotonNetwork.Instantiate(generateItem,new Vector3(0,0,0),Quaternion.identity);
     }
 
@@ -216,5 +236,49 @@ public class FactoryManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_ACTION)
+        {
+            // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            object[] receivedData = (object[])photonEvent.CustomData;
+            bool isMinusCurrentItem = (bool)receivedData[0];
+            if (isMinusCurrentItem)
+            {
+                currentItemNum--;
+            }
+            else
+            {
+                StartCoroutine(ItemProduction());
+            }
+        }
+        if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_HEATING)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            bool _isHeating = (bool)receivedData[0];
+            if (_isHeating)
+            {
+                StopCoroutine(FactoryInFire());
+                isHeating = false;
+                currentFireTime = 0;
+            }
+            else
+            {
+                StartCoroutine(FactoryInFire());
+            }
+        }
+        
+    }
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 }

@@ -17,6 +17,7 @@ TagManager:
   - DroppedSlot
   - PlayableButton
   - LoadingBar
+  - FactoriesObject_First
   layers:
   - Default
   - TransparentFX
@@ -29,8 +30,8 @@ TagManager:
   - PickSlot
   - Track
   - Player
-  - 
-  - 
+  - FactoriesObject
+  - FactoriesObject_First
   - 
   - 
   - 

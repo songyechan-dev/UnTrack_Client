@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -67,9 +68,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (pv != null && pv.IsMine)
         {
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
+            playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
         //rb = GetComponent<Rigidbody>();
-        playerAnim = transform.Find("Duck").GetComponent<Animator>();
+        if (pv == null)
+        {
+            playerAnim = transform.Find("Duck").GetComponent<Animator>();
+        }
+        
     }
 
     // 업데이트
@@ -78,8 +84,34 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (pv == null || (pv != null && pv.IsMine && !isExit))
         {
-            if (!isWorking)
+            if (!isWorking && pv == null)
+            {
                 PlayerMove();
+            }
+            else if (!isWorking && pv != null && pv.IsMine)
+            {
+                if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
+                {
+                    float newX = Mathf.Clamp(transform.position.x, MapInfo.startPosition.x, MapInfo.endPositionX-1f);
+                    float newZ = Mathf.Clamp(transform.position.z, MapInfo.startPosition.z, MapInfo.endPositionZ -1f);
+                    if (newX == Mathf.Clamp(newX, MapInfo.startPosition.x, MapInfo.endPositionX-1f) &&
+                        newZ == Mathf.Clamp(newZ, MapInfo.startPosition.z, MapInfo.endPositionZ -1f))
+                    {
+                        transform.position = new Vector3(newX, transform.position.y, newZ);
+                        PlayerMove();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+                {
+                    PlayerMove();
+                }
+
+            }
+
         }
         else if (PhotonNetwork.IsMasterClient && isExit)
         {
@@ -140,6 +172,48 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
+            switch (playerState)
+            {
+                case PLAYERSTATE.IDLE:
+                    playerAnim.SetInteger("PLAYERSTATE", 0);
+                    break;
+                case PLAYERSTATE.WALK:
+                    playerAnim.SetInteger("PLAYERSTATE", 1);
+                    break;
+                case PLAYERSTATE.PICKUP:
+                    playerAnim.SetInteger("PLAYERSTATE", 2);
+                    AnimatorClipInfo[] curClipInfo_1;
+                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (pickCurTime > curClipInfo_1[0].clip.length)
+                    {
+                        pickCurTime = 0;
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    break;
+                case PLAYERSTATE.DROP:
+                    playerAnim.SetInteger("PLAYERSTATE", 3);
+                    dropCurTime += Time.deltaTime;
+                    AnimatorClipInfo[] curClipInfo;
+                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (dropCurTime > curClipInfo[0].clip.length)
+                    {
+                        dropCurTime = 0;
+                        playerState = PLAYERSTATE.IDLE;
+                    }
+                    break;
+                case PLAYERSTATE.EQUIPMENTACTION:
+                    playerAnim.SetInteger("PLAYERSTATE", 4);
+                    break;
+
+                case PLAYERSTATE.PICK:
+                    playerAnim.SetInteger("PLAYERSTATE", 5);
+                    break;
+
+            }
+            if (transform.position.y <= -1f)
+            {
+                transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
+            }
             if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
             {
                 //스페이스바 눌렀을때 실행
@@ -162,44 +236,48 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
 
-        switch (playerState)
+        if (pv == null)
         {
-            case PLAYERSTATE.IDLE:
-                playerAnim.SetInteger("PLAYERSTATE", 0);
-                break;
-            case PLAYERSTATE.WALK:
-                playerAnim.SetInteger("PLAYERSTATE", 1);
-                break;
-            case PLAYERSTATE.PICKUP:
-                playerAnim.SetInteger("PLAYERSTATE", 2);
-                AnimatorClipInfo[] curClipInfo_1;
-                curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
-                if (pickCurTime > curClipInfo_1[0].clip.length)
-                {
-                    pickCurTime = 0;
-                    playerState = PLAYERSTATE.PICK;
-                }
-                break;
-            case PLAYERSTATE.DROP:
-                playerAnim.SetInteger("PLAYERSTATE", 3);
-                dropCurTime += Time.deltaTime;
-                AnimatorClipInfo[] curClipInfo;
-                curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
-                if (dropCurTime> curClipInfo[0].clip.length)
-                {
-                    dropCurTime = 0;
-                    playerState = PLAYERSTATE.IDLE;
-                }
-                break;
-            case PLAYERSTATE.EQUIPMENTACTION:
-                playerAnim.SetInteger("PLAYERSTATE", 4);
-                break;
-            
-            case PLAYERSTATE.PICK:
-                playerAnim.SetInteger("PLAYERSTATE", 5);
-                break;
+            switch (playerState)
+            {
+                case PLAYERSTATE.IDLE:
+                    playerAnim.SetInteger("PLAYERSTATE", 0);
+                    break;
+                case PLAYERSTATE.WALK:
+                    playerAnim.SetInteger("PLAYERSTATE", 1);
+                    break;
+                case PLAYERSTATE.PICKUP:
+                    playerAnim.SetInteger("PLAYERSTATE", 2);
+                    AnimatorClipInfo[] curClipInfo_1;
+                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (pickCurTime > curClipInfo_1[0].clip.length)
+                    {
+                        pickCurTime = 0;
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    break;
+                case PLAYERSTATE.DROP:
+                    playerAnim.SetInteger("PLAYERSTATE", 3);
+                    dropCurTime += Time.deltaTime;
+                    AnimatorClipInfo[] curClipInfo;
+                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (dropCurTime > curClipInfo[0].clip.length)
+                    {
+                        dropCurTime = 0;
+                        playerState = PLAYERSTATE.IDLE;
+                    }
+                    break;
+                case PLAYERSTATE.EQUIPMENTACTION:
+                    playerAnim.SetInteger("PLAYERSTATE", 4);
+                    break;
 
+                case PLAYERSTATE.PICK:
+                    playerAnim.SetInteger("PLAYERSTATE", 5);
+                    break;
+
+            }
         }
+        
 
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
