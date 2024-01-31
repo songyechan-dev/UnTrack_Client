@@ -1,358 +1,362 @@
-using LeeYuJoung;
+using DG.Tweening;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Jobs;
 
-public class PlayerManager : MonoBehaviourPunCallbacks
+//Player 애니메이션용 STATE
+public enum PLAYERSTATE
 {
-    PlayerController playerController;
-    private InventoryManager inventoryManager;
-    public Transform pickSlot;
-    public Transform sensor;
-    public Transform droppedSlotPrefab;
-    float castRange = 1f;
-
-    public ItemManager itemManager;
-
+    IDLE = 0,
+    WALK,
+    PICKUP,
+    DROP,
+    EQUIPMENT,
     
+    PICK
 
+}
 
-    private void Awake()
+public class PlayerController : MonoBehaviourPunCallbacks
+{
+    //Player 애니메이션용 STATE
+    public enum PLAYERSTATE
     {
-        if ((photonView != null && photonView.IsMine))
+        IDLE = 0,
+        WALK,
+        PICKUP,
+        DROP,
+        EQUIPMENTACTION,
+        
+        PICK
+
+    }
+    private float moveSpeed = 10f;
+
+    Vector3 moveDirection;
+    //Rigidbody rb;
+    PlayerManager playerManager;
+    public PLAYERSTATE playerState;
+    public Animator playerAnim;
+    public float dropCurTime;
+    public float pickCurTime;
+    public bool isPick;
+    public bool isWorking;
+
+    public float currentTime = 0f;
+    public float spaceTime = .2f;
+
+
+    public string playableButtonTagName = "PlayableButton";
+    private PhotonView pv;
+    private TeamManager teamManager;
+
+    private bool isReady = false;
+    private bool isExit = false;
+
+
+    // 시작
+
+    void Start()
+    {
+        pv = GetComponent<PhotonView>();
+        playerManager = GetComponent<PlayerManager>();
+        if (pv != null && pv.IsMine)
         {
-            sensor = transform.GetChild(0).gameObject.GetComponent<Transform>();
-            playerController = GetComponent<PlayerController>();
-            inventoryManager = GetComponentInChildren<InventoryManager>();
-            if (Camera.main.transform.GetComponent<CameraManager>() != null)
-            {
-                Camera.main.transform.GetComponent<CameraManager>().playerTransform = transform;
-            }
+            teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
+            playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
-        else if (photonView == null)
+        //rb = GetComponent<Rigidbody>();
+        if (pv == null)
         {
-            return;
+            playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
+        
     }
 
-    
-
-    //플레이어의 정면에 장애물이 있는 경우 파괴
-    public void CollectIngredient()
+    // 업데이트
+    void FixedUpdate()
     {
-        int layerMask = (-1) - (1 << LayerMask.NameToLayer("PickSlot"));
-        RaycastHit hit;
-        Ray ray = new Ray(sensor.position, -sensor.up);
 
-        if (Physics.Raycast(ray, out hit, castRange, layerMask))
+        if (pv == null || (pv != null && pv.IsMine && !isExit))
         {
-            Debug.Log("태그명 !!! ::: " + hit.transform.tag);
-            int childCount = 0;
-            switch (hit.transform.tag)
+            if (!isWorking && pv == null)
             {
-                case "Obstacle":
-                    if (hit.transform.GetComponent<PhotonView>() != null)
-                    {
-                        hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
-                    }
-                    hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
-                    if (hit.transform.GetComponent<ObstacleManager>().isWorking)
-                        playerController.playerState = PlayerController.PLAYERSTATE.EQUIPMENTACTION;
-                    else
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICK;
-                    
-                    break;
-                case "Item":
-                    if (hit.transform.GetComponent<PhotonView>() != null)
-                    {
-                        hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
-                    }
-                    childCount = hit.transform.childCount;
-                    for (int i = 0; i < childCount; i++)
-                    {
-                        hit.transform.GetChild(i).transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
-                    }
-                    childCount = 0;
-                    Debug.Log("호출됨");
-                    if (!playerController.isPick)
-                    {
-                        playerController.isPick = true;
-                        castRange = 2f;
-                        inventoryManager.SaveInventory(hit.transform.gameObject);
-                        hit.transform.SetParent(pickSlot.transform);
-                        pickSlot.GetChild(0).transform.position = pickSlot.position;
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
-                    }
-                    else
-                    {
-                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
-                        {
-                            if (inventoryManager.SaveInventory(hit.transform.gameObject))
-                            {
-                                hit.transform.SetParent(pickSlot.transform);
-                                pickSlot.GetChild(inventoryManager.itemNum - 1).transform.position =
-                                    pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
-                            }
-                        }
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
-                    }
-
-                    break;
-                case "Factory":
-                    FactoryManager _fm = hit.transform.GetComponent<FactoryManager>();
-                    if (_fm.isHeating && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.BUCKET))
-                    {
-                        playerController.isPick = false;
-                        castRange = 1f;
-
-                        Destroy(pickSlot.GetChild(0).gameObject);
-                        inventoryManager.OutInventory();
-                        _fm.FireSuppression();
-                    }
-
-                    if (_fm.ItemUse() && !playerController.isPick)
-                    {
-                        playerController.isPick = true;
-                        castRange = 2f;
-
-                        GameObject _object = (_fm.ItemGenerate());
-                        inventoryManager.SaveInventory(_object.transform.gameObject);
-                        _object.transform.SetParent(pickSlot.transform);
-                        _object.transform.position = pickSlot.position;
-                        _object.transform.rotation = pickSlot.rotation;
-                        _object.name = _fm.generateItem;
-                    }
-
-                    break;
-                case "Storage":
-                    if ((playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) && photonView.IsMine) || (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) && photonView.IsMine))
-                    {
-                        Debug.Log("뭔가를 들고있다 " + inventoryManager.itemType.ToString());
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP;
-                        if (StateManager.Instance().IngredientAdd(inventoryManager.itemType.ToString(), inventoryManager.itemNum))
-                        {
-                            Debug.Log("뭔가를 들고있다2" + inventoryManager.itemType.ToString());
-                            playerController.isPick = false;
-                            castRange = 1f;
-
-                            for (int i = 0; i < pickSlot.transform.childCount; i++)
-                            {
-                                PhotonNetwork.Destroy(pickSlot.transform.GetChild(i).gameObject);
-                                inventoryManager.OutInventory();
-                            }
-                        }
-                    }
-
-                    break;
-                case "DroppedTrack":
-
-                    break;
-                case "DroppedSlot":
-                    if (hit.transform.GetComponent<PhotonView>() != null)
-                    {
-                        hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
-                    }
-                    childCount = hit.transform.childCount;
-                    for (int i = 0; i < childCount; i++)
-                    {
-                        if (hit.transform.GetChild(i).transform.GetComponent<PhotonView>().IsOwnerActive)
-                            hit.transform.GetChild(i).transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
-                    }
-                    childCount = 0;
-                    InventoryManager droppedSlot = hit.transform.GetComponent<InventoryManager>();
-                    Debug.Log("카운트 ::::" + droppedSlot.transform.childCount);
-                    Debug.Log("카운트2 ::::" + droppedSlot.itemNum);
-
-                    if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
-                    {
-                        //바닥에 놓은 아이템들 위에 쌓기
-                        if (inventoryManager.itemType.Equals(droppedSlot.itemType))
-                        {
-                            
-                            playerController.isPick = false;
-                            castRange = 1f;
-                            int n = pickSlot.transform.childCount;
-                            for (int i = 0; i < n; i++)
-                            {
-                                droppedSlot.GetComponent<PhotonSyncManager>().DroppedSlotIn(droppedSlot.transform, pickSlot.transform.GetChild(0).gameObject);
-                                //droppedSlot.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                                pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().SetParent(droppedSlot.transform,false);
-                                droppedSlot.transform.GetChild(droppedSlot.itemNum - 1).GetComponent<PhotonSyncManager>().SetPosition(droppedSlot.transform.position + (Vector3.up * (droppedSlot.itemNum - 1)));
-                            }
-                            inventoryManager.OutInventory();
-                        }
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP; ;
-                    }
-                    else
-                    {
-                        if (playerController.isPick)
-                        {
-                            if (inventoryManager.itemType.Equals(droppedSlot.itemType))
-                            {
-                                if (inventoryManager.itemNum < 4)
-                                {
-                                    inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
-                                    hit.transform.GetChild(droppedSlot.itemNum - 1).GetComponent<PhotonSyncManager>().SetParent(pickSlot,true);
-
-                                    pickSlot.GetChild(inventoryManager.itemNum - 1).transform.GetComponent<PhotonSyncManager>().SetPosition(pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1)));
-                                    droppedSlot.GetComponent<PhotonSyncManager>().DroppedSlotOut(droppedSlot.GetComponent<PhotonView>().ViewID);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            
-                            playerController.isPick = true;
-                            castRange = 2.0f;
-
-                            inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
-                            playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
-                            //
-                            hit.transform.GetChild(droppedSlot.itemNum - 1).GetComponent<PhotonSyncManager>().SetParent(pickSlot,true);
-                            pickSlot.GetChild(0).GetComponent<PhotonSyncManager>().SetPosition(pickSlot.position);
-                            //hit.transform.GetChild(droppedSlot.itemNum - 1).SetParent(pickSlot);
-                            //pickSlot.GetChild(0).transform.position = pickSlot.position;
-                            droppedSlot.GetComponent<PhotonSyncManager>().DroppedSlotOut(droppedSlot.GetComponent<PhotonView>().ViewID);
-                        }
-                        Debug.Log("ItemNum ::::" + droppedSlot.itemNum);
-                        if (droppedSlot.itemNum <= 1)
-                        {
-                            Debug.Log("삭제되어야됩니다.");
-                            DestroyOnNetwork(droppedSlot.transform.GetComponent<PhotonSyncManager>());
-                        }
-
-                    }
-                    break;
-                case "Plane":
-                    Debug.Log("바닥입니다....");
-
-                    if (playerController.isPick)
-                    {
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP;
-                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
-                        {
-                            playerController.isPick = false;
-                            castRange = 1.0f;
-                            GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot", pickSlot.transform.position, Quaternion.identity);
-                            _droppedSlot.name = "DroppedSlot";
-
-                            int num = pickSlot.transform.childCount;
-                            for (int i = 0; i < num; i++)
-                            {
-                                //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-
-                                //pickSlot.transform.GetChild(0).SetParent(_droppedSlot.transform);
-                                
-                                pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().DroppedSlotIn(_droppedSlot.transform, pickSlot.transform.GetChild(0).gameObject);
-                                pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().SetParent(_droppedSlot.transform,false);
-
-
-
-
-                                ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
-                            }
-                            inventoryManager.OutInventory();
-                        }
-                        else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
-                        {
-                            Debug.Log("생성이되나?");
-
-                            if (hit.transform.CompareTag("Plane"))
-                            {
-                                int num = pickSlot.transform.childCount;
-
-                                if (num <= 1)
-                                {
-                                    playerController.isPick = false;
-                                    castRange = 1.0f;
-                                    Debug.Log("여기는통과");
-                                    DestroyOnNetwork(pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>());
-                                    inventoryManager.DroppedSlotOut();
-                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
-                                }
-                                else
-                                {
-                                    Debug.Log("여기는통과");
-                                    //_droppedSlot.GetComponent<InventoryManager>().DroppedSlotIn(pickSlot.transform.GetChild(i).gameObject);
-                                    DestroyOnNetwork(pickSlot.transform.GetChild(num - 1).GetComponent<PhotonSyncManager>());
-                                    inventoryManager.DroppedSlotOut();
-                                    GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
-                                }
-                            }
-
-                        }
-                        else
-                        {
-                            Debug.Log("여기호출인가");
-                            playerController.isPick = false;
-                            castRange = 1.0f;
-
-                            inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
-                            inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
-                            ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
-                            pickSlot.transform.GetChild(0).SetParent(null);
-                        }
-                    }
-
-                    break;
+                PlayerMove();
             }
+            else if (!isWorking && pv != null && pv.IsMine)
+            {
+                if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
+                {
+                    float newX = Mathf.Clamp(transform.position.x, MapInfo.startPosition.x, MapInfo.endPositionX-1f);
+                    float newZ = Mathf.Clamp(transform.position.z, MapInfo.startPosition.z, MapInfo.endPositionZ -1f);
+                    if (newX == Mathf.Clamp(newX, MapInfo.startPosition.x, MapInfo.endPositionX-1f) &&
+                        newZ == Mathf.Clamp(newZ, MapInfo.startPosition.z, MapInfo.endPositionZ -1f))
+                    {
+                        transform.position = new Vector3(newX, transform.position.y, newZ);
+                        PlayerMove();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+                {
+                    PlayerMove();
+                }
+
+            }
+
+        }
+        else if (PhotonNetwork.IsMasterClient && isExit)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+
+    }
+
+    void CheckPlayableButton_OnStay()
+    {
+        if (pv == null || (pv != null && pv.IsMine))
+        {
+            Ray ray = new Ray(transform.position, -transform.up);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+                {
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                }
+                if (isReady)
+                {
+                    if (!hit.transform.CompareTag(playableButtonTagName))
+                    {
+                        Debug.Log("벗어남");
+                        SetIsReady(false);
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    void CheckPlayableButton_OnHit()
+    {
+        if (pv == null || (pv != null && pv.IsMine))
+        {
+            Ray ray = new Ray(transform.position, -transform.up);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
+                {
+                    //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                }
+            }
+        }
+
+
+    }
+
+    private void Update()
+    {
+        if (pv == null || (pv != null && pv.IsMine))
+        {
+            switch (playerState)
+            {
+                case PLAYERSTATE.IDLE:
+                    playerAnim.SetInteger("PLAYERSTATE", 0);
+                    break;
+                case PLAYERSTATE.WALK:
+                    playerAnim.SetInteger("PLAYERSTATE", 1);
+                    break;
+                case PLAYERSTATE.PICKUP:
+                    playerAnim.SetInteger("PLAYERSTATE", 2);
+                    AnimatorClipInfo[] curClipInfo_1;
+                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (pickCurTime > curClipInfo_1[0].clip.length)
+                    {
+                        pickCurTime = 0;
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    break;
+                case PLAYERSTATE.DROP:
+                    playerAnim.SetInteger("PLAYERSTATE", 3);
+                    dropCurTime += Time.deltaTime;
+                    AnimatorClipInfo[] curClipInfo;
+                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (dropCurTime > curClipInfo[0].clip.length)
+                    {
+                        dropCurTime = 0;
+                        playerState = PLAYERSTATE.IDLE;
+                    }
+                    break;
+                case PLAYERSTATE.EQUIPMENTACTION:
+                    playerAnim.SetInteger("PLAYERSTATE", 4);
+                    break;
+
+                case PLAYERSTATE.PICK:
+                    playerAnim.SetInteger("PLAYERSTATE", 5);
+                    break;
+
+            }
+            if (transform.position.y <= -1f)
+            {
+                transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
+            }
+            if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None) && Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+            {
+                //스페이스바 눌렀을때 실행
+                CheckPlayableButton_OnHit();
+            }
+            else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.None))
+            {
+                //플레이어가 스테이하면 실행
+                CheckPlayableButton_OnStay();
+            }
+
+            if (Input.GetKey(KeyCodeInfo.myActionKeyCode))
+            {
+                currentTime += Time.deltaTime;
+            }
+            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+            {
+                playerManager.CollectIngredient();
+                currentTime = 0;
+            }
+        }
+
+        if (pv == null)
+        {
+            switch (playerState)
+            {
+                case PLAYERSTATE.IDLE:
+                    playerAnim.SetInteger("PLAYERSTATE", 0);
+                    break;
+                case PLAYERSTATE.WALK:
+                    playerAnim.SetInteger("PLAYERSTATE", 1);
+                    break;
+                case PLAYERSTATE.PICKUP:
+                    playerAnim.SetInteger("PLAYERSTATE", 2);
+                    AnimatorClipInfo[] curClipInfo_1;
+                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (pickCurTime > curClipInfo_1[0].clip.length)
+                    {
+                        pickCurTime = 0;
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    break;
+                case PLAYERSTATE.DROP:
+                    playerAnim.SetInteger("PLAYERSTATE", 3);
+                    dropCurTime += Time.deltaTime;
+                    AnimatorClipInfo[] curClipInfo;
+                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (dropCurTime > curClipInfo[0].clip.length)
+                    {
+                        dropCurTime = 0;
+                        playerState = PLAYERSTATE.IDLE;
+                    }
+                    break;
+                case PLAYERSTATE.EQUIPMENTACTION:
+                    playerAnim.SetInteger("PLAYERSTATE", 4);
+                    break;
+
+                case PLAYERSTATE.PICK:
+                    playerAnim.SetInteger("PLAYERSTATE", 5);
+                    break;
+
+            }
+        }
+        
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    playerManager.ButtonClick();
+        //}
+    }
+
+    //플레이어 이동
+    public void PlayerMove()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f)
+        {
+            Vector3 moveDirection = new Vector3(h, 0f, v);
+            moveDirection = moveDirection.normalized * moveSpeed * Time.deltaTime;
+
+            transform.position += moveDirection;
+            transform.rotation = Quaternion.LookRotation(moveDirection);
+            playerState = PLAYERSTATE.WALK;
         }
         else
         {
-
+            playerState = PLAYERSTATE.IDLE;
         }
     }
 
-
-    void DestroyOnNetwork(PhotonSyncManager _photonSyncManager)
+    public bool GetIsReady()
     {
-        _photonSyncManager.DestroyObject();
+        if (pv.IsMine)
+        {
+            return isReady;
+        }
+        return false;
     }
-    //플레이어가 바라보는 방향에 따라 아이템의 각도 변경
-    public void ObjectRotationCheck(GameObject _gameObject)
+
+    public void SetIsReady(bool _isReady)
     {
-        float _rotation = transform.rotation.eulerAngles.y;
-        Debug.Log(_rotation);
-
-        if (_rotation >= 0.0f && _rotation < 85.0f)
+        if (pv.IsMine)
         {
-            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            Debug.Log("ready Set");
+            this.isReady = _isReady;
+            teamManager.SetReadyUserCount(_isReady);
         }
-        else if (_rotation >= 85.0f && _rotation < 175.0f)
-        {
-            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
-        }
-        else if (_rotation >= 175.0f && _rotation < 265.0f)
-        {
-            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
-        }
-        else if (_rotation >= 265.0f && _rotation < 360.0f)
-        {
-            _gameObject.transform.rotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
-        }
+        
     }
 
-    //바닥 UI 인식
-    //public void ButtonClick()
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (pv.CreatorActorNr == otherPlayer.ActorNumber)
+        {
+            if (photonView.IsMine)
+            {
+                isExit = true;
+            }
+        }
+    }
+    //public override void OnDisconnected(DisconnectCause cause)
     //{
-    //    //TODO 김주완 0119 : UI Manager에서 UI 기능들 끌어다 쓰게 하기
-    //    RaycastHit hit;
-    //    if(Physics.Raycast(transform.position, Vector3.down, out hit, castRange))
+    //    if (pv.IsMine)
     //    {
-    //        Debug.Log("버튼입니다...");
-    //            playerController.keyCode++;
-    //            if (playerController.keyCode > 2)
-    //            {
-    //                playerController.keyCode = 0;
-    //            }
-
+    //        PhotonNetwork.Destroy(gameObject);
     //    }
+    //}
 
+    //private void OnApplicationQuit()
+    //{
+    //    if (pv.IsMine)
+    //    {
+    //        Debug.Log("나감");
+    //        pv.RPC("Delete", RpcTarget.Others);
+    //    }
+    //}
+
+    //[PunRPC]
+    //void Delete()
+    //{
+    //    Debug.Log("여기호출됨");
+    //    PhotonNetwork.Destroy(gameObject);
     //}
 }
