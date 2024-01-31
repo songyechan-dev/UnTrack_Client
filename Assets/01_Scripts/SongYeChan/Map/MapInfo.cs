@@ -50,4 +50,8 @@ public static class MapInfo
     public static float trackDefaultYRotation = 0f;
     public static float trackDefaultZRotation = 0f;
 
+    public static float endPositionX;
+    public static float endPositionY;
+    public static float endPositionZ;
+
 }

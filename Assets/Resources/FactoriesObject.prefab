@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7907212738355502621}
   - component: {fileID: 1016447901502085276}
   - component: {fileID: 2884705731464529150}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sensor
-  m_TagString: Untagged
+  m_TagString: FactoriesObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3434016436887725201}
   - component: {fileID: 8503344015808434060}
   - component: {fileID: 5511965959073521376}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: FactoriesObject
   m_TagString: FactoriesObject
   m_Icon: {fileID: 0}

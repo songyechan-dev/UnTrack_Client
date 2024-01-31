@@ -36,7 +36,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
     [SerializeField, Range(0f, 100f)]
     public float fireTime;
     [SerializeField, Range(0f, 5f)]
-    public float rotationTime = 10f;
+    public float rotationTime = 2f;
     //[SerializeField, Range(0f, 500f)]
     //public float rotationPerFrame = 1.5f;
     //[SerializeField, Range(0f, 100f)]
@@ -53,13 +53,26 @@ public class FactoriesObjectManager : MonoBehaviourPun
 
     private float curTime = 0f;
     // 시작
-    void Start()
+    void Awake()
     {
         sensorTransform = transform.Find("Sensor");
+        StartCoroutine(SetTag());
     }
+
+    IEnumerator SetTag()
+    {
+        yield return new WaitForSeconds(2F);
+        if (gameObject.layer == LayerMask.NameToLayer("FactoriesObject_First"))
+        {
+            gameObject.tag = "FactoriesObject";
+            Debug.Log("변경됨");
+        }
+    }
+
     // 업데이트
     void Update()
     {
+        
         if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             SensorDetect();
@@ -177,7 +190,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
         Quaternion startRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(0, _targetTransform.eulerAngles.y, 0);
         Vector3 startPosition = transform.position;
-        Vector3 endPosition = _targetTransform.position + new Vector3(0, 0.75f,0);
+        Vector3 endPosition = new Vector3(_targetTransform.position.x, transform.position.y, _targetTransform.position.z);
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -222,14 +235,6 @@ public class FactoriesObjectManager : MonoBehaviourPun
             moveSpeed = step * increasingSpeed * round;
         }
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.transform.tag.Equals("Plane"))
-    //    {
-    //        Debug.Log("바닥이랑 충돌함");
-    //    }
-    //}
 
  
 

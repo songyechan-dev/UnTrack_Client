@@ -64,6 +64,7 @@ MonoBehaviour:
   - SetMapInfo_Otehrs
   - SetMapInfo_Others
   - AddedComponent
+  - GetOnFactoriesObject_Other
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

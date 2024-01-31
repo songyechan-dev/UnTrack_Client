@@ -69,7 +69,9 @@ public class FactoriesObjectCreator : MonoBehaviour
         factoriesObject.GetComponent<FactoriesObjectManager>().Init();
         GameManager.Instance().firstFactoriesObject = factoriesObject;
         factoriesObject.GetComponent<MeshRenderer>().enabled = false;
-        factoriesObject.GetComponent<BoxCollider>().enabled = false;
+        factoriesObject.layer = LayerMask.NameToLayer("FactoriesObject_First");
+        factoriesObject.transform.Find("Sensor").gameObject.layer = LayerMask.NameToLayer("FactoriesObject_First");
+        factoriesObject.tag = "FactoriesObject";
         count++;
     }
 

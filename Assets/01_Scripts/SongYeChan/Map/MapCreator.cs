@@ -16,7 +16,9 @@ using static FactoryManager;
 public class MapCreator : MonoBehaviour
 {
     private List<List<int>> mapInfo = new List<List<int>>();
+    [SerializeField]
     private int mapY;
+    [SerializeField]
     private int mapX;
     private bool isMapDataLoaded = false;
     private float objScale = MapInfo.objScale;
@@ -107,6 +109,10 @@ public class MapCreator : MonoBehaviour
         photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
         pv = GetComponent<PhotonView>();
         photonObjectCreator.Create("Player", new Vector3(0, 0.5f, 0));
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance().GameStart();
+        }
     }
 
     private void MapDataCreate()
@@ -421,6 +427,10 @@ public class MapCreator : MonoBehaviour
         //EditorUtility.SetDirty(mapParent.gameObject);
         //AssetDatabase.SaveAssets();
         //AssetDatabase.Refresh();
+        MapInfo.endPositionX = mapX;
+        MapInfo.endPositionZ = mapY;
+        SetEndPosition(mapX, mapY);
+        Debug.Log(MapInfo.endPositionX +", "+ MapInfo.endPositionZ);
         StateManager.Instance().sceneFactorys = new List<GameObject>(GameObject.FindGameObjectsWithTag("Factory"));
         pv.RPC("SetSceneFactorys_Others", RpcTarget.Others);
         Debug.Log("찾았다 ::::" + StateManager.Instance().sceneFactorys.Count);
@@ -459,19 +469,19 @@ public class MapCreator : MonoBehaviour
 
     void CreateFactory_Master(float x, float y,float z, string name,FactoryManager.FACTORYTYPE _factoryType)
     {
-        factoryObject = Instantiate(Resources.Load<GameObject>(name), new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10), Quaternion.identity);
+        factoryObject = PhotonNetwork.Instantiate(name, new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10), Quaternion.identity);
         factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
         factoryObject.AddComponent<FactoryManager>();
         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
         factoryObject.GetComponent<FactoryManager>().factoryType = _factoryType;
         factoryObject.GetComponent<FactoryManager>().Init();
-        pv.RPC("CreateFactory_Others", RpcTarget.Others, x, y, z, name, _factoryType);
+        pv.RPC("CreateFactory_Others", RpcTarget.Others, x, y, z, factoryObject.GetComponent<PhotonView>().ViewID, _factoryType);
     }
 
     [PunRPC]
-    void CreateFactory_Others(float x, float y, float z, string name, FactoryManager.FACTORYTYPE _factoryType)
+    void CreateFactory_Others(float x, float y, float z, int viewID, FactoryManager.FACTORYTYPE _factoryType)
     {
-        factoryObject = Instantiate(Resources.Load<GameObject>(name), new Vector3(x * objScale * 10, dynamiteMachinePrefab.transform.localScale.y / 2, z * objScale * 10), Quaternion.identity);
+        factoryObject = PhotonView.Find(viewID).gameObject;
         factoryObject.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
         factoryObject.AddComponent<FactoryManager>();
         factoryObject.GetComponent<FactoryManager>().dataPath = "FactoryData";
@@ -537,6 +547,13 @@ public class MapCreator : MonoBehaviour
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_INFO, data, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    void SetEndPosition(int x, int z)
+    {
+        object[] data = new object[] { x, z };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.MAP_END_POS, data, raiseEventOptions, SendOptions.SendReliable);
+    }
+
     void OnEvent(EventData photonEvent)
     {
         if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_INFO)
@@ -550,6 +567,14 @@ public class MapCreator : MonoBehaviour
             factoryView.GetComponent<FactoryManager>().dataPath = "FactoryData";
             factoryView.GetComponent<FactoryManager>().factoryType = _factoryType;
             factoryView.GetComponent<FactoryManager>().Init();
+        }
+        if (photonEvent.Code == (int)SendDataInfo.Info.MAP_END_POS)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            int x = (int)receivedData[0];
+            int z = (int)receivedData[1];
+            MapInfo.endPositionX = x;
+            MapInfo.endPositionZ = z;
         }
     }
 

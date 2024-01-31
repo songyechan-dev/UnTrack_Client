@@ -82,17 +82,21 @@ public class TrackManager : MonoBehaviourPun
                     Debug.Log("이즈마인아님");
                     leftTrackInfo.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
                     leftTrackInfo.prevMyMesh = leftTrackInfo.GetComponent<MeshFilter>().mesh;
-                    if (leftTrackInfo.prevMyMesh.name.Equals("Left"))
+                    Debug.Log("Name ::::" + leftTrackInfo.prevMyMesh.name);
+                    if (leftTrackInfo.prevMyMesh.name.Contains("Left"))
                     {
+                        Debug.Log("prev :::: left");
                         prevMesh = "Left";
                     }
-                    else if (leftTrackInfo.prevMyMesh.name.Equals("Right"))
+                    else if (leftTrackInfo.prevMyMesh.name.Contains("Right"))
                     {
                         prevMesh = "Right";
+                        Debug.Log("prev :::: right");
                     }
                     else
                     {
                         prevMesh = "Origin";
+                        Debug.Log("prev :::: origin");
                     }
                     Debug.Log("레프트의 각도 :::::" + leftTrackInfo.transform.localEulerAngles.y);
                     if (Mathf.Abs(leftTrackInfo.transform.localEulerAngles.y) == 180f)
@@ -143,17 +147,21 @@ public class TrackManager : MonoBehaviourPun
                     Debug.Log("이즈마인아님");
                     rightTrackInfo.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
                     rightTrackInfo.prevMyMesh = rightTrackInfo.GetComponent<MeshFilter>().mesh;
-                    if (rightTrackInfo.prevMyMesh.name.Equals("Left"))
+                    Debug.Log("Name ::::" + rightTrackInfo.prevMyMesh.name);
+                    if (rightTrackInfo.prevMyMesh.name.Contains("Left"))
                     {
                         prevMesh = "Left";
+                        Debug.Log("prev left");
                     }
-                    else if (rightTrackInfo.prevMyMesh.name.Equals("Right"))
+                    else if (rightTrackInfo.prevMyMesh.name.Contains("Right"))
                     {
                         prevMesh = "Right";
+                        Debug.Log("prev right");
                     }
                     else
                     {
                         prevMesh = "Origin";
+                        Debug.Log("prev origin");
                     }
                     if (Mathf.Abs(rightTrackInfo.transform.localEulerAngles.y) == 0)
                     {
@@ -202,17 +210,21 @@ public class TrackManager : MonoBehaviourPun
                     Debug.Log("이즈마인아님");
                     forwardTrackInfo.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
                     forwardTrackInfo.prevMyMesh = forwardTrackInfo.GetComponent<MeshFilter>().mesh;
-                    if (forwardTrackInfo.prevMyMesh.name.Equals("Left"))
+                    Debug.Log("Name ::::" + forwardTrackInfo.prevMyMesh.name);
+                    if (forwardTrackInfo.prevMyMesh.name.Contains("Left"))
                     {
                         prevMesh = "Left";
+                        Debug.Log("prev left");
                     }
-                    else if (forwardTrackInfo.prevMyMesh.name.Equals("Right"))
+                    else if (forwardTrackInfo.prevMyMesh.name.Contains("Right"))
                     {
                         prevMesh = "Right";
+                        Debug.Log("prev right");
                     }
                     else
                     {
                         prevMesh = "Origin";
+                        Debug.Log("prev origin");
                     }
                     if (forwardTrackInfo.transform.forward == Vector3.right)
                     {
@@ -264,17 +276,21 @@ public class TrackManager : MonoBehaviourPun
                     Debug.Log("이즈마인아님");
                     backTrackInfo.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
                     backTrackInfo.prevMyMesh = backTrackInfo.GetComponent<MeshFilter>().mesh;
-                    if (backTrackInfo.prevMyMesh.name.Equals("Left"))
+                    Debug.Log("Name ::::" + backTrackInfo.prevMyMesh.name);
+                    if (backTrackInfo.prevMyMesh.name.Contains("Left"))
                     {
                         prevMesh = "Left";
+                        Debug.Log("prev left");
                     }
-                    else if (backTrackInfo.prevMyMesh.name.Equals("Right"))
+                    else if (backTrackInfo.prevMyMesh.name.Contains("Right"))
                     {
                         prevMesh = "Right";
+                        Debug.Log("prev right");
                     }
                     else
                     {
                         prevMesh = "Origin";
+                        Debug.Log("prev origin");
                     }
                     if (backTrackInfo.transform.forward == Vector3.right)
                     {

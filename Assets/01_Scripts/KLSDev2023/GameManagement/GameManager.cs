@@ -117,12 +117,11 @@ public class GameManager : MonoBehaviourPun
     public void GameStart()
     {
         gameState = GameState.GameStart;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            mapCreator.MapLoad();
-        }
         gameMode = GameMode.Play;
-        UIManager.Instance().Init();
+
+        object[] data = new object[] { (int)gameMode,(int)gameState };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
     }
 
     /// <summary>
@@ -188,6 +187,12 @@ public class GameManager : MonoBehaviourPun
 
             UIManager.Instance().SetText(UIManager.Instance().distance03, (int)(receivedMeter * 100) + "m");
         }
+        if (photonEvent.Code == (int)SendDataInfo.Info.GAME_MODE)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+
+            SetGameMode((GameMode)((int)receivedData[0]), (GameState)((int)receivedData[1]));
+        }
     }
 
 
@@ -199,6 +204,12 @@ public class GameManager : MonoBehaviourPun
     void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    public void SetGameMode(GameMode _gameMode, GameState _gameState)
+    {
+        gameMode = _gameMode;
+        gameState = _gameState;
     }
 
     #endregion

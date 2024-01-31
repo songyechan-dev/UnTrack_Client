@@ -28,6 +28,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             sensor = transform.GetChild(0).gameObject.GetComponent<Transform>();
             playerController = GetComponent<PlayerController>();
             inventoryManager = GetComponentInChildren<InventoryManager>();
+            if (Camera.main.transform.GetComponent<CameraManager>() != null)
+            {
+                Camera.main.transform.GetComponent<CameraManager>().playerTransform = transform;
+            }
         }
         else if (photonView == null)
         {

@@ -1,10 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static TrackInfo;
 
-public class TrackInfo : MonoBehaviour
+public class TrackInfo : MonoBehaviourPun
 {
     public enum MyDirection
     {
@@ -91,9 +92,17 @@ public class TrackInfo : MonoBehaviour
                 if (hit.transform.localEulerAngles.y != transform.localEulerAngles.y)
                 {
                     hit.transform.GetComponent<FactoriesObjectManager>().Turn(transform);
+                    photonView.RPC("GetOnFactoriesObject_Other", RpcTarget.Others,hit.transform.GetComponent<PhotonView>().ViewID);
                 }
             }
         }
+    }
+
+    [PunRPC]
+    public void GetOnFactoriesObject_Other(int viewID)
+    {
+        GameObject go = PhotonView.Find(viewID).gameObject;
+        go.GetComponent<FactoriesObjectManager>().Turn(transform);
     }
 
     //TODO: 트러블 슈팅 - 각도 이슈(0,90,180,-90 각도가 정확히 나오지가 않아서 수정함)
