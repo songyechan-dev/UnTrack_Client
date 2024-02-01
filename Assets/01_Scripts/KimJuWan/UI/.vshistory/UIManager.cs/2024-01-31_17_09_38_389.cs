@@ -224,7 +224,7 @@ public class UIManager : MonoBehaviour
             questIndex03 = canvas.transform.Find("QuestIndex").gameObject;
             chat = canvas.transform.Find("Chat").gameObject;
 
-            distance03 = rDVindex03.transform.Find("DistanceTxt").transform.Find("Distance").GetComponent<Text>();
+            distance03 = rDVindex03.transform.Find("Distance").GetComponent<Text>();
             
         }
             
