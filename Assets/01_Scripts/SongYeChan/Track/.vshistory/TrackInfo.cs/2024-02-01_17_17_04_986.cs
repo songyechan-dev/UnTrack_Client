@@ -103,24 +103,10 @@ public class TrackInfo : MonoBehaviourPun
     [PunRPC]
     public void GetOnFactoriesObject_Other(int viewID)
     {
-        GameObject go = PhotonView.Find(viewID)?.gameObject;
-
-        if (go != null)
+        GameObject go = PhotonView.Find(viewID).gameObject;
+        if (go != null&& go.GetComponent<FactoriesObjectManager>() != null)
         {
-            FactoriesObjectManager factoriesObjectManager = go.GetComponent<FactoriesObjectManager>();
-
-            if (factoriesObjectManager != null)
-            {
-                factoriesObjectManager.Turn(transform);
-            }
-            else
-            {
-                Debug.LogWarning("FactoriesObjectManager 컴포넌트를 찾지 못했습니다.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("PhotonView를 찾지 못했습니다.");
+            go.GetComponent<FactoriesObjectManager>().Turn(transform);
         }
     }
 

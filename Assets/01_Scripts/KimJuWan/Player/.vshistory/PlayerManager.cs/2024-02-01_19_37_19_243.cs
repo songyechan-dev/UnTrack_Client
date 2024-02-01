@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;

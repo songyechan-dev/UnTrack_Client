@@ -216,7 +216,6 @@ GameObject:
   - component: {fileID: 3934003489838394569}
   - component: {fileID: 3934003489838394570}
   - component: {fileID: 5866941857841863165}
-  - component: {fileID: 1732779509}
   - component: {fileID: 1732779510}
   m_Layer: 0
   m_Name: WaterTank
@@ -328,33 +327,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1732779509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3934003489838394548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea52ef6bbc9d00545b353488de189678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  factoryType: 1
-  dataPath: FactoryData
-  ingredient_1: 
-  amount_1: 0
-  ingredient_2: 
-  amount_2: 0
-  generateTime: 0
-  generateItem: 
-  fireDeadTime: 50
-  currentFireTime: 0
-  currentGenerateTime: 0
-  currentItemNum: 0
-  itemMaxVolume: 5
-  isWorking: 0
-  isHeating: 0
 --- !u!114 &1732779510
 MonoBehaviour:
   m_ObjectHideFlags: 0

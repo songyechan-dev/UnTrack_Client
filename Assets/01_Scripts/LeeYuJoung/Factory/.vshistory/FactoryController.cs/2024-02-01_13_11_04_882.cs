@@ -25,7 +25,6 @@ public class FactoryController : MonoBehaviourPun
         factoryManager = GetComponent<FactoryManager>();
         descriptionText = transform.GetChild(1).gameObject;
         smokeEffect = transform.GetChild(2).gameObject;
-
     }
 
 

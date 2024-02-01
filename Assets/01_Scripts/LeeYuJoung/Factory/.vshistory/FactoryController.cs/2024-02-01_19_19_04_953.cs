@@ -22,10 +22,12 @@ public class FactoryController : MonoBehaviourPun
     private void Start()
     {
         targetPosition = GameManager.Instance().myPlayer;
-        factoryManager = GetComponent<FactoryManager>();
-        descriptionText = transform.GetChild(1).gameObject;
-        smokeEffect = transform.GetChild(2).gameObject;
-
+        if (photonView.IsMine)
+        {
+            factoryManager = GetComponent<FactoryManager>();
+            descriptionText = transform.GetChild(1).gameObject;
+            smokeEffect = transform.GetChild(2).gameObject;
+        }
     }
 
 
