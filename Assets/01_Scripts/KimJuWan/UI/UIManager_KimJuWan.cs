@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
-using static GameManager;
 using LeeYuJoung;
+using Photon.Pun;
+using Photon.Realtime;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager_KimJuWan : MonoBehaviour
 {
@@ -20,7 +19,7 @@ public class UIManager_KimJuWan : MonoBehaviour
     public GameObject canvas;
     public GameObject ground;
     public string keySet = "PlayerActionKeyCode";
-    
+
     #region Scene01
     [Header("PlayableButtons")]
 
@@ -38,7 +37,7 @@ public class UIManager_KimJuWan : MonoBehaviour
     [Header("Text")]
     public Text keySettingText01;
 
-    
+
 
     #endregion
 
@@ -51,7 +50,7 @@ public class UIManager_KimJuWan : MonoBehaviour
     public GameObject roomListPanel02;
     [Header("Text")]
     public TextMeshPro roomIdText02;
-    
+
     #endregion
 
     #region Scene03
@@ -99,7 +98,7 @@ public class UIManager_KimJuWan : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         Init();
-        
+
         Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
     }
 
@@ -138,11 +137,12 @@ public class UIManager_KimJuWan : MonoBehaviour
             //default:
             //    break;
             case PlayableButtonInfo_KimJuWan.Info.REPLAY_05:
-                if(!playerController.GetIsReady())
+                if (!playerController.GetIsReady())
                     playerController.SetIsReady(true);
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOLOBBY_05:
                 SceneManager.LoadScene("02_Lobby");
+                PhotonNetwork.LeaveRoom();
                 break;
             case PlayableButtonInfo_KimJuWan.Info.REPLAY_06:
                 if (!playerController.GetIsReady())
@@ -150,14 +150,17 @@ public class UIManager_KimJuWan : MonoBehaviour
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOMAIN_06:
                 SceneManager.LoadScene("01_Intro");
-                
+                PhotonNetwork.LeaveRoom();
+
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOLOBBY_06:
                 SceneManager.LoadScene("02_Lobby");
-                //새로운 방 자동 생성
+                PhotonNetwork.LeaveRoom();
+                
                 break;
         }
     }
+
 
     /// <summary>
     /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
@@ -220,23 +223,24 @@ public class UIManager_KimJuWan : MonoBehaviour
     {
         ActiveAndDeActive(ground, settingPanel01);
     }
-    
+
     public void KeySetRight()
     {
-                  
-            keySettingText01.text = ((KeyCode)PlayerPrefs.GetInt(keySet)).ToString();
-            KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt(keySet);
+        SetText(keySettingText01, ((KeyCode)PlayerPrefs.GetInt(keySet)).ToString());
+
+        KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt(keySet);
         Debug.Log(KeyCodeInfo.myActionKeyCode);
-            
+
     }
 
     public void KeySetLeft()
     {
         KeyCodeInfo.myActionKeyCode = KeyCode.Space;
-        keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
+
+        SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
     }
-    
-    
+
+
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -347,7 +351,7 @@ public class UIManager_KimJuWan : MonoBehaviour
             dynamiteLvText06 = ground.transform.Find("FinalDynamite").transform.Find("FinalDynamiteTxt").GetComponent<TextMeshPro>();
             productionLvText06 = ground.transform.Find("FinalProduction").transform.Find("FinalProductionTxt").GetComponent<TextMeshPro>();
             watertankLvText06 = ground.transform.Find("FinalWaterTank").transform.Find("FinalWaterTankTxt").GetComponent<TextMeshPro>();
-            
+
             SetText(clearTimeText06, TimeManager.Instance().GetCurTime().ToString());
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());

@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Transform pickSlot;
     public Transform sensor;
     public Transform droppedSlotPrefab;
+    public Transform EquipSlot;
     float castRange = 1f;
 
     public ItemManager itemManager;
@@ -99,6 +100,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                                 pickSlot.GetChild(inventoryManager.itemNum - 1).transform.position =
                                     pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
                             }
+                        }
+                        if(inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.AX) ||
+                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
+                        {
+                            hit.transform.position = EquipSlot.transform.position;
                         }
                         playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
                     }
