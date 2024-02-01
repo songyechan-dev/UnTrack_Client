@@ -51,6 +51,7 @@ public class MapCreator : MonoBehaviour
     public GameObject obStonePrefab;
     public GameObject obTreePrefab;
     public GameObject trackPrefab;
+    public GameObject minePrefab;
     [Header("")]
     public GameObject dynamiteMachinePrefab;
     public GameObject productionMachinePrefab;
@@ -126,6 +127,9 @@ public class MapCreator : MonoBehaviour
         int factoryCreatedCount = 0;
         bool isCreatedObStone = false;
         bool isCreatedObTree = false;
+        int createdFactoryCount = 0;
+        int factoriesCreatedX = 0;
+        bool notCreateOB = false;
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
@@ -133,25 +137,34 @@ public class MapCreator : MonoBehaviour
                 mapInfo = "0";
                 
                 // TODO : 랜덤 범위 지정 필요(2024.01.14) - 송예찬 MapTool.cs
-                if (!isCreatedObStone && !isCreatedObTree && y +3 < mapHeight)
+                if (!isCreatedObStone && !isCreatedObTree)
                 {
-                    int randomCount = Random.Range(0, 70);
-                    randomXcount = Random.Range(3, 7);
-                    randomYcount = Random.Range(1, 4);
-                    if (randomCount <1)
+                    if (y > mapHeight - 15 && x < 30)
                     {
-                        if (Random.Range(0, 2) == 0)
-                        {
-                            isCreatedObStone = true;
-                        }
-                        else
-                        {
-                            isCreatedObTree = true;
-                        }
-                        originX = x;
-                        originY = y;
+                        notCreateOB = true;
                     }
+                    if (!notCreateOB)
+                    {
+                        int randomCount = Random.Range(0, 70);
+                        randomXcount = Random.Range(3, 7);
+                        randomYcount = Random.Range(1, 4);
+                        if (randomCount < 1)
+                        {
+                            if (Random.Range(0, 2) == 0)
+                            {
+                                isCreatedObStone = true;
+                            }
+                            else
+                            {
+                                isCreatedObTree = true;
+                            }
+                            originX = x;
+                            originY = y;
+                        }
+                    }
+                    
                 }
+                notCreateOB = false;
 
                 if (isCreatedObStone || isCreatedObTree)
                 {
@@ -167,33 +180,49 @@ public class MapCreator : MonoBehaviour
                     else if (x <= (randomXcount + originX) && x >= originX)
                     {
                         mapInfo = isCreatedObStone ? ((int)(MapInfo.Type.OBSTACLE_STONE)).ToString() : ((int)(MapInfo.Type.OBSTACLE_TREE)).ToString();
+                        if (mapInfo == ((int)MapInfo.Type.OBSTACLE_TREE).ToString())
+                        {
+                            int rand = Random.Range(0, 2);
+                            if (rand > 0)
+                            {
+                                mapInfo = ((int)MapInfo.Type.PLANE).ToString();
+                            }
+                        }
+
                     }
                 }
                 if (!isCreatedFactory || !isCreatedEngine || !isCreatedStorage)
                 {
-                    int rand = Random.Range(0, 500);
-                    if (rand < 100)
+                    if (y == mapHeight -3)
                     {
-                        if (!isCreatedEngine)
+                        if (!isCreatedEngine && x>3)
                         {
+                            factoriesCreatedX = x;
                             mapInfo = ((int)(MapInfo.Type.ENGINE)).ToString();
                             isCreatedEngine = true;
                             Debug.Log("엔진 생성");
                         }
-                        else if (!isCreatedStorage)
+                        else if (!isCreatedStorage && x >=factoriesCreatedX+6)
                         {
+                            factoriesCreatedX = x;
                             mapInfo = ((int)(MapInfo.Type.STORAGE)).ToString();
                             isCreatedStorage = true;
                             Debug.Log("스토리지 생성");
                         }
-                        else if (round == 1 && !isCreatedFactory)
+                        else if (round == 1 && !isCreatedFactory  &&x >= factoriesCreatedX+6)
                         {
+                            factoriesCreatedX = x;
+                            createdFactoryCount++;
                             mapInfo = ((int)(MapInfo.Type.FACTORY)).ToString();
-                            isCreatedFactory = true;
-                            Debug.Log("팩토리 생성");
+                            if (createdFactoryCount == 2)
+                            {
+                                isCreatedFactory = true;
+                                factoriesCreatedX = 0;
+                            }
                         }
-                        else if (round != 1 && factoryCreatedCount < StateManager.Instance().waterTanks.Count + StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count)
+                        else if (round != 1 && factoryCreatedCount < StateManager.Instance().waterTanks.Count + StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count && x>factoriesCreatedX +6)
                         {
+                            factoriesCreatedX = x;
                             mapInfo = ((int)(MapInfo.Type.FACTORY)).ToString();
                             factoryCreatedCount++;
                             Debug.Log("팩토리 생성");
@@ -204,6 +233,16 @@ public class MapCreator : MonoBehaviour
                 if ((x >= MapInfo.defaultStartTrackX && x <= MapInfo.defaultEndTrackX) && (y >= MapInfo.defaultStartTrackZ && y <= MapInfo.defaultEndTrackZ))
                 {
                     mapInfo = ((int)(MapInfo.Type.TRACK)).ToString();
+                }
+
+                //출발TrackObject
+                if ((x >= MapInfo.defaultStartTrackX -2 && x <= MapInfo.defaultStartTrackX +5) && (y > MapInfo.defaultStartTrackZ && y <= MapInfo.defaultStartTrackZ +5))
+                {
+                    mapInfo = ((int)(MapInfo.Type.START_MINE)).ToString();
+                }
+                if ((x >= MapInfo.finishStartTrackX - 2 && x <= MapInfo.finishStartTrackX + 5) && (y > MapInfo.finishEndTrackZ && y <= MapInfo.finishEndTrackZ + 5))
+                {
+                    mapInfo = ((int)(MapInfo.Type.END_MINE)).ToString();
                 }
 
                 //도착Track
@@ -350,7 +389,7 @@ public class MapCreator : MonoBehaviour
         float y = startPosition.y;
         float z = startPosition.z;
         float prevCreatedYPos;
-
+        int createdFactoryCount = 0;
         for (int i = 0; i < mapY; i++)
         {
             for (int j = 0; j < mapX; j++)
@@ -374,6 +413,22 @@ public class MapCreator : MonoBehaviour
                 {
                     CreateObject_Master(x, y, z, obTreePrefab.name);
                 }
+                else if (mapInfo[i][j] == (int)MapInfo.Type.START_MINE)
+                {
+                    if (j == MapInfo.defaultStartTrackX + 1 && i == MapInfo.defaultStartTrackZ + 3)
+                    {
+                        CreateObject_Master(x, y, z, minePrefab.name);
+                    }
+                }
+                else if (mapInfo[i][j] == (int)MapInfo.Type.END_MINE)
+                {
+                    if (j == MapInfo.finishStartTrackX + 1 && i == MapInfo.finishStartTrackZ + 3)
+                    {
+                        CreateObject_Master(x, y, z, minePrefab.name);
+                    }
+                }
+                
+
                 else if (mapInfo[i][j] == (int)MapInfo.Type.TRACK || mapInfo[i][j] == (int)MapInfo.Type.FiNISH_TRACK)
                 {
                     CreateTrack_Master(x, y, z, trackPrefab.name, i, j);
@@ -382,7 +437,15 @@ public class MapCreator : MonoBehaviour
                 {
                     if (round == 1)
                     {
-                        CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.ProductionMachine);
+                        if (createdFactoryCount == 0)
+                        {
+                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.ProductionMachine);
+                        }
+                        else
+                        {
+                            CreateFactory_Master(x, y, z, waterTankPrefab.name, FACTORYTYPE.WaterTank);
+                        }
+                        createdFactoryCount++;
                     }
                     else
                     {

@@ -100,13 +100,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             foreach (var playerInfo in PhotonNetwork.PlayerListOthers)
             {
-                if (PhotonNetwork.NickName.Equals(playerInfo.NickName))
-                {
-                    Debug.Log("사용자가 이미 로그인 중 입니다.\n다시 로그인해주세요.");
-                    PhotonNetwork.LeaveLobby();
-                    PhotonNetwork.LeaveRoom();
-                    return;
-                }
+                //if (PhotonNetwork.NickName.Equals(playerInfo.NickName))
+                //{
+                //    Debug.Log("사용자가 이미 로그인 중 입니다.\n다시 로그인해주세요.");
+                //    PhotonNetwork.LeaveLobby();
+                //    PhotonNetwork.LeaveRoom();
+                //    return;
+                //}
             }
 
             // 마스터 클라이언트인 경우에 룸에 입장한 후 전투 씬을 로딩한다.

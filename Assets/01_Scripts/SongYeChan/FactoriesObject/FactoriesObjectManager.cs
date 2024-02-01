@@ -148,20 +148,20 @@ public class FactoriesObjectManager : MonoBehaviourPun
     /// </summary>
     void Move()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit,1f))
-        {
-            if (hit.transform.tag != null && hit.transform.tag.Equals(this.transform.tag))
-            {
-                if (hit.transform.GetComponent<Rigidbody>() == null)
-                {
-                    hit.transform.AddComponent<Rigidbody>();
-                    hit.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 5f);
-                    //파괴 이벤트 발생
-                }
-            }
-        }
+        //Ray ray = new Ray(transform.position, transform.forward);
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit,1f))
+        //{
+        //    if (hit.transform.tag != null && hit.transform.tag.Equals(this.transform.tag))
+        //    {
+        //        if (hit.transform.GetComponent<Rigidbody>() == null)
+        //        {
+        //            hit.transform.AddComponent<Rigidbody>();
+        //            hit.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 5f);
+        //            //파괴 이벤트 발생
+        //        }
+        //    }
+        //}
         if (myState == MyState.MOVE)
         {
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);

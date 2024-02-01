@@ -15,7 +15,9 @@ public static class MapInfo
         STORAGE = 6,
         ENGINE = 7,
         Ax = 8,
-        Pick = 9
+        Pick = 9,
+        START_MINE = 10,
+        END_MINE = 11,
     }
     public static string mapDataCsvName = "MapData";
     public static float objScale = 0.1f;
@@ -27,7 +29,7 @@ public static class MapInfo
     public static string startTrackYRotationKeyName = "startTrackYRotation";
     public static string endTrackYRotationKeyName = "endTrackYRotation";
 
-    public static int mapWidth = 100;
+    public static int mapWidth = 60;
     public static int mapHeight = 20;
     public static float startTrackYRotation = 90f;
     public static float endTrackYRotation = 90f;

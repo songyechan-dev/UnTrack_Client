@@ -252,7 +252,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -480,6 +480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fd6a1743461f1498d70ec2e183a755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapY: 0
+  mapX: 0
   planePrefab: {fileID: 182608508188195332, guid: 5da078673d7795443aad0b01819612f9, type: 3}
   obStonePrefab: {fileID: 7328833125633006158, guid: 2997f8fc0e9f2f94fb80fe3a404fcfab, type: 3}
   obTreePrefab: {fileID: 6632435566270772146, guid: 752c2c0d1583c8948ac6b91f6466c42c, type: 3}
@@ -558,6 +560,9 @@ MonoBehaviour:
   backTrackPrevAngle: {x: 0, y: 0, z: 0}
   electricityFlowingList: []
   factoriesObjectPrefab: {fileID: 0}
+  trackLeftMesh: {fileID: 0}
+  trackRightMesh: {fileID: 0}
+  trackOriginMesh: {fileID: 0}
 --- !u!4 &820733339
 Transform:
   m_ObjectHideFlags: 0
@@ -873,7 +878,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
