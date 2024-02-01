@@ -36,7 +36,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
     [SerializeField, Range(0f, 100f)]
     public float fireTime;
     [SerializeField, Range(0f, 5f)]
-    public float rotationTime = 5f;
+    public float rotationTime = 2f;
     //[SerializeField, Range(0f, 500f)]
     //public float rotationPerFrame = 1.5f;
     //[SerializeField, Range(0f, 100f)]
