@@ -207,8 +207,6 @@ namespace LeeYuJoung
         // Storage에 아이템을 제작할 재료가 충분한지 확인 
         public bool IngredientCheck(string _ingredient1, string _ingredient2, int _amount1, int _amount2)
         {
-            Debug.Log("First ::::" + _ingredient1);
-            Debug.Log("Secound ::::" + _ingredient2);
             if (_ingredient1.Equals(_ingredient2))
             {
                 if (storages[_ingredient1] >= _amount1 + _amount2)

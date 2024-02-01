@@ -16,7 +16,7 @@ public enum PLAYERSTATE
     PICKUP,
     DROP,
     EQUIPMENT,
-
+    
     PICK
 
 }
@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         PICKUP,
         DROP,
         EQUIPMENTACTION,
-
+        
         PICK
 
     }
@@ -63,10 +63,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        pv = GetComponent<PhotonView>();
-        playerManager = GetComponent<PlayerManager>();
         if (pv != null && pv.IsMine)
         {
+            pv = GetComponent<PhotonView>();
+            playerManager = GetComponent<PlayerManager>();
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
             playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
-
+        
     }
 
     // 업데이트
@@ -92,10 +92,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
                 {
-                    float newX = Mathf.Clamp(transform.position.x, MapInfo.startPosition.x, MapInfo.endPositionX - 1f);
-                    float newZ = Mathf.Clamp(transform.position.z, MapInfo.startPosition.z, MapInfo.endPositionZ - 1f);
-                    if (newX == Mathf.Clamp(newX, MapInfo.startPosition.x, MapInfo.endPositionX - 1f) &&
-                        newZ == Mathf.Clamp(newZ, MapInfo.startPosition.z, MapInfo.endPositionZ - 1f))
+                    float newX = Mathf.Clamp(transform.position.x, MapInfo.startPosition.x, MapInfo.endPositionX-1f);
+                    float newZ = Mathf.Clamp(transform.position.z, MapInfo.startPosition.z, MapInfo.endPositionZ -1f);
+                    if (newX == Mathf.Clamp(newX, MapInfo.startPosition.x, MapInfo.endPositionX-1f) &&
+                        newZ == Mathf.Clamp(newZ, MapInfo.startPosition.z, MapInfo.endPositionZ -1f))
                     {
                         transform.position = new Vector3(newX, transform.position.y, newZ);
                         PlayerMove();
@@ -277,7 +277,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             }
         }
-
+        
 
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -323,7 +323,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             this.isReady = _isReady;
             teamManager.SetReadyUserCount(_isReady);
         }
-
+        
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
