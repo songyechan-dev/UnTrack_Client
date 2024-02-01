@@ -1,28 +1,28 @@
 [
  {
   "ID": 1,
-  "CONTENT": "나무  10개 제거하기",
+  "CONTENT": "크리스탈  10개 제거하기",
   "QUEST_TYPE": "Count",
   "PROGRESS_TYPE": "Wood",
   "PROGRESS_GOAL": 10,
   "REWARD_VOLT": 1
  },
- {
-  "ID": 2,
-  "CONTENT": "나무 20개 제거하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Wood",
-  "PROGRESS_GOAL": 20,
-  "REWARD_VOLT": 2
- },
- {
-  "ID": 3,
-  "CONTENT": "나무 30개 제거하기",
-  "QUEST_TYPE": "Count",
-  "PROGRESS_TYPE": "Wood",
-  "PROGRESS_GOAL": 30,
-  "REWARD_VOLT": 3
- },
+  {
+    "ID": 2,
+    "CONTENT": "크리스탈 20개 제거하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Wood",
+    "PROGRESS_GOAL": 20,
+    "REWARD_VOLT": 2
+  },
+  {
+    "ID": 3,
+    "CONTENT": "크리스탈 30개 제거하기",
+    "QUEST_TYPE": "Count",
+    "PROGRESS_TYPE": "Wood",
+    "PROGRESS_GOAL": 30,
+    "REWARD_VOLT": 3
+  },
  {
   "ID": 4,
   "CONTENT": "암석 10개 제거하기",
