@@ -83,16 +83,18 @@ public class TrackInfo : MonoBehaviourPun
     public void GetOnFactoriesObject()
     {
         Ray ray = new Ray(transform.position, Vector3.up);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        RaycastHit[] hits = Physics.RaycastAll(ray);
+
+        foreach (RaycastHit hit in hits)
         {
             if (hit.transform != null && hit.transform.CompareTag(factoriesObjectTagName))
             {
-                Debug.Log("팩토리스오브젝트가 위에있음");
+                Debug.Log("팩토리스오브젝트가 위에 있음");
+
                 if (hit.transform.localEulerAngles.y != transform.localEulerAngles.y)
                 {
                     hit.transform.GetComponent<FactoriesObjectManager>().Turn(transform);
-                    photonView.RPC("GetOnFactoriesObject_Other", RpcTarget.Others,hit.transform.GetComponent<PhotonView>().ViewID);
+                    photonView.RPC("GetOnFactoriesObject_Other", RpcTarget.Others, hit.transform.GetComponent<PhotonView>().ViewID);
                 }
             }
         }
@@ -102,7 +104,10 @@ public class TrackInfo : MonoBehaviourPun
     public void GetOnFactoriesObject_Other(int viewID)
     {
         GameObject go = PhotonView.Find(viewID).gameObject;
-        go.GetComponent<FactoriesObjectManager>().Turn(transform);
+        if (go != null&& go.GetComponent<FactoriesObjectManager>() != null)
+        {
+            go.GetComponent<FactoriesObjectManager>().Turn(transform);
+        }
     }
 
     //TODO: 트러블 슈팅 - 각도 이슈(0,90,180,-90 각도가 정확히 나오지가 않아서 수정함)
@@ -161,33 +166,33 @@ public class TrackInfo : MonoBehaviourPun
     }
 
 
-    private Material material;
-    private float offset = 0.0f;
-    private void Start()
-    {
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            material = renderer.material;
-        }
-    }
+    //private Material material;
+    //private float offset = 0.0f;
+    //private void Start()
+    //{
+    //    Renderer renderer = GetComponent<Renderer>();
+    //    if (renderer != null)
+    //    {
+    //        material = renderer.material;
+    //    }
+    //}
 
-    private void Update()
-    {
-        offset += 0.5f * Time.deltaTime;
-        if (offset <= 0f)
-        {
-            material.mainTextureOffset = new Vector2(0, offset);
-        }
-        else if (offset >= 1.5f)
-        {
-            offset -= 1.5f;
-            material.mainTextureOffset = new Vector2(0, offset);
-        }
-        else
-        {
-            material.mainTextureOffset = new Vector2(0, offset);
-        }
-    }
+    //private void Update()
+    //{
+    //    offset += 0.5f * Time.deltaTime;
+    //    if (offset <= 0f)
+    //    {
+    //        material.mainTextureOffset = new Vector2(0, offset);
+    //    }
+    //    else if (offset >= 1.5f)
+    //    {
+    //        offset -= 1.5f;
+    //        material.mainTextureOffset = new Vector2(0, offset);
+    //    }
+    //    else
+    //    {
+    //        material.mainTextureOffset = new Vector2(0, offset);
+    //    }
+    //}
 
 }

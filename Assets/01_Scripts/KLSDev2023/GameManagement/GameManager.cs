@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviourPun
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviourPun
     public GameMode gameMode;
     public TimeManager timeManager;
     public GameObject firstFactoriesObject;
+    public Transform myPlayer;
     #endregion
 
     #region Instance
@@ -118,10 +120,18 @@ public class GameManager : MonoBehaviourPun
     {
         gameState = GameState.GameStart;
         gameMode = GameMode.Play;
-
-        object[] data = new object[] { (int)gameMode,(int)gameState };
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                myPlayer = players[i].transform;
+            }
+        }
+        object[] data = new object[] { (int)gameState };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
+        
     }
 
     /// <summary>
@@ -190,8 +200,19 @@ public class GameManager : MonoBehaviourPun
         if (photonEvent.Code == (int)SendDataInfo.Info.GAME_MODE)
         {
             object[] receivedData = (object[])photonEvent.CustomData;
-
-            SetGameMode((GameMode)((int)receivedData[0]), (GameState)((int)receivedData[1]));
+            GameState _gameState = (GameState)((int)receivedData[0]);
+            if (_gameState.Equals(GameState.GameStart))
+            {
+                SetGameMode(GameMode.Play,GameState.GameStart);
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                for (int i = 0; i < players.Length; i++)
+                {
+                    if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
+                    {
+                        myPlayer = players[i].transform;
+                    }
+                }
+            }
         }
     }
 

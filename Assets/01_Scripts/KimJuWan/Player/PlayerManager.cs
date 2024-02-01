@@ -74,7 +74,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     childCount = hit.transform.childCount;
                     for (int i = 0; i < childCount; i++)
                     {
-                        hit.transform.GetChild(i).transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
+                        if (hit.transform.GetChild(i).GetComponent<PhotonView>() != null)
+                        {
+                            hit.transform.GetChild(i)?.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
+                        }
                     }
                     childCount = 0;
                     Debug.Log("호출됨");
@@ -111,7 +114,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         playerController.isPick = false;
                         castRange = 1f;
 
-                        Destroy(pickSlot.GetChild(0).gameObject);
+                        PhotonNetwork.Destroy(pickSlot.GetChild(0).gameObject);
                         inventoryManager.OutInventory();
                         _fm.FireSuppression();
                     }

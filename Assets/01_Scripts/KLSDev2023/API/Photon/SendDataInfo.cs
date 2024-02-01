@@ -22,5 +22,6 @@ public class SendDataInfo
         GAME_MODE = 13,
         FACTORY_ACTION = 14,
         FACTORY_HEATING = 15,
+        FACTORIES_OBJECT_INFO = 16,
     }
 }

@@ -6,8 +6,9 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using LeeYuJoung;
+using Photon.Pun;
 
-public class FactoryController : MonoBehaviour
+public class FactoryController : MonoBehaviourPun
 {
     public FactoryManager factoryManager;
     public Transform targetPosition;
@@ -20,11 +21,13 @@ public class FactoryController : MonoBehaviour
 
     private void Start()
     {
+        targetPosition = GameManager.Instance().myPlayer;
         factoryManager = GetComponent<FactoryManager>();
-        targetPosition = GameObject.Find("Player").GetComponent<Transform>();
         descriptionText = transform.GetChild(1).gameObject;
         smokeEffect = transform.GetChild(2).gameObject;
     }
+
+
 
     private void Update()
     {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -723,7 +723,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -908,6 +908,9 @@ MonoBehaviour:
   backTrackPrevAngle: {x: 0, y: 0, z: 0}
   electricityFlowingList: []
   factoriesObjectPrefab: {fileID: 0}
+  trackLeftMesh: {fileID: 0}
+  trackRightMesh: {fileID: 0}
+  trackOriginMesh: {fileID: 0}
 --- !u!4 &669882782
 Transform:
   m_ObjectHideFlags: 0
@@ -3342,6 +3345,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7975312254757875894, guid: 01e12184ff81aea49ae49642e3ec8d0a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01e12184ff81aea49ae49642e3ec8d0a, type: 3}
 --- !u!1001 &4239831014903098534
@@ -3704,6 +3711,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8261312582292117729, guid: 289fa13000ac8f24e928e3e6605778d5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 289fa13000ac8f24e928e3e6605778d5, type: 3}
 --- !u!1001 &7965832978987125429
@@ -3835,6 +3846,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2095702474359914209, guid: 8583f2360b93e704586e5d8203af1f89, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 2095702474359914211, guid: 8583f2360b93e704586e5d8203af1f89, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -3969,6 +3984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mine
       objectReference: {fileID: 0}
+    - target: {fileID: 3911616205850030212, guid: 6862d77e90546d244aafbf825d8b0e0d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 8247092203306211276, guid: 6862d77e90546d244aafbf825d8b0e0d, type: 3}
       propertyPath: m_RootOrder
       value: 11

@@ -910,6 +910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -994,6 +995,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &724879092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,6 +1352,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 776e75436213cd94f99588291c4bc99c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 0}
+  minX: 15
+  maxX: 85
 --- !u!1 &1057637557
 GameObject:
   m_ObjectHideFlags: 0
@@ -2446,12 +2470,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fd6a1743461f1498d70ec2e183a755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planePrefab: {fileID: 182608508188195332, guid: 01e12184ff81aea49ae49642e3ec8d0a, type: 3}
+  mapY: 0
+  mapX: 0
+  planePrefab: {fileID: 182608508188195332, guid: c38a1fbe0de20ee46990209bab5300e4, type: 3}
   obStonePrefab: {fileID: 919132149155446097, guid: 4e900c1b093e3054d80fced03d984aab, type: 3}
   obTreePrefab: {fileID: 6632435566270772146, guid: f7a3c9d37e6df9b41845f0e648756643, type: 3}
   trackPrefab: {fileID: 2458459440035365112, guid: c576ba09449be154899488efd79b5ea1, type: 3}
+  minePrefab: {fileID: 420866672299408189, guid: c0d8cf26432eb02439a72f60c9c3bfd2, type: 3}
   dynamiteMachinePrefab: {fileID: 1414702916102547295, guid: b1eda0730ab4139458ccc656ea8f8cbe, type: 3}
-  productionMachinePrefab: {fileID: 491123125678747441, guid: 13bb28786d3e8eb4e806a9939e9702e6, type: 3}
+  productionMachinePrefab: {fileID: 491123125678747441, guid: 1eca178224f33844eb0aee8567aa4611, type: 3}
   waterTankPrefab: {fileID: 3934003489838394548, guid: 21df4f20ad1bbd54a860277029df7b06, type: 3}
   enginePrefab: {fileID: 2095702474359914223, guid: 8583f2360b93e704586e5d8203af1f89, type: 3}
   storagePrefab: {fileID: 3686851000239159954, guid: e777703bf66a5484c806eed6ef40d9db, type: 3}

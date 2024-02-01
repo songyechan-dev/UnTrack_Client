@@ -29,6 +29,16 @@ Mesh:
     localAABB:
       m_Center: {x: 0, y: 0.00027844726, z: 0.000014839228}
       m_Extent: {x: 0.0073692226, y: 0.00042405128, z: 0.0062916237}
+  - serializedVersion: 2
+    firstByte: 384
+    indexCount: 0
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 0
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
   m_Shapes:
     vertices: []
     shapes: []
