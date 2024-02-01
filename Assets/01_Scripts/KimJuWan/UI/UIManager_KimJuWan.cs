@@ -19,6 +19,8 @@ public class UIManager_KimJuWan : MonoBehaviour
     public PlayerController playerController;
     public GameObject canvas;
     public GameObject ground;
+    public string keySet = "PlayerActionKeyCode";
+    
     #region Scene01
     [Header("PlayableButtons")]
 
@@ -33,6 +35,11 @@ public class UIManager_KimJuWan : MonoBehaviour
     public GameObject loginFailPanel01;
     public GameObject rankingPanel01;
 
+    [Header("Text")]
+    public Text keySettingText01;
+
+    
+
     #endregion
 
     #region Scene02
@@ -44,6 +51,7 @@ public class UIManager_KimJuWan : MonoBehaviour
     public GameObject roomListPanel02;
     [Header("Text")]
     public TextMeshPro roomIdText02;
+    
     #endregion
 
     #region Scene03
@@ -91,6 +99,8 @@ public class UIManager_KimJuWan : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         Init();
+        
+        Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
     }
 
 
@@ -102,16 +112,19 @@ public class UIManager_KimJuWan : MonoBehaviour
     {
         switch (_info)
         {
-            //case PlayableButtonInfo.Info.GAME_START_01:
-            //    ActiveAndDeActive(loginPanel01, ground);
-            //    break;
-            //case PlayableButtonInfo.Info.GAME_EXIT_01:
-            //    break;
-            //case PlayableButtonInfo.Info.RANKING_01:
-            //    ActiveAndDeActive(rankingPanel01, ground);
-            //    break;
-            //case PlayableButtonInfo.Info.SETTING_01:
-            //    break;
+            case PlayableButtonInfo_KimJuWan.Info.GAME_START_01:
+                ActiveAndDeActive(loginPanel01, ground);
+                break;
+            case PlayableButtonInfo_KimJuWan.Info.GAME_EXIT_01:
+                PlayerPrefs.Save();
+                Application.Quit();
+                break;
+            case PlayableButtonInfo_KimJuWan.Info.RANKING_01:
+                ActiveAndDeActive(rankingPanel01, ground);
+                break;
+            case PlayableButtonInfo_KimJuWan.Info.SETTING_01:
+                ActiveAndDeActive(settingPanel01, ground);
+                break;
             //case PlayableButtonInfo.Info.GAME_START_02:
             //    if (!playerController.GetIsReady())
             //    {
@@ -129,18 +142,18 @@ public class UIManager_KimJuWan : MonoBehaviour
                     playerController.SetIsReady(true);
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOLOBBY_05:
+                SceneManager.LoadScene("02_Lobby");
                 break;
             case PlayableButtonInfo_KimJuWan.Info.REPLAY_06:
                 if (!playerController.GetIsReady())
                     playerController.SetIsReady(true);
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOMAIN_06:
-                SceneManager.LoadScene(1);
-                //로그인 상태 유지
-                //TODO 0130 김주완 : 마스터가 나간 경우, 남아 있는 사람 중 한 명에게 마스터 부여
+                SceneManager.LoadScene("01_Intro");
+                
                 break;
             case PlayableButtonInfo_KimJuWan.Info.BACKTOLOBBY_06:
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene("02_Lobby");
                 //새로운 방 자동 생성
                 break;
         }
@@ -150,7 +163,7 @@ public class UIManager_KimJuWan : MonoBehaviour
     /// 플레이어가 해당 버튼에서 액션키버튼을 눌렀을때 해야할 함수 호출
     /// </summary>
     /// <param name="_info">PlayableButton 종류</param>
-    public void PlayAbleButton_OnHit(PlayableButtonInfo.Info _info)
+    public void PlayAbleButton_OnHit(PlayableButtonInfo_KimJuWan.Info _info)
     {
 
     }
@@ -198,11 +211,32 @@ public class UIManager_KimJuWan : MonoBehaviour
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
 
-    public void rankingPanelOff()
+    public void RankingPanelOff_01()
     {
         ActiveAndDeActive(ground, rankingPanel01);
     }
 
+    public void SettingPanelOff_01()
+    {
+        ActiveAndDeActive(ground, settingPanel01);
+    }
+    
+    public void KeySetRight()
+    {
+                  
+            keySettingText01.text = ((KeyCode)PlayerPrefs.GetInt(keySet)).ToString();
+            KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt(keySet);
+        Debug.Log(KeyCodeInfo.myActionKeyCode);
+            
+    }
+
+    public void KeySetLeft()
+    {
+        KeyCodeInfo.myActionKeyCode = KeyCode.Space;
+        keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
+    }
+    
+    
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -220,15 +254,15 @@ public class UIManager_KimJuWan : MonoBehaviour
             playableButton_Setting01 = ground.transform.Find("Setting").gameObject;
             playableButton_GameExit01 = ground.transform.Find("Quit").gameObject;
 
-            playableButton_GameStart01.AddComponent<PlayableButtonInfo>();
-            playableButton_Ranking01.AddComponent<PlayableButtonInfo>();
-            playableButton_Setting01.AddComponent<PlayableButtonInfo>();
-            playableButton_GameExit01.AddComponent<PlayableButtonInfo>();
+            playableButton_GameStart01.AddComponent<PlayableButtonInfo_KimJuWan>();
+            playableButton_Ranking01.AddComponent<PlayableButtonInfo_KimJuWan>();
+            playableButton_Setting01.AddComponent<PlayableButtonInfo_KimJuWan>();
+            playableButton_GameExit01.AddComponent<PlayableButtonInfo_KimJuWan>();
 
-            playableButton_GameStart01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_START_01;
-            playableButton_Ranking01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.RANKING_01;
-            playableButton_Setting01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.SETTING_01;
-            playableButton_GameExit01.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.GAME_EXIT_01;
+            playableButton_GameStart01.GetComponent<PlayableButtonInfo_KimJuWan>().myInfo = PlayableButtonInfo_KimJuWan.Info.GAME_START_01;
+            playableButton_Ranking01.GetComponent<PlayableButtonInfo_KimJuWan>().myInfo = PlayableButtonInfo_KimJuWan.Info.RANKING_01;
+            playableButton_Setting01.GetComponent<PlayableButtonInfo_KimJuWan>().myInfo = PlayableButtonInfo_KimJuWan.Info.SETTING_01;
+            playableButton_GameExit01.GetComponent<PlayableButtonInfo_KimJuWan>().myInfo = PlayableButtonInfo_KimJuWan.Info.GAME_EXIT_01;
 
             loginPanel01 = canvas.transform.Find("LoginPanel").gameObject;
             loginPanel01.transform.Find("LoginBtn").GetComponent<Button>().onClick.RemoveAllListeners();
@@ -237,7 +271,14 @@ public class UIManager_KimJuWan : MonoBehaviour
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
             rankingPanel01 = canvas.transform.Find("RankingPanel").gameObject;
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
-            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(rankingPanelOff);
+            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
+            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
+            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetText").GetComponent<Text>();
+
+            PlayerPrefs.SetInt(keySet, (int)KeyCode.LeftControl);
+
+            keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
         }
         #endregion
         #region Scene02
