@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using static GameManager;
 using LeeYuJoung;
+using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class UIManager : MonoBehaviour
     public PlayerController playerController;
     public GameObject canvas;
     public GameObject ground;
+    public string keySet = "PlayerActionKeyCode";
+
     #region Scene01
     [Header("PlayableButtons")]
 
@@ -31,7 +34,11 @@ public class UIManager : MonoBehaviour
     public GameObject loginPanel01;
     public GameObject settingPanel01;
     public GameObject loginFailPanel01;
-    
+    public GameObject rankingPanel01;
+
+    [Header("Text")]
+    public Text keySettingText01;
+
     #endregion
 
     #region Scene02
@@ -84,6 +91,28 @@ public class UIManager : MonoBehaviour
     public TextMesh waterTankBuyPriceText;
     #endregion
 
+    #region Scene05
+    [Header("PlayableButtons")]
+    public GameObject playableButton_ReStart05;
+    public GameObject playableButton_Back05;
+    [Header("Text")]
+    public TextMeshPro roundText05;
+    public TextMeshPro gameOverTimeText05;
+    #endregion
+
+    #region Scene06
+    [Header("PlayableButtons")]
+    public GameObject playableButton_ReStart06;
+    public GameObject playableButton_BackToMain06;
+    public GameObject playableButton_BackToLobby06;
+    [Header("Text")]
+    public TextMeshPro clearTimeText06;
+    public TextMeshPro storageLvText06;
+    public TextMeshPro dynamiteLvText06;
+    public TextMeshPro productionLvText06;
+    public TextMeshPro watertankLvText06;
+    #endregion
+
     private void Awake()
     {
         if (instance == null)
@@ -111,11 +140,14 @@ public class UIManager : MonoBehaviour
                 ActiveAndDeActive(loginPanel01, ground);
                 break;
             case PlayableButtonInfo.Info.GAME_EXIT_01:
+                PlayerPrefs.Save();
+                Application.Quit();
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
-                
+                ActiveAndDeActive(rankingPanel01, ground);
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
+                ActiveAndDeActive(settingPanel01, ground);
                 break;
             case PlayableButtonInfo.Info.GAME_START_02:
                 if (!playerController.GetIsReady())
@@ -170,6 +202,29 @@ public class UIManager : MonoBehaviour
                 machineUpgradePanel.SetActive(false);
                 engineDesPanel.SetActive(false);
                 storageDesPanel.SetActive(false);
+
+                break;
+
+            case PlayableButtonInfo.Info.REPLAY_05:
+                if (!playerController.GetIsReady())
+                    playerController.SetIsReady(true);
+                break;
+            case PlayableButtonInfo.Info.BACKTOLOBBY_05:
+                SceneManager.LoadScene("02_Lobby");
+                PhotonNetwork.LeaveRoom();
+                break;
+            case PlayableButtonInfo.Info.REPLAY_06:
+                if (!playerController.GetIsReady())
+                    playerController.SetIsReady(true);
+                break;
+            case PlayableButtonInfo.Info.BACKTOMAIN_06:
+                SceneManager.LoadScene("01_Intro");
+                PhotonNetwork.LeaveRoom();
+
+                break;
+            case PlayableButtonInfo.Info.BACKTOLOBBY_06:
+                SceneManager.LoadScene("02_Lobby");
+                PhotonNetwork.LeaveRoom();
 
                 break;
             default:
@@ -298,7 +353,32 @@ public class UIManager : MonoBehaviour
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
 
-    
+    public void RankingPanelOff_01()
+    {
+        ActiveAndDeActive(ground, rankingPanel01);
+    }
+
+    public void SettingPanelOff_01()
+    {
+        ActiveAndDeActive(ground, settingPanel01);
+    }
+
+    public void KeySetRight()
+    {
+        SetText(keySettingText01, ((KeyCode)PlayerPrefs.GetInt(keySet)).ToString());
+
+        KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt(keySet);
+        Debug.Log(KeyCodeInfo.myActionKeyCode);
+
+    }
+
+    public void KeySetLeft()
+    {
+        KeyCodeInfo.myActionKeyCode = KeyCode.Space;
+
+        SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
+    }
+
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -331,7 +411,17 @@ public class UIManager : MonoBehaviour
             loginPanel01.transform.Find("LoginBtn").GetComponent<Button>().onClick.AddListener(LoginButtonOnClick_01);
             settingPanel01 = canvas.transform.Find("SettingPanel").gameObject;
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
-            
+            rankingPanel01 = canvas.transform.Find("RankingPanel").gameObject;
+            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
+            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
+            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
+            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetText").GetComponent<Text>();
+
+            PlayerPrefs.SetInt(keySet, (int)KeyCode.LeftControl);
+
+            keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
+
         }
         #endregion
         #region Scene02
@@ -414,6 +504,50 @@ public class UIManager : MonoBehaviour
             }
 
             upgradeManager.ShowUpgradeMachine(pos);
+        }
+        #endregion
+
+        #region Scene05
+        if (SceneManager.GetActiveScene().buildIndex == 5)
+        {
+            ground = GameObject.Find("Ground");
+            playableButton_ReStart05 = ground.transform.Find("RePlay").gameObject;
+            playableButton_Back05 = ground.transform.Find("BacktoLobby").gameObject;
+            roundText05 = ground.transform.Find("RoundRecord").transform.Find("RoundRecordTxt").GetComponent<TextMeshPro>();
+            gameOverTimeText05 = ground.transform.Find("TimeRecord").transform.Find("TimeRecordTxt").GetComponent<TextMeshPro>();
+
+            playableButton_ReStart05.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.REPLAY_05;
+            playableButton_Back05.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACKTOLOBBY_05;
+           
+            SetText(roundText05, GameManager.Instance().GetRound().ToString());
+            SetText(gameOverTimeText05, TimeManager.Instance().GetCurTime().ToString());
+        }
+        #endregion
+
+        #region Scene06
+        if (SceneManager.GetActiveScene().buildIndex == 6)
+        {
+            ground = GameObject.Find("Ground");
+
+            playableButton_ReStart06 = ground.transform.Find("RePlay").gameObject;
+            playableButton_BackToLobby06 = ground.transform.Find("BacktoLobby").gameObject;
+            playableButton_BackToMain06 = ground.transform.Find("Main").gameObject;
+
+            clearTimeText06 = ground.transform.Find("FinalRecord").transform.Find("FinalTimeTxt").GetComponent<TextMeshPro>();
+            storageLvText06 = ground.transform.Find("Finalstorage").transform.Find("FinalStorageTxt").GetComponent<TextMeshPro>();
+            dynamiteLvText06 = ground.transform.Find("FinalDynamite").transform.Find("FinalDynamiteTxt").GetComponent<TextMeshPro>();
+            productionLvText06 = ground.transform.Find("FinalProduction").transform.Find("FinalProductionTxt").GetComponent<TextMeshPro>();
+            watertankLvText06 = ground.transform.Find("FinalWaterTank").transform.Find("FinalWaterTankTxt").GetComponent<TextMeshPro>();
+
+            playableButton_ReStart06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.REPLAY_06;
+            playableButton_BackToMain06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACKTOMAIN_06;
+            playableButton_BackToLobby06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACKTOLOBBY_06;
+
+            SetText(clearTimeText06, TimeManager.Instance().GetCurTime().ToString());
+            SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
+            SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
+            SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
+
         }
         #endregion
     }
