@@ -178,14 +178,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    pickCurTime += Time.deltaTime;
-                    AnimatorClipInfo[] curClipInfo_1;
-                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
-                    if (pickCurTime > curClipInfo_1[0].clip.length)
-                    {
-                        pickCurTime = 0;
-                        playerState = PLAYERSTATE.PICK;
-                    }
+                    
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -201,7 +194,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 case PLAYERSTATE.EQUIPMENTACTION:
                     playerAnim.SetInteger("PLAYERSTATE", 4);
                     if(!isWorking)
-                        playerState = PLAYERSTATE.PICK;
+                        playerState = PLAYERSTATE.IDLE;
                     
                     break;
 
