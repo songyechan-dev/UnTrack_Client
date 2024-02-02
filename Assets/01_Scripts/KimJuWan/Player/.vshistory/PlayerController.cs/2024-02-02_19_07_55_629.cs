@@ -9,23 +9,33 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
 
+//Player 애니메이션용 STATE
+public enum PLAYERSTATE
+{
+    IDLE = 0,
+    WALK,
+    PICKUP,
+    DROP,
+    EQUIPMENTACTION,
 
+    PICK
+
+}
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
     //Player 애니메이션용 STATE
-    public enum PLAYERSTATE
-    {
-        IDLE = 0,
-        WALK,
-        PICKUP,
-        DROP,
-        EQUIPMENTACTION,
+    //public enum PLAYERSTATE
+    //{
+    //    IDLE = 0,
+    //    WALK,
+    //    PICKUP,
+    //    DROP,
+    //    EQUIPMENTACTION,
 
-        PICK
+    //    PICK
 
-    }
-    
+    //}
     private float moveSpeed = 10f;
 
     Vector3 moveDirection;
@@ -168,10 +178,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 case PLAYERSTATE.IDLE:
                     playerAnim.SetInteger("PLAYERSTATE", 0);
-                    if (isWorking)
-                    {
-                        playerState = PLAYERSTATE.EQUIPMENTACTION;
-                    }
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
@@ -233,7 +239,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
             {
                 playerManager.CollectIngredient();
-                Debug.Log("실행됨");
                 currentTime = 0;
             }
         }
@@ -250,7 +255,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
+                    AnimatorClipInfo[] curClipInfo_1;
+                    curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
+                    if (pickCurTime > curClipInfo_1[0].clip.length)
+                    {
+                        pickCurTime = 0;
+                        playerState = PLAYERSTATE.PICK;
+                    }
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
