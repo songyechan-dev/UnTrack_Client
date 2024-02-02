@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using static GameManager;
-
+using LeeYuJoung;
 
 public class UIManager : MonoBehaviour
 {
@@ -56,6 +56,34 @@ public class UIManager : MonoBehaviour
     public Text distance03;
     #endregion
 
+    #region Scene04
+    public UpgradeManager upgradeManager;
+    public Transform[] pos = new Transform[9];
+
+    [Header("PlayableButtons")]
+    public GameObject playableButton_CONTINUE_04;
+    public GameObject playableButton_ENGINE_UPGRADE_04;
+    public GameObject playableButton_STORAGE_UPGRADE_04;
+    public GameObject playableButton_MACHINE_UPGRADE_04;
+    public GameObject playableButton_PRODUCTIONMACHINE_BUY_04;
+    public GameObject playableButton_DYNAMITEMACHINE_BUY_04;
+    public GameObject playableButton_WATERTANK_BUY_04;
+    public GameObject playableButton_GAME_EXIT_04;
+    [Header("Panel")]
+    public GameObject machineUpgradePanel;
+    public GameObject engineDesPanel;
+    public GameObject storageDesPanel;
+    [Header("Text")]
+    public Text voltNumText;
+    public TextMesh enginePriceText;
+    public TextMesh engineDesText;
+    public TextMesh storagePriceText;
+    public TextMesh storageDesText;
+    public TextMesh productionMachineBuyPriceText;
+    public TextMesh dynamiteMachineBuyPriceText;
+    public TextMesh waterTankBuyPriceText;
+    #endregion
+
     private void Awake()
     {
         if (instance == null)
@@ -99,6 +127,51 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.FIND_ROOM_02:
                 break;
+            case PlayableButtonInfo.Info.CONTINUE_04:
+                // 다음 라운드 게임 시작 
+                machineUpgradePanel.SetActive(false);
+                engineDesPanel.SetActive(false);
+                storageDesPanel.SetActive(false);
+
+                break;
+            case PlayableButtonInfo.Info.ENGINE_UPGRADE_04:
+                ActiveAndDeActive(engineDesPanel, new GameObject[] { machineUpgradePanel, storageDesPanel });
+
+                break;
+            case PlayableButtonInfo.Info.STORAGE_UPGRADE_04:
+                ActiveAndDeActive(storageDesPanel, new GameObject[] { machineUpgradePanel, engineDesPanel });
+
+                break;
+            case PlayableButtonInfo.Info.MACHINE_UPGRADE_04:
+                ActiveAndDeActive(machineUpgradePanel, new GameObject[] { storageDesPanel, engineDesPanel });
+
+                break;
+            case PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04:
+                machineUpgradePanel.SetActive(false);
+                engineDesPanel.SetActive(false);
+                storageDesPanel.SetActive(false);
+
+                break;
+            case PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04:
+                machineUpgradePanel.SetActive(false);
+                engineDesPanel.SetActive(false);
+                storageDesPanel.SetActive(false);
+
+                break;
+            case PlayableButtonInfo.Info.WATERTANK_BUY_04:
+                machineUpgradePanel.SetActive(false);
+                engineDesPanel.SetActive(false);
+                storageDesPanel.SetActive(false);
+
+                break;
+
+            case PlayableButtonInfo.Info.GAME_EXIT_04:
+                // 로비로 돌아가기
+                machineUpgradePanel.SetActive(false);
+                engineDesPanel.SetActive(false);
+                storageDesPanel.SetActive(false);
+
+                break;
             default:
                 break;
         }
@@ -112,6 +185,75 @@ public class UIManager : MonoBehaviour
     {
 
     }
+
+    #region Scene04_PlayAbleButton_OnHit
+    public void PlayAbleButton_OnHit(PlayableButtonInfo info)
+    {
+        switch (info.myInfo)
+        {
+            case PlayableButtonInfo.Info.ENGINE_UPGRADE_04:
+                upgradeManager.UpgradeEngine();
+                enginePriceText.text = StateManager.Instance().engineUpgradePrice.ToString();
+                engineDesText.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+
+                break;
+            case PlayableButtonInfo.Info.STORAGE_UPGRADE_04:
+                upgradeManager.UpgradeStorage();
+                storagePriceText.text = StateManager.Instance().storageUpgradePrice.ToString();
+                storageDesText.text = $"저장소 현재 용량 \n {StateManager.Instance().storageMaxVolume}";
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+
+                break;
+            case PlayableButtonInfo.Info.PRODUCTIONMACHINE_UPGRADE_04:
+                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, info.machineUpgradeIDX);
+                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+
+                break;
+            case PlayableButtonInfo.Info.DYNAMITEMACHINE_UPGRADE_04:
+                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, info.machineUpgradeIDX);
+                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+
+                break;
+            case PlayableButtonInfo.Info.WATERTANK_UPGRADE_04:
+                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, info.machineUpgradeIDX);
+                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][info.machineUpgradeIDX].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+
+                break;
+            case PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04:
+                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.ProductionMachine);
+                productionMachineBuyPriceText.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+                upgradeManager.ClearUpgradeMachine(pos);
+                upgradeManager.ShowUpgradeMachine(pos);
+
+                break;
+            case PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04:
+                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.DynamiteMachine);
+                dynamiteMachineBuyPriceText.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+                upgradeManager.ClearUpgradeMachine(pos);
+                upgradeManager.ShowUpgradeMachine(pos);
+
+                break;
+            case PlayableButtonInfo.Info.WATERTANK_BUY_04:
+                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.WaterTank);
+                waterTankBuyPriceText.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
+                voltNumText.text = StateManager.Instance().voltNum.ToString();
+                upgradeManager.ClearUpgradeMachine(pos);
+                upgradeManager.ShowUpgradeMachine(pos);
+
+                break;
+
+            default:
+                break;
+        }
+    }
+    #endregion
+
     /// <summary>
     /// 특정 오브젝트의 Active를 끄거나 켠다
     /// </summary>
@@ -227,9 +369,52 @@ public class UIManager : MonoBehaviour
             distance03 = rDVindex03.transform.Find("DistanceTxt").transform.Find("Distance").GetComponent<Text>();
             
         }
-            
+
 
         #endregion
-    }
+        #region Scene04
+        if (SceneManager.GetActiveScene().buildIndex == 4)
+        {
+            upgradeManager = GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>();
 
+            playableButton_CONTINUE_04 = ground.transform.Find("Continue").gameObject;
+            playableButton_GAME_EXIT_04 = ground.transform.Find("BacktoLobby").gameObject;
+            playableButton_ENGINE_UPGRADE_04 = ground.transform.Find("EngineUpgrade").gameObject;
+            playableButton_STORAGE_UPGRADE_04 = ground.transform.Find("StorageUpgrade").gameObject;
+            playableButton_MACHINE_UPGRADE_04 = ground.transform.Find("MachineUpgrade").gameObject;
+            playableButton_PRODUCTIONMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(1).gameObject;
+            playableButton_DYNAMITEMACHINE_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(2).gameObject;
+            playableButton_WATERTANK_BUY_04 = ground.transform.Find("MachineBuy").transform.GetChild(3).gameObject;
+
+            machineUpgradePanel = ground.transform.Find("MachineUpgradePanel").gameObject;
+            engineDesPanel = playableButton_ENGINE_UPGRADE_04.transform.GetChild(3).gameObject;
+            storageDesPanel = playableButton_STORAGE_UPGRADE_04.transform.GetChild(3).gameObject;
+
+            playableButton_CONTINUE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.CONTINUE_04;
+            playableButton_GAME_EXIT_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.GAME_EXIT_04;
+            playableButton_ENGINE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.ENGINE_UPGRADE_04;
+            playableButton_STORAGE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.STORAGE_UPGRADE_04;
+            playableButton_MACHINE_UPGRADE_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.MACHINE_UPGRADE_04;
+            playableButton_PRODUCTIONMACHINE_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.PRODUCTIONMACHINE_BUY_04;
+            playableButton_DYNAMITEMACHINE_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.DYNAMITEMACHINE_BUY_04;
+            playableButton_WATERTANK_BUY_04.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo = PlayableButtonInfo_LeeYuJoung.Info.WATERTANK_BUY_04;
+
+            voltNumText = canvas.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<Text>();
+            enginePriceText = playableButton_ENGINE_UPGRADE_04.transform.GetChild(2).GetComponent<TextMesh>();
+            engineDesText = engineDesPanel.GetComponentInChildren<TextMesh>();
+            storagePriceText = playableButton_STORAGE_UPGRADE_04.transform.GetChild(2).GetComponent<TextMesh>();
+            storageDesText = storageDesPanel.GetComponentInChildren<TextMesh>();
+            productionMachineBuyPriceText = playableButton_PRODUCTIONMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>();
+            dynamiteMachineBuyPriceText = playableButton_DYNAMITEMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>();
+            waterTankBuyPriceText = playableButton_WATERTANK_BUY_04.transform.GetChild(1).GetComponent<TextMesh>();
+
+            for (int i = 0; i < machineUpgradePanel.transform.GetChild(0).transform.childCount; i++)
+            {
+                pos[i] = machineUpgradePanel.transform.GetChild(0).transform.GetChild(i);
+            }
+
+            upgradeManager.ShowUpgradeMachine(pos);
+        }
+        #endregion
+    }
 }
