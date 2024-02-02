@@ -18,6 +18,8 @@ public class FactoriesObjectCreator : MonoBehaviour
     public float createdTime = 15f;
     public int count = 0;
 
+    private MapCreator mapCreator;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,7 +35,7 @@ public class FactoriesObjectCreator : MonoBehaviour
         {
             InvokeRepeating("Create", 0f, createdTime);
         }
-        
+        mapCreator = GameObject.Find("MapCreator").GetComponent<MapCreator>();
     }
     
     public void Create()
@@ -49,6 +51,7 @@ public class FactoriesObjectCreator : MonoBehaviour
                 else
                 {
                     Create_Master();
+                    mapCreator.CreateOB();
                 }
                 
             }
