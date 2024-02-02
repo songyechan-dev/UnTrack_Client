@@ -26,7 +26,15 @@ public class PlayableButtonInfo : MonoBehaviour
         PRODUCTIONMACHINE_BUY_04 = 14,
         DYNAMITEMACHINE_BUY_04 = 15,
         WATERTANK_BUY_04 = 16,
-        GAME_EXIT_04 = 17
+        GAME_EXIT_04 = 17,
+
+        REPLAY_05 = 18,
+        BACKTOLOBBY_05 = 19,
+        REPLAY_06 = 20,
+        BACKTOMAIN_06 = 21,
+        BACKTOLOBBY_06 = 22
+
+
 
     }
     public Info myInfo;
