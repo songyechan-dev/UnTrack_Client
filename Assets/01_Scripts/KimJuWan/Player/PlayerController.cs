@@ -15,7 +15,7 @@ public enum PLAYERSTATE
     WALK,
     PICKUP,
     DROP,
-    EQUIPMENT,
+    EQUIPMENTACTION,
 
     PICK
 
@@ -24,17 +24,17 @@ public enum PLAYERSTATE
 public class PlayerController : MonoBehaviourPunCallbacks
 {
     //Player 애니메이션용 STATE
-    public enum PLAYERSTATE
-    {
-        IDLE = 0,
-        WALK,
-        PICKUP,
-        DROP,
-        EQUIPMENTACTION,
+    //public enum PLAYERSTATE
+    //{
+    //    IDLE = 0,
+    //    WALK,
+    //    PICKUP,
+    //    DROP,
+    //    EQUIPMENTACTION,
 
-        PICK
+    //    PICK
 
-    }
+    //}
     private float moveSpeed = 10f;
 
     Vector3 moveDirection;
@@ -42,11 +42,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     PlayerManager playerManager;
     public PLAYERSTATE playerState;
     public Animator playerAnim;
-    public float dropCurTime;
-    public float pickCurTime;
+    public float dropCurTime = 0;
+    public float pickCurTime = 0;
     public bool isPick;
     public bool isWorking;
-
+    public int animLoopCnt = 3;
     public float currentTime = 0f;
     public float spaceTime = .2f;
 
@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
+                    pickCurTime += Time.deltaTime;
                     AnimatorClipInfo[] curClipInfo_1;
                     curClipInfo_1 = playerAnim.GetCurrentAnimatorClipInfo(0);
                     if (pickCurTime > curClipInfo_1[0].clip.length)
@@ -203,6 +204,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.EQUIPMENTACTION:
                     playerAnim.SetInteger("PLAYERSTATE", 4);
+                    animLoopCnt--;
+                    if (animLoopCnt <= 0)
+                    {
+                        playerState = PLAYERSTATE.PICK;
+                    }
                     break;
 
                 case PLAYERSTATE.PICK:
@@ -273,6 +279,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 case PLAYERSTATE.PICK:
                     playerAnim.SetInteger("PLAYERSTATE", 5);
+                    
                     break;
 
             }
@@ -299,6 +306,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             transform.position += moveDirection;
             transform.rotation = Quaternion.LookRotation(moveDirection);
             playerState = PLAYERSTATE.WALK;
+            
         }
         else
         {
