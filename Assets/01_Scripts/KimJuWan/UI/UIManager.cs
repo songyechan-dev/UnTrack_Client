@@ -416,7 +416,7 @@ public class UIManager : MonoBehaviour
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
             settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
-            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetText").GetComponent<Text>();
+            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetTxt").GetComponent<Text>();
 
             PlayerPrefs.SetInt(keySet, (int)KeyCode.LeftControl);
 
