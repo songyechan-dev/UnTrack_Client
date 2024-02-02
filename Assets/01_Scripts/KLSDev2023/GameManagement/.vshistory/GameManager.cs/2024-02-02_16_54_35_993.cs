@@ -118,10 +118,6 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     public void GameStart()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-        }
         gameState = GameState.GameStart;
         gameMode = GameMode.Play;
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -156,9 +152,7 @@ public class GameManager : MonoBehaviourPun
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
-                object[] data = new object[] { (int)gameState };
-                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
+                UIManager.Instance().Init();
             }
             else
             {
@@ -216,13 +210,6 @@ public class GameManager : MonoBehaviourPun
                         myPlayer = players[i].transform;
                     }
                 }
-            }
-            if (_gameState.Equals(GameState.GameClear))
-            {
-                round++;
-                gameState = GameState.GameClear;
-                gameMode = GameMode.None;
-
             }
         }
     }

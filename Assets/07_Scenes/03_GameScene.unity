@@ -560,7 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 2cff81f1139ff6b41adb4e846d5dd8fe, type: 3}
   mapParent: {fileID: 0}
-  createdTime: 1
+  createdTime: 30
   count: 0
 --- !u!4 &643903637
 Transform:
@@ -754,6 +754,7 @@ MonoBehaviour:
   sceneFactorys: []
   currentTime: 0
   fireTime: 20
+  isFire: 0
   storageText: {fileID: 0}
   woodText: {fileID: 0}
   steelText: {fileID: 0}

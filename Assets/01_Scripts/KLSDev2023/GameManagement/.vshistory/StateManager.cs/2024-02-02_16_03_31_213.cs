@@ -37,6 +37,7 @@ namespace LeeYuJoung
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
         public float currentTime = 0;
         public float fireTime = 20.0f;
+        public bool isFire = false;
 
         public Text storageText;
         public Text woodText;
@@ -65,7 +66,7 @@ namespace LeeYuJoung
             {
                 currentTime += Time.deltaTime;
 
-                if (currentTime > fireTime)
+                if (currentTime > fireTime && !isFire)
                 {
                     Fire();
                 }
@@ -112,6 +113,7 @@ namespace LeeYuJoung
 
         public void Fire()
         {
+            isFire = true;
             int _idx = Random.Range(0, sceneFactorys.Count);
 
             if (_idx < sceneFactorys.Count && sceneFactorys[_idx] != null)
@@ -120,13 +122,10 @@ namespace LeeYuJoung
 
                 if (factoryManager != null)
                 {
-                    if (!factoryManager.isHeating && PhotonNetwork.IsMasterClient)
+                    if (!factoryManager.isHeating)
                     {
                         factoryManager.EngineOverheating();
                         currentTime = 0;
-                        object[] data = new object[] { false,factoryManager.GetComponent<PhotonView>().ViewID };
-                        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
                     }
                     else
                     {
@@ -265,15 +264,6 @@ namespace LeeYuJoung
 
                 Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
             }
-            if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_HEATING)
-            {
-                object[] receivedData = (object[])photonEvent.CustomData;
-                bool _isFire = (bool)receivedData[0];
-                int viewID = (int)receivedData[1];
-                GameObject go = PhotonView.Find(viewID).gameObject;
-                go.GetComponent<FactoryManager>().EngineOverheating();
-            }
-
         }
 
 

@@ -257,12 +257,11 @@ public class FactoryManager : MonoBehaviourPun
             object[] receivedData = (object[])photonEvent.CustomData;
             bool _isHeating = (bool)receivedData[0];
             int viewID = (int)receivedData[1];
-            GameObject go = PhotonView.Find(viewID).gameObject;
             if (_isHeating)
             {
-                go.GetComponent<FactoryManager>().StopCoroutine(FactoryInFire());
-                go.GetComponent<FactoryManager>().isHeating = false;
-                go.GetComponent<FactoryManager>().currentFireTime = 0;
+                StopCoroutine(FactoryInFire());
+                isHeating = false;
+                currentFireTime = 0;
             }
             
         }

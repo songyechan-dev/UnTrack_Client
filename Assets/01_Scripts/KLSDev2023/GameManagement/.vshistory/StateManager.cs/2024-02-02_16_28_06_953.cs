@@ -265,14 +265,6 @@ namespace LeeYuJoung
 
                 Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
             }
-            if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_HEATING)
-            {
-                object[] receivedData = (object[])photonEvent.CustomData;
-                bool _isFire = (bool)receivedData[0];
-                int viewID = (int)receivedData[1];
-                GameObject go = PhotonView.Find(viewID).gameObject;
-                go.GetComponent<FactoryManager>().EngineOverheating();
-            }
 
         }
 

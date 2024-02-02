@@ -97,8 +97,22 @@ public class MapCreator : MonoBehaviour
     int treeCount = 0;
     int stoneCount = 0;
 
+    public static MapCreator Instance()
+    {
+        return instance;
+    }
+
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(this);
         //방장인지 확인
         if (PhotonNetwork.IsMasterClient)
         {
@@ -522,7 +536,7 @@ public class MapCreator : MonoBehaviour
                 pv.RPC("CreatePlane_Master",RpcTarget.MasterClient,x,y,z);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
-                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i > MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ - 3 || i > MapInfo.defaultStartTrackZ + 1))
                     {
                         //pv.RPC("CreatePlane_Master", RpcTarget.MasterClient, x, y, z)
                     }
@@ -541,7 +555,7 @@ public class MapCreator : MonoBehaviour
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
-                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i > MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ - 3 || i > MapInfo.defaultStartTrackZ + 1))
                     {
                         
                     }

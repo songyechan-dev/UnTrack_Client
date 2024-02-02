@@ -89,7 +89,9 @@ public class FactoryManager : MonoBehaviourPun
     // 엔진이 일정 시간마다 불나는 이벤트
     public void EngineOverheating()
     {
-        
+        object[] data = new object[] { false };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
 
         StartCoroutine(FactoryInFire());
     }
@@ -129,7 +131,7 @@ public class FactoryManager : MonoBehaviourPun
         isHeating = false;
         currentFireTime = 0;
 
-        object[] data = new object[] { true,GetComponent<PhotonView>().ViewID };
+        object[] data = new object[] { true };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
     }
@@ -256,15 +258,16 @@ public class FactoryManager : MonoBehaviourPun
         {
             object[] receivedData = (object[])photonEvent.CustomData;
             bool _isHeating = (bool)receivedData[0];
-            int viewID = (int)receivedData[1];
-            GameObject go = PhotonView.Find(viewID).gameObject;
             if (_isHeating)
             {
-                go.GetComponent<FactoryManager>().StopCoroutine(FactoryInFire());
-                go.GetComponent<FactoryManager>().isHeating = false;
-                go.GetComponent<FactoryManager>().currentFireTime = 0;
+                StopCoroutine(FactoryInFire());
+                isHeating = false;
+                currentFireTime = 0;
             }
-            
+            else
+            {
+                StartCoroutine(FactoryInFire());
+            }
         }
         
     }
