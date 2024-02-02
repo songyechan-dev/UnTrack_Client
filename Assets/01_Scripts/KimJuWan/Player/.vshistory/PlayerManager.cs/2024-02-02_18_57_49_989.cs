@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             {
                 Camera.main.transform.GetComponent<CameraManager>().playerTransform = transform;
             }
-            equipSlot = transform.Find("Duck").Find("Character").Find("Body").Find("armLeft").Find("handSlotLeft").transform;
+            equipSlot = transform.Find("Duck").Find("KayKit Animated Character").transform;
         }
         else if (photonView == null)
         {
@@ -94,7 +94,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.AX) ||
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
-                            pickSlot.GetChild(0).transform.position = equipSlot.position;
+                            pickSlot.GetChild(0).GetChild(0).transform.position = equipSlot.position;
                             pickSlot.GetChild(0).rotation = Quaternion.Euler(0, 90, 30);
                         }
                     }

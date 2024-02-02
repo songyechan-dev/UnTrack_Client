@@ -239,7 +239,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
             {
                 playerManager.CollectIngredient();
-                Debug.Log("실행됨");
                 currentTime = 0;
             }
         }

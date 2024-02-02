@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerManager = GetComponent<PlayerManager>();
         if (pv != null && pv.IsMine)
         {
-            playerManager = GetComponent<PlayerManager>();
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
             playerAnim = transform.Find("Duck").GetComponent<Animator>();
         }
@@ -239,7 +238,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
             {
                 playerManager.CollectIngredient();
-                Debug.Log("실행됨");
                 currentTime = 0;
             }
         }

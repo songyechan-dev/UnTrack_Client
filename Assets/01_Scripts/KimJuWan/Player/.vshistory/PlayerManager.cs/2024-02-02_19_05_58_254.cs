@@ -14,7 +14,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Transform pickSlot;
     public Transform sensor;
     public Transform droppedSlotPrefab;
-    public Transform equipSlot;
+    public Transform EquipSlot;
     float castRange = 1f;
 
     public ItemManager itemManager;
@@ -94,7 +94,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.AX) ||
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
-                            pickSlot.GetChild(0).transform.position = equipSlot.position;
+                            pickSlot.GetChild(0).transform.position = EquipSlot.position;
                             pickSlot.GetChild(0).rotation = Quaternion.Euler(0, 90, 30);
                         }
                     }

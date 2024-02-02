@@ -1086,6 +1086,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   canvas: {fileID: 0}
   ground: {fileID: 0}
+  keySet: PlayerActionKeyCode
   playableButton_GameStart01: {fileID: 0}
   playableButton_Ranking01: {fileID: 0}
   playableButton_GameExit01: {fileID: 0}
@@ -1093,6 +1094,8 @@ MonoBehaviour:
   loginPanel01: {fileID: 0}
   settingPanel01: {fileID: 0}
   loginFailPanel01: {fileID: 0}
+  rankingPanel01: {fileID: 0}
+  keySettingText01: {fileID: 0}
   playableButton_GameStart02: {fileID: 0}
   playableButton_Back02: {fileID: 0}
   playableButton_FindRoom02: {fileID: 0}
@@ -1103,6 +1106,48 @@ MonoBehaviour:
   questIndex03: {fileID: 0}
   chat: {fileID: 0}
   distance03: {fileID: 0}
+  upgradeManager: {fileID: 0}
+  pos:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playableButton_CONTINUE_04: {fileID: 0}
+  playableButton_ENGINE_UPGRADE_04: {fileID: 0}
+  playableButton_STORAGE_UPGRADE_04: {fileID: 0}
+  playableButton_MACHINE_UPGRADE_04: {fileID: 0}
+  playableButton_PRODUCTIONMACHINE_BUY_04: {fileID: 0}
+  playableButton_DYNAMITEMACHINE_BUY_04: {fileID: 0}
+  playableButton_WATERTANK_BUY_04: {fileID: 0}
+  playableButton_GAME_EXIT_04: {fileID: 0}
+  machineUpgradePanel: {fileID: 0}
+  engineDesPanel: {fileID: 0}
+  storageDesPanel: {fileID: 0}
+  voltNumText: {fileID: 0}
+  enginePriceText: {fileID: 0}
+  engineDesText: {fileID: 0}
+  storagePriceText: {fileID: 0}
+  storageDesText: {fileID: 0}
+  productionMachineBuyPriceText: {fileID: 0}
+  dynamiteMachineBuyPriceText: {fileID: 0}
+  waterTankBuyPriceText: {fileID: 0}
+  playableButton_ReStart05: {fileID: 0}
+  playableButton_Back05: {fileID: 0}
+  roundText05: {fileID: 0}
+  gameOverTimeText05: {fileID: 0}
+  playableButton_ReStart06: {fileID: 0}
+  playableButton_BackToMain06: {fileID: 0}
+  playableButton_BackToLobby06: {fileID: 0}
+  clearTimeText06: {fileID: 0}
+  storageLvText06: {fileID: 0}
+  dynamiteLvText06: {fileID: 0}
+  productionLvText06: {fileID: 0}
+  watertankLvText06: {fileID: 0}
 --- !u!4 &1607778135
 Transform:
   m_ObjectHideFlags: 0
