@@ -32,7 +32,15 @@ namespace LeeYuJoung
         public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
         public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
 
-        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들f
+        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
+
+        public int engineUpgradePrice = 3;
+        public int storageUpgradePrice = 2;
+
+        public Dictionary<string, List<int>> factoryPrice = new Dictionary<string, List<int>>()
+        { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
+        public Dictionary<string, int> machineAddPrice = new Dictionary<string, int>()
+        { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
         public float currentTime = 0;
