@@ -7,23 +7,15 @@ using Unity.VisualScripting;
 
 public class UpgradeManager : MonoBehaviour
 {
-    public int engineUpgradePrice = 3;
-    public int storageUpgradePrice = 2;
-
-    public Dictionary<string, List<int>> factoryPrice = new Dictionary<string, List<int>>()
-    { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
-    public Dictionary<string, int> machineAddPrice = new Dictionary<string, int>() 
-    { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
-
     // 엔진 업그레이드
     public void UpgradeEngine()
     {
-        if(StateManager.Instance().voltNum >= engineUpgradePrice)
+        if(StateManager.Instance().voltNum >= StateManager.Instance().engineUpgradePrice)
         {
             Debug.Log(":::: 엔진 업그레이드 성공 ::::");
             StateManager.Instance().engineMaxVolume += 1;
-            StateManager.Instance().voltNum -= engineUpgradePrice;
-            engineUpgradePrice += 1;
+            StateManager.Instance().voltNum -= StateManager.Instance().engineUpgradePrice;
+            StateManager.Instance().engineUpgradePrice += 1;
         }
         else
         {
@@ -34,12 +26,12 @@ public class UpgradeManager : MonoBehaviour
     // 저장소 업그레이드
     public void UpgradeStorage()
     {
-        if (StateManager.Instance().voltNum >= storageUpgradePrice)
+        if (StateManager.Instance().voltNum >= StateManager.Instance().storageUpgradePrice)
         {
             Debug.Log(":::: 저장소 업그레이드 성공 ::::");
             StateManager.Instance().storageMaxVolume += 5;
-            StateManager.Instance().voltNum -= storageUpgradePrice;
-            storageUpgradePrice += 1;
+            StateManager.Instance().voltNum -= StateManager.Instance().storageUpgradePrice;
+            StateManager.Instance().storageUpgradePrice += 1;
         }
         else
         {
@@ -50,14 +42,14 @@ public class UpgradeManager : MonoBehaviour
     // 기계 업그레이드 → 업그레이드하고 싶은 기계 선택
     public void UpgradeMachine(FactoryManager.FACTORYTYPE _factoryType, int _idx)
     {
-        if (StateManager.Instance().voltNum >= factoryPrice[_factoryType.ToString()][_idx])
+        if (StateManager.Instance().voltNum >= StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx])
         {
             if (StateManager.Instance().factorys[_factoryType.ToString()].Count != 0)
             {
                 Debug.Log($"::: 업그레이드 성공 ::: {StateManager.Instance().factorys[_factoryType.ToString()][_idx][1]}");
                 StateManager.Instance().factorys[_factoryType.ToString()][_idx][1] += 2;
-                StateManager.Instance().voltNum -= factoryPrice[_factoryType.ToString()][_idx];
-                factoryPrice[_factoryType.ToString()][_idx] += 1;
+                StateManager.Instance().voltNum -= StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx];
+                StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx] += 1;
             }
         }
         else
@@ -69,15 +61,15 @@ public class UpgradeManager : MonoBehaviour
     // 기계 추가 구매
     public void BuyMachine(FactoryManager.FACTORYTYPE _factoryType)
     {
-        if(StateManager.Instance().voltNum >= machineAddPrice[_factoryType.ToString()])
+        if(StateManager.Instance().voltNum >= StateManager.Instance().machineAddPrice[_factoryType.ToString()])
         {
             Debug.Log($":::: {_factoryType} 구매 완료 ::::");
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
 
             StateManager.Instance().factorys[_factoryType.ToString()].Add(new int[] { 0, 5 });
-            StateManager.Instance().voltNum -= machineAddPrice[_factoryType.ToString()];
-            machineAddPrice[_factoryType.ToString()] += 1;
-            factoryPrice[_factoryType.ToString()].Add(1);
+            StateManager.Instance().voltNum -= StateManager.Instance().machineAddPrice[_factoryType.ToString()];
+            StateManager.Instance().machineAddPrice[_factoryType.ToString()] += 1;
+            StateManager.Instance().factoryPrice[_factoryType.ToString()].Add(1);
 
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
         }
@@ -96,21 +88,21 @@ public class UpgradeManager : MonoBehaviour
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeProductionMachine"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
-            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = factoryPrice["ProductionMachine"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().waterTanks.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeWaterTank"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
-            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = factoryPrice["WaterTank"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().dynamiteMachines.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeDynamiteMachine"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
-            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = factoryPrice["DynamiteMachine"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][i].ToString();
         }
     }
 
