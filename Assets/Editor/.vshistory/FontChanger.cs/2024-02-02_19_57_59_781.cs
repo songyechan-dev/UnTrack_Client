@@ -28,7 +28,7 @@ public class FontChanger : EditorWindow
             }
             else
             {
-                Debug.Log("폰트를 선택해주세요");
+                Debug.LogWarning("Please select a target TTF font.");
             }
         }
     }
