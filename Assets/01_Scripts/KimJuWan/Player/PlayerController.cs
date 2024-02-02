@@ -2,6 +2,7 @@ using DG.Tweening;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -204,15 +205,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.EQUIPMENTACTION:
                     playerAnim.SetInteger("PLAYERSTATE", 4);
-                    animLoopCnt--;
-                    if (animLoopCnt <= 0)
-                    {
+                    if(!isWorking)
                         playerState = PLAYERSTATE.PICK;
-                    }
+                    
                     break;
 
                 case PLAYERSTATE.PICK:
                     playerAnim.SetInteger("PLAYERSTATE", 5);
+                    
                     break;
 
             }
@@ -275,6 +275,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.EQUIPMENTACTION:
                     playerAnim.SetInteger("PLAYERSTATE", 4);
+                    if (!isWorking)
+                    {
+                        playerState = PLAYERSTATE.PICK;
+                    }
                     break;
 
                 case PLAYERSTATE.PICK:
