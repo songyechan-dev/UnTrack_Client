@@ -425,6 +425,7 @@ MonoBehaviour:
   pickCurTime: 0
   isPick: 0
   isWorking: 0
+  animLoopCnt: 3
   currentTime: 0
   spaceTime: 0.2
   playableButtonTagName: PlayableButton
@@ -443,7 +444,7 @@ MonoBehaviour:
   pickSlot: {fileID: 520467188123819218}
   sensor: {fileID: 0}
   droppedSlotPrefab: {fileID: 4222096931821908648, guid: 5278bed1f1f96fa4d8eac978cd1e4d7d, type: 3}
-  EquipSlot: {fileID: 0}
+  EquipSlot: {fileID: 4272577573039722130}
   itemManager: {fileID: 0}
 --- !u!114 &-482669073529749514
 MonoBehaviour:
@@ -609,6 +610,11 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 90e1843f7ee54be438af6f1905351ce9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
+--- !u!4 &4272577573039722130 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2285079963397764484, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
+  m_PrefabInstance: {fileID: 2665289529979239190}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6471517026085888084 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9021397000629197634, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}

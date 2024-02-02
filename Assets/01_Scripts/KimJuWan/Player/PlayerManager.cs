@@ -61,13 +61,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
                     }
                     hit.transform.GetComponent<ObstacleManager>().ObstacleWorking(inventoryManager.itemType.ToString(), playerController);
-                    if (hit.transform.GetComponent<ObstacleManager>().isWorking)
-                        playerController.playerState = PlayerController.PLAYERSTATE.EQUIPMENTACTION;
-                    else
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICK;
+                    
+                    playerController.playerState = PLAYERSTATE.EQUIPMENTACTION;
                     
                     break;
                 case "Item":
+                    playerController.playerState = PLAYERSTATE.PICKUP;
                     if (hit.transform.GetComponent<PhotonView>() != null)
                     {
                         hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
@@ -89,7 +88,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         inventoryManager.SaveInventory(hit.transform.gameObject);
                         hit.transform.SetParent(pickSlot.transform);
                         pickSlot.GetChild(0).transform.position = pickSlot.position;
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
+                        
                     }
                     else
                     {
@@ -107,9 +106,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         if(inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.AX) ||
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
-                            hit.transform.position = EquipSlot.transform.position;
+                            hit.transform.GetChild(0).position = EquipSlot.transform.position;
+                            hit.transform.GetChild(0).rotation = Quaternion.Euler(0,90,30) ;
                         }
-                        playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
+                        
                     }
 
                     break;
@@ -140,10 +140,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
                     break;
                 case "Storage":
+                    playerController.playerState = PLAYERSTATE.DROP;
                     if ((playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) && photonView.IsMine) || (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) && photonView.IsMine))
                     {
                         Debug.Log("뭔가를 들고있다 " + inventoryManager.itemType.ToString());
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP;
+                        
                         if (StateManager.Instance().IngredientAdd(inventoryManager.itemType.ToString(), inventoryManager.itemNum))
                         {
                             Debug.Log("뭔가를 들고있다2" + inventoryManager.itemType.ToString());
@@ -178,8 +179,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     Debug.Log("카운트 ::::" + droppedSlot.transform.childCount);
                     Debug.Log("카운트2 ::::" + droppedSlot.itemNum);
 
-                    if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
+                    if (playerController.currentTime >= playerController.spaceTime && playerController.isPick && playerController.playerState == PLAYERSTATE.PICK)
                     {
+                        playerController.playerState = PLAYERSTATE.DROP;
                         //바닥에 놓은 아이템들 위에 쌓기
                         if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                         {
@@ -196,10 +198,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             }
                             inventoryManager.OutInventory();
                         }
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP; ;
+                        
                     }
                     else
                     {
+                        playerController.playerState = PLAYERSTATE.PICKUP;
                         if (playerController.isPick)
                         {
                             if (inventoryManager.itemType.Equals(droppedSlot.itemType))
@@ -219,9 +222,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             
                             playerController.isPick = true;
                             castRange = 2.0f;
-
+                            playerController.playerState = PLAYERSTATE.PICKUP;
                             inventoryManager.SaveInventory(hit.transform.GetChild(droppedSlot.itemNum - 1).gameObject);
-                            playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
+                            
                             //
                             hit.transform.GetChild(droppedSlot.itemNum - 1).GetComponent<PhotonSyncManager>().SetParent(pickSlot,true);
                             pickSlot.GetChild(0).GetComponent<PhotonSyncManager>().SetPosition(pickSlot.position);
@@ -240,10 +243,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     break;
                 case "Plane":
                     Debug.Log("바닥입니다....");
-
+                    if(playerController.playerState == PLAYERSTATE.PICK)
+                        playerController.playerState = PLAYERSTATE.DROP;
                     if (playerController.isPick)
                     {
-                        playerController.playerState = PlayerController.PLAYERSTATE.DROP;
+                        
                         if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                         {
                             playerController.isPick = false;
