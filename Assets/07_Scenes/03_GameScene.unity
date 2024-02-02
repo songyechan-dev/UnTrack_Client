@@ -560,7 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 2cff81f1139ff6b41adb4e846d5dd8fe, type: 3}
   mapParent: {fileID: 0}
-  createdTime: 30
+  createdTime: 1
   count: 0
 --- !u!4 &643903637
 Transform:
@@ -2419,6 +2419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fd6a1743461f1498d70ec2e183a755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toBeCreatedPos: []
   mapY: 0
   mapX: 0
   planePrefab: {fileID: 182608508188195332, guid: c38a1fbe0de20ee46990209bab5300e4, type: 3}
