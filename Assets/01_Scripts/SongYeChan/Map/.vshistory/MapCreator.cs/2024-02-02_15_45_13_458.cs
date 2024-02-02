@@ -97,8 +97,22 @@ public class MapCreator : MonoBehaviour
     int treeCount = 0;
     int stoneCount = 0;
 
+    public static MapCreator Instance()
+    {
+        return instance;
+    }
+
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(this);
         //방장인지 확인
         if (PhotonNetwork.IsMasterClient)
         {

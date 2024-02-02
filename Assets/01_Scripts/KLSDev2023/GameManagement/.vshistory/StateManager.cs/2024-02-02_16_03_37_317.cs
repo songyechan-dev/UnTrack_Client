@@ -32,19 +32,12 @@ namespace LeeYuJoung
         public List<Dictionary<string, int>> waterTanks = new List<Dictionary<string, int>>();
         public List<Dictionary<string, int>> dynamiteMachines = new List<Dictionary<string, int>>();
 
-        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들
-
-        public int engineUpgradePrice = 3;
-        public int storageUpgradePrice = 2;
-
-        public Dictionary<string, List<int>> factoryPrice = new Dictionary<string, List<int>>()
-        { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
-        public Dictionary<string, int> machineAddPrice = new Dictionary<string, int>()
-        { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
+        public List<GameObject> sceneFactorys = new List<GameObject>();   // 현재 엔진이 가진 제작소들f
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
         public float currentTime = 0;
         public float fireTime = 20.0f;
+        public bool isFire = false;
 
         public Text storageText;
         public Text woodText;
@@ -73,7 +66,7 @@ namespace LeeYuJoung
             {
                 currentTime += Time.deltaTime;
 
-                if (currentTime > fireTime)
+                if (currentTime > fireTime && !isFire)
                 {
                     Fire();
                 }
@@ -120,6 +113,7 @@ namespace LeeYuJoung
 
         public void Fire()
         {
+            isFire = true;
             int _idx = Random.Range(0, sceneFactorys.Count);
 
             if (_idx < sceneFactorys.Count && sceneFactorys[_idx] != null)
@@ -128,13 +122,11 @@ namespace LeeYuJoung
 
                 if (factoryManager != null)
                 {
-                    if (!factoryManager.isHeating && PhotonNetwork.IsMasterClient)
+                    if (!factoryManager.isHeating)
                     {
                         factoryManager.EngineOverheating();
                         currentTime = 0;
-                        object[] data = new object[] { false,factoryManager.GetComponent<PhotonView>().ViewID };
-                        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-                        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
+                        isFire = false;
                     }
                     else
                     {
@@ -273,15 +265,6 @@ namespace LeeYuJoung
 
                 Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
             }
-            if (photonEvent.Code == (int)SendDataInfo.Info.FACTORY_HEATING)
-            {
-                object[] receivedData = (object[])photonEvent.CustomData;
-                bool _isFire = (bool)receivedData[0];
-                int viewID = (int)receivedData[1];
-                GameObject go = PhotonView.Find(viewID).gameObject;
-                go.GetComponent<FactoryManager>().EngineOverheating();
-            }
-
         }
 
 

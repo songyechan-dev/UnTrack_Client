@@ -118,10 +118,6 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     public void GameStart()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-        }
         gameState = GameState.GameStart;
         gameMode = GameMode.Play;
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
