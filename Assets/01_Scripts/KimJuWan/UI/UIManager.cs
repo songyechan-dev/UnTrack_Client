@@ -125,6 +125,8 @@ public class UIManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         Init();
+        Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
+        Debug.Log(KeyCodeInfo.myActionKeyCode);
     }
 
 
@@ -365,8 +367,9 @@ public class UIManager : MonoBehaviour
 
     public void KeySetRight()
     {
+        PlayerPrefs.SetInt(keySet, (int)KeyCode.LeftControl);
         SetText(keySettingText01, ((KeyCode)PlayerPrefs.GetInt(keySet)).ToString());
-
+        
         KeyCodeInfo.myActionKeyCode = (KeyCode)PlayerPrefs.GetInt(keySet);
         Debug.Log(KeyCodeInfo.myActionKeyCode);
 
@@ -375,7 +378,7 @@ public class UIManager : MonoBehaviour
     public void KeySetLeft()
     {
         KeyCodeInfo.myActionKeyCode = KeyCode.Space;
-
+        PlayerPrefs.SetInt(keySet, (int)KeyCode.Space);
         SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
     }
 
@@ -416,10 +419,14 @@ public class UIManager : MonoBehaviour
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
             settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
+            settingPanel01.transform.Find("Setting").transform.Find("KeySetLeft").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("Setting").transform.Find("KeySetLeft").GetComponent<Button>().onClick.AddListener(KeySetLeft);
+            settingPanel01.transform.Find("Setting").transform.Find("KeySetRight").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("Setting").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
             keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetTxt").GetComponent<Text>();
-
-            PlayerPrefs.SetInt(keySet, (int)KeyCode.LeftControl);
-
+            
+            PlayerPrefs.GetInt(keySet);
+            
             keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
 
         }
