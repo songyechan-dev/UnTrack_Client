@@ -2,15 +2,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FontChanger : EditorWindow
+public class ApplyTTFToTexts : EditorWindow
 {
     private Font targetTTF;
 
     [MenuItem("Tools/Font Changer")]
     private static void OpenWindow()
     {
-        FontChanger window = GetWindow<FontChanger>();
-        window.titleContent = new GUIContent("FontChagner");
+        ApplyTTFToTexts window = GetWindow<ApplyTTFToTexts>();
+        window.titleContent = new GUIContent("Apply TTF to Texts");
         window.Show();
     }
 
@@ -28,7 +28,7 @@ public class FontChanger : EditorWindow
             }
             else
             {
-                Debug.Log("폰트를 선택해주세요");
+                Debug.LogWarning("Please select a target TTF font.");
             }
         }
     }
@@ -46,6 +46,6 @@ public class FontChanger : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("폰트 변경됨");
+        Debug.Log("TTF font applied to all Texts successfully.");
     }
 }

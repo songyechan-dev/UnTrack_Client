@@ -28,7 +28,7 @@ public class FontChanger : EditorWindow
             }
             else
             {
-                Debug.Log("폰트를 선택해주세요");
+                Debug.LogWarning("Please select a target TTF font.");
             }
         }
     }
@@ -46,6 +46,6 @@ public class FontChanger : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("폰트 변경됨");
+        Debug.Log("TTF font applied to all Texts successfully.");
     }
 }
