@@ -172,13 +172,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     {
                         playerState = PLAYERSTATE.EQUIPMENTACTION;
                     }
+                    
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
+                    if (!isPick)
+                    {
+                        playerState = PLAYERSTATE.DROP;
+                    }
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -200,7 +204,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 case PLAYERSTATE.PICK:
                     playerAnim.SetInteger("PLAYERSTATE", 5);
-                    
+                    if(!isPick)
+                    {
+                        playerState = PLAYERSTATE.DROP;
+                    }
                     break;
 
             }
@@ -237,13 +244,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 case PLAYERSTATE.IDLE:
                     playerAnim.SetInteger("PLAYERSTATE", 0);
+                    if (isWorking)
+                    {
+                        playerState = PLAYERSTATE.EQUIPMENTACTION;
+                    }
+                    
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
+                    if (!isPick)
+                    {
+                        playerState = PLAYERSTATE.DROP;
+                    }
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -260,13 +275,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     playerAnim.SetInteger("PLAYERSTATE", 4);
                     if (!isWorking)
                     {
-                        playerState = PLAYERSTATE.PICK;
+                        playerState = PLAYERSTATE.IDLE;
                     }
                     break;
 
                 case PLAYERSTATE.PICK:
                     playerAnim.SetInteger("PLAYERSTATE", 5);
-                    
+                    if (!isPick)
+                    {
+                        playerState = PLAYERSTATE.DROP;
+                    }
                     break;
 
             }
