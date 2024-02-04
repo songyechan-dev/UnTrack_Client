@@ -17,12 +17,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public enum PLAYERSTATE
     {
         IDLE = 0,
-        WALK,
-        PICKUP,
-        DROP,
-        EQUIPMENTACTION,
+        WALK = 1,
+        PICKUP = 2,
+        DROP = 3,
+        EQUIPMENTACTION = 4,
 
-        PICK
+        PICK = 5
 
     }
     
@@ -176,13 +176,25 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
+                    if (isWorking)
+                    {
+                        playerState = PLAYERSTATE.EQUIPMENTACTION;
+                    }
+                    if (isPick)
+                    {
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    if (Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+                    {
+                        if (!isPick)
+                            playerState = PLAYERSTATE.PICKUP;
+                        else
+                            playerState = PLAYERSTATE.DROP;
+                    }
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    if (!isPick)
-                    {
-                        playerState = PLAYERSTATE.DROP;
-                    }
+                    
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -248,17 +260,29 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     {
                         playerState = PLAYERSTATE.EQUIPMENTACTION;
                     }
+                    if (isPick)
+                    {
+                        playerState = PLAYERSTATE.PICK;
+                    }
+                    if (Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+                    {
+                        if (!isPick)
+                            playerState = PLAYERSTATE.PICKUP;
+                        else
+                            playerState = PLAYERSTATE.DROP;
+                    }
                     
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
+                    if (isWorking)
+                    {
+                        playerState = PLAYERSTATE.EQUIPMENTACTION;
+                    }
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    if (!isPick)
-                    {
-                        playerState = PLAYERSTATE.DROP;
-                    }
+                    
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
