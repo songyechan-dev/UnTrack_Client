@@ -44,10 +44,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public string playableButtonTagName = "PlayableButton";
     private PhotonView pv;
-    private TeamManager teamManager;
+    public TeamManager teamManager;
 
     private bool isReady = false;
     private bool isExit = false;
+
+    public Transform sensor;
 
 
     // 시작
@@ -56,8 +58,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         pv = GetComponent<PhotonView>();
         playerManager = GetComponent<PlayerManager>();
+        sensor = transform.Find("Sensor").transform;
         if (pv != null && pv.IsMine)
         {
+            sensor = transform.Find("Sensor").transform;
             playerManager = GetComponent<PlayerManager>();
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
             playerAnim = transform.Find("Duck").GetComponent<Animator>();
@@ -116,10 +120,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            Ray ray = new Ray(transform.position, -transform.up);
+            Ray ray = new Ray(sensor.transform.position, -sensor.transform.up);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 3f))
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
@@ -144,15 +148,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            Ray ray = new Ray(transform.position, -transform.up);
+            Ray ray = new Ray(sensor.transform.position, -sensor.transform.up);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 3f))
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
                     //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>());
                 }
             }
         }
@@ -164,46 +168,46 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            switch (playerState)
-            {
-                case PLAYERSTATE.IDLE:
-                    playerAnim.SetInteger("PLAYERSTATE", 0);
-                    if (isWorking)
-                    {
-                        playerState = PLAYERSTATE.EQUIPMENTACTION;
-                    }
-                    break;
-                case PLAYERSTATE.WALK:
-                    playerAnim.SetInteger("PLAYERSTATE", 1);
-                    break;
-                case PLAYERSTATE.PICKUP:
-                    playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
-                    break;
-                case PLAYERSTATE.DROP:
-                    playerAnim.SetInteger("PLAYERSTATE", 3);
-                    dropCurTime += Time.deltaTime;
-                    AnimatorClipInfo[] curClipInfo;
-                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
-                    if (dropCurTime > curClipInfo[0].clip.length)
-                    {
-                        dropCurTime = 0;
-                        playerState = PLAYERSTATE.IDLE;
-                    }
-                    break;
-                case PLAYERSTATE.EQUIPMENTACTION:
-                    playerAnim.SetInteger("PLAYERSTATE", 4);
-                    if(!isWorking)
-                        playerState = PLAYERSTATE.IDLE;
-                    
-                    break;
+            //switch (playerState)
+            //{
+            //    case PLAYERSTATE.IDLE:
+            //        playerAnim.SetInteger("PLAYERSTATE", 0);
+            //        if (isWorking)
+            //        {
+            //            playerState = PLAYERSTATE.EQUIPMENTACTION;
+            //        }
+            //        break;
+            //    case PLAYERSTATE.WALK:
+            //        playerAnim.SetInteger("PLAYERSTATE", 1);
+            //        break;
+            //    case PLAYERSTATE.PICKUP:
+            //        playerAnim.SetInteger("PLAYERSTATE", 2);
 
-                case PLAYERSTATE.PICK:
-                    playerAnim.SetInteger("PLAYERSTATE", 5);
-                    
-                    break;
+            //        break;
+            //    case PLAYERSTATE.DROP:
+            //        playerAnim.SetInteger("PLAYERSTATE", 3);
+            //        dropCurTime += Time.deltaTime;
+            //        AnimatorClipInfo[] curClipInfo;
+            //        curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+            //        if (dropCurTime > curClipInfo[0].clip.length)
+            //        {
+            //            dropCurTime = 0;
+            //            playerState = PLAYERSTATE.IDLE;
+            //        }
+            //        break;
+            //    case PLAYERSTATE.EQUIPMENTACTION:
+            //        playerAnim.SetInteger("PLAYERSTATE", 4);
+            //        if (!isWorking)
+            //            playerState = PLAYERSTATE.IDLE;
 
-            }
+            //        break;
+
+            //    case PLAYERSTATE.PICK:
+            //        playerAnim.SetInteger("PLAYERSTATE", 5);
+
+            //        break;
+
+            //}
             if (transform.position.y <= -1f)
             {
                 transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
@@ -223,7 +227,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 currentTime += Time.deltaTime;
             }
-            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode) && GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
             {
                 playerManager.CollectIngredient();
                 Debug.Log("실행됨");

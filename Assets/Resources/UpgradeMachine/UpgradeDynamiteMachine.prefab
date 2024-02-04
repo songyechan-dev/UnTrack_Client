@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 4986761969784093363}
   - component: {fileID: 4986761969784093360}
   - component: {fileID: 4986761969784093361}
-  - component: {fileID: 4986761969784093374}
+  - component: {fileID: -3675360925763864472}
   m_Layer: 0
   m_Name: UpgradeDynamiteMachine
   m_TagString: PlayableButton
@@ -198,7 +198,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &4986761969784093374
+--- !u!114 &-3675360925763864472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,10 +207,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4986761969784093372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
+  m_Script: {fileID: 11500000, guid: e2ec3df31d66aac4397d7fb07cae56f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myInfo: 5
+  myInfo: 12
+  machineUpgradeIDX: 0
 --- !u!1 &4986761970492218519
 GameObject:
   m_ObjectHideFlags: 0

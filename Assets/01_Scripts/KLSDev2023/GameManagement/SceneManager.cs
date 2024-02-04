@@ -1,3 +1,4 @@
+using LeeYuJoung;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +12,6 @@ namespace KLSDev2023
         private void Awake()
         {
             UIManager.Instance().Init();
-            //TODO : 테스트 코드 삭제 필요 송예찬
-
-            
-
         }
 
         public void NextScene()

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2879135932918281215}
   - component: {fileID: 2879135932918281208}
   - component: {fileID: 2879135932918281209}
-  - component: {fileID: 2879135932918281210}
+  - component: {fileID: -2516114603441909944}
   m_Layer: 0
   m_Name: UpgradeWaterTank
   m_TagString: PlayableButton
@@ -101,7 +101,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2879135932918281210
+--- !u!114 &-2516114603441909944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,10 +110,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2879135932918281204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
+  m_Script: {fileID: 11500000, guid: e2ec3df31d66aac4397d7fb07cae56f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myInfo: 6
+  myInfo: 13
   machineUpgradeIDX: 0
 --- !u!1 &2879135933032968390
 GameObject:

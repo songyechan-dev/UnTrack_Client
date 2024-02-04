@@ -102,6 +102,9 @@ public class MapCreator : MonoBehaviour
         //방장인지 확인
         if (PhotonNetwork.IsMasterClient)
         {
+            planeList.Clear();
+            treeCount = 0;
+            stoneCount = 0;
             MapLoad();
         }
         trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
@@ -111,8 +114,11 @@ public class MapCreator : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             GameManager.Instance().GameStart();
+            QuestManager.Instance().Init();
         }
     }
+
+
 
     private void MapDataCreate()
     {
@@ -662,7 +668,7 @@ public class MapCreator : MonoBehaviour
     void CreateObject_Master(float x, float y, float z,string name)
     {
         Debug.Log("마스터 호출");
-        GameObject _obj = PhotonNetwork.Instantiate(name, new Vector3(x, planeObject.transform.position.y + 0.5f, z), Quaternion.identity);
+        GameObject _obj = PhotonNetwork.Instantiate(name, new Vector3(x,MapInfo.startPosition.y + 0.5f, z), Quaternion.identity);
         
         _obj.transform.localScale = new Vector3(objScale * 10, objScale * 10, objScale * 10);
     }

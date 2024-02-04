@@ -1221,6 +1221,7 @@ MonoBehaviour:
   questIndex03: {fileID: 0}
   chat: {fileID: 0}
   distance03: {fileID: 0}
+  volt03: {fileID: 0}
   upgradeManager: {fileID: 0}
   pos:
   - {fileID: 0}

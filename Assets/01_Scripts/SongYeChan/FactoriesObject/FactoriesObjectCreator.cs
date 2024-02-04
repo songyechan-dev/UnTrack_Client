@@ -106,7 +106,7 @@ public class FactoriesObjectCreator : MonoBehaviour
     public void Init()
     {
         count = 0;
-        createdTime = 15f;
+        createdTime = 30f;
     }
 
     void OnEvent(EventData photonEvent)

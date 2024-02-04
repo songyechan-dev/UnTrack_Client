@@ -91,7 +91,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
                             pickSlot.GetChild(0).transform.position = equipSlot.position;
-                            pickSlot.GetChild(0).rotation = Quaternion.Euler(0, 90, 30);
+                            //pickSlot.GetChild(0).rotation = Quaternion.Euler(0, 90, 30);
                         }
                     }
                     else

@@ -26,7 +26,6 @@ public class QuestManager : MonoBehaviourPun
     public int progress = 0;
     public bool isCompleted = false;
 
-    public Text questText;
 
     private void Awake()
     {
@@ -42,9 +41,8 @@ public class QuestManager : MonoBehaviourPun
         dataPath = "QuestData";
     }
 
-    private void Start()
+    public void Init()
     {
-        //OnExampleButton();
         if (PhotonNetwork.IsMasterClient)
         {
             InitQuest();
@@ -102,9 +100,9 @@ public class QuestManager : MonoBehaviourPun
     // 퀘스트 성공 시 보상 지급 → 라운드 종료 후 실행 
     public void CheckCompletion()
     {
-        if(isCompleted)
+        if(isCompleted && PhotonNetwork.IsMasterClient)
         {
-            StateManager.Instance().voltNum += reward;
+            StateManager.Instance().SetVolt(true, reward);
         }
     }
 
@@ -121,13 +119,14 @@ public class QuestManager : MonoBehaviourPun
     // TODO : 이유정 2024.01.16 QuestManager.cs QuestTextChange(string _content, int _progress, int _progressGaol)
     public void QuestTextChange(string _content, int _progress, int _progressGaol)
     {
+        UIManager.Instance().volt03.text = StateManager.Instance().voltNum.ToString();
         if (questType.Equals("Time"))
         {
-            questText.text = _content;
+            UIManager.Instance().questIndex03.transform.Find("Quest").GetComponent<Text>().text = _content;
         }
         else
         {
-            questText.text = _content + $" ( {_progress} / {_progressGaol} )";
+            UIManager.Instance().questIndex03.transform.Find("Quest").GetComponent<Text>().text = _content + $" ( {_progress} / {_progressGaol} )";
         }
     }
 
