@@ -198,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5278378788793267665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.734, z: 1.138}
+  m_LocalPosition: {x: 0, y: 1.473, z: 1.138}
   m_LocalScale: {x: 1, y: 0.2, z: 0.22856}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -430,7 +430,6 @@ MonoBehaviour:
   spaceTime: 0.2
   playableButtonTagName: PlayableButton
   teamManager: {fileID: 0}
-  sensor: {fileID: 0}
 --- !u!114 &9017414315893891907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,6 +561,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308664166526694298, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -8067726398312463513, guid: 554d7bd2fbe683c4084d4b2160e06c8e, type: 3}
+    - target: {fileID: 6308664166526694298, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: eb4d7a0fb2b6ef245b57a2c090d9dd89, type: 2}
+    - target: {fileID: 6308664166526694298, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 488322f08424d204f8323a2b1e974c83, type: 2}
     - target: {fileID: 8537030949189665272, guid: e5e17c1864341174a8ad6694b88a27f1, type: 3}
       propertyPath: m_Name
       value: Duck
