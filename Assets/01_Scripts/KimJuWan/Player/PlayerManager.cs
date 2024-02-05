@@ -103,13 +103,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             pickSlot.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
                             equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = true;
                         }
-                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) ||
-                            inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
-                        {
-
-                            playerController.playerAnim.Play("PICK", 0, 0.5f);
-                        }
+                        
                     }
                     else
                     {
@@ -117,13 +111,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) ||
                             inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.DROPPEDTRACK))
                         {
-                            playerController.playerAnim.Play("PICK", 0, 0.5f);
+                            
 
                             if (inventoryManager.SaveInventory(hit.transform.gameObject))
                             {
                                 hit.transform.SetParent(pickSlot.transform);
                                 pickSlot.GetChild(inventoryManager.itemNum - 1).transform.position =
                                     pickSlot.position + (Vector3.up * (inventoryManager.itemNum - 1));
+                                playerController.playerAnim.Play("PICK", 0, 0.5f);
                             }
                         }
                         
@@ -138,7 +133,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     {
                         playerController.isPick = false;
                         castRange = 1f;
-
+                        playerController.playerAnim.Play("PickUp, 0, 0.5f");
                         PhotonNetwork.Destroy(pickSlot.GetChild(0).gameObject);
                         inventoryManager.OutInventory();
                         _fm.FireSuppression();
