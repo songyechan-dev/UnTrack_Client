@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Sound
@@ -25,6 +26,12 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource bgmPlayer = null;
     public AudioSource[] sfxPlayer = null;
+
+    public Slider bgmSlider;
+    public Slider sfxSlider;
+
+    public float bgmVolume;
+    public float sfxVolume;
 
     void Awake()
     {
@@ -50,19 +57,19 @@ public class AudioManager : MonoBehaviour
                 bgmPlayer.clip = bgms[1].clip;
                 break;
             case 2:
-                bgmPlayer.clip = bgms[2].clip;
+                bgmPlayer.clip = bgms[1].clip;
                 break;
             case 3:
-                bgmPlayer.clip = bgms[3].clip;
+                bgmPlayer.clip = bgms[2].clip;
                 break;
             case 4:
-                bgmPlayer.clip = bgms[4].clip;
+                bgmPlayer.clip = bgms[1].clip;
                 break;
             case 5:
-                bgmPlayer.clip = bgms[5].clip;
+                bgmPlayer.clip = bgms[3].clip;
                 break;
             case 6:
-                bgmPlayer.clip = bgms[6].clip;
+                bgmPlayer.clip = bgms[4].clip;
                 break;
             default:
                 break;
@@ -74,29 +81,25 @@ public class AudioManager : MonoBehaviour
         bgmPlayer.Stop();
     }
 
-    public void ControlBGMVolume()
+    public void ChangeBGMVolume()
     {
-
+        bgmPlayer.volume = bgmVolume;
     }
 
-    public void PlaySFX(string _name)
+    public void SaveBGMVolume()
+    {
+        bgmVolume = bgmSlider.value;
+    }
+
+    public void PlaySFX(AudioSource _audioSource, string _name)
     {
         for(int i = 0; i < sfxs.Length; i++)
         {
             if (_name.Equals(sfxs[i].name))
             {
-                for(int j = 0; j < sfxPlayer.Length; j++)
-                {
-                    if (!sfxPlayer[i].isPlaying)
-                    {
-                        sfxPlayer[j].clip = sfxs[i].clip;
-                        sfxPlayer[j].Play();
+                _audioSource.clip = sfxs[i].clip;
+                _audioSource.Play();
 
-                        return;
-                    }
-                }
-
-                Debug.Log("::: 사용 가능한 오디오 플레이어 없음 :::");
                 return;
             }
         }
@@ -110,8 +113,16 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void ControlSFXVolume()
+    public void ChangeSFXVolume()
     {
+        for(int i = 0; i < sfxPlayer.Length; i++)
+        {
+            sfxPlayer[i].volume = sfxVolume;
+        }
+    }
 
+    public void SaveSFXVolume()
+    {
+        sfxVolume = sfxSlider.value;
     }
 }
