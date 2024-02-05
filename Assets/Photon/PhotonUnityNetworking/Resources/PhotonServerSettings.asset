@@ -65,6 +65,10 @@ MonoBehaviour:
   - SetMapInfo_Others
   - AddedComponent
   - GetOnFactoriesObject_Other
+  - RPC_ChangePlayerState
+  - PlayAnim
+  - SetItemPos
+  - SetMyParent_Null
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

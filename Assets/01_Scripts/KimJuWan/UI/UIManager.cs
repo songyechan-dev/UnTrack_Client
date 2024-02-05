@@ -7,6 +7,9 @@ using TMPro;
 using static GameManager;
 using LeeYuJoung;
 using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
@@ -140,6 +143,7 @@ public class UIManager : MonoBehaviour
         switch (_info)
         {
             case PlayableButtonInfo.Info.GAME_START_01:
+                Debug.Log("여기실행");
                 ActiveAndDeActive(loginPanel01, ground);
                 break;
             case PlayableButtonInfo.Info.GAME_EXIT_01:
@@ -173,34 +177,64 @@ public class UIManager : MonoBehaviour
                 }
                 break;
             case PlayableButtonInfo.Info.ENGINE_UPGRADE_04:
-                ActiveAndDeActive(engineDesPanel04,  machineUpgradePanel04, storageDesPanel04);
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    ActiveAndDeActive(engineDesPanel04, machineUpgradePanel04, storageDesPanel04);
+                    object[] data = new object[] { (int)_info,true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
             case PlayableButtonInfo.Info.STORAGE_UPGRADE_04:
-                ActiveAndDeActive(storageDesPanel04,  machineUpgradePanel04, engineDesPanel04 );
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    ActiveAndDeActive(storageDesPanel04, machineUpgradePanel04, engineDesPanel04);
+                    object[] data = new object[] { (int)_info, true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
             case PlayableButtonInfo.Info.MACHINE_UPGRADE_04:
-                ActiveAndDeActive(machineUpgradePanel04,  storageDesPanel04, engineDesPanel04 );
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    ActiveAndDeActive(machineUpgradePanel04, storageDesPanel04, engineDesPanel04);
+                    object[] data = new object[] { (int)_info, true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
             case PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04:
-                machineUpgradePanel04.SetActive(false);
-                engineDesPanel04.SetActive(false);
-                storageDesPanel04.SetActive(false);
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                    object[] data = new object[] { (int)_info, true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
             case PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04:
-                machineUpgradePanel04.SetActive(false);
-                engineDesPanel04.SetActive(false);
-                storageDesPanel04.SetActive(false);
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                    object[] data = new object[] { (int)_info, true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
             case PlayableButtonInfo.Info.WATERTANK_BUY_04:
-                machineUpgradePanel04.SetActive(false);
-                engineDesPanel04.SetActive(false);
-                storageDesPanel04.SetActive(false);
-
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                    object[] data = new object[] { (int)_info, true };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
                 break;
 
             case PlayableButtonInfo.Info.GAME_EXIT_04:
@@ -248,64 +282,120 @@ public class UIManager : MonoBehaviour
     }
 
     #region Scene04_PlayAbleButton_OnHit
-    public void PlayAbleButton_OnHit(PlayableButtonInfo info)
+    public void PlayAbleButton_OnHit(PlayableButtonInfo _info)
     {
-        switch (info.myInfo)
+        switch (_info.myInfo)
         {
             case PlayableButtonInfo.Info.ENGINE_UPGRADE_04:
-                upgradeManager.UpgradeEngine();
-                enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
-                engineDesText04.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.UpgradeEngine();
+                    enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
+                    engineDesText04.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.STORAGE_UPGRADE_04:
-                upgradeManager.UpgradeStorage();
-                storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
-                storageDesText04.text = $"저장소 현재 용량 \n {StateManager.Instance().storageMaxVolume}";
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.UpgradeStorage();
+                    storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
+                    storageDesText04.text = $"저장소 현재 용량 \n {StateManager.Instance().storageMaxVolume}";
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.PRODUCTIONMACHINE_UPGRADE_04:
-                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, info.machineUpgradeIDX);
-                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][info.machineUpgradeIDX].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][_info.machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.DYNAMITEMACHINE_UPGRADE_04:
-                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, info.machineUpgradeIDX);
-                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][info.machineUpgradeIDX].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][_info.machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.WATERTANK_UPGRADE_04:
-                upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, info.machineUpgradeIDX);
-                info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][info.machineUpgradeIDX].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][_info.machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04:
-                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.ProductionMachine);
-                productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                upgradeManager.ClearUpgradeMachine(pos);
-                upgradeManager.ShowUpgradeMachine(pos);
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.ProductionMachine);
+                    productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04:
-                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.DynamiteMachine);
-                dynamiteMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                upgradeManager.ClearUpgradeMachine(pos);
-                upgradeManager.ShowUpgradeMachine(pos);
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.DynamiteMachine);
+                    dynamiteMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
             case PlayableButtonInfo.Info.WATERTANK_BUY_04:
-                upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.WaterTank);
-                waterTankBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
-                voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                upgradeManager.ClearUpgradeMachine(pos);
-                upgradeManager.ShowUpgradeMachine(pos);
+                if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.WaterTank);
+                    waterTankBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                    object[] data = new object[] { (int)_info.myInfo, false };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                }
+                
 
                 break;
 
@@ -354,8 +444,8 @@ public class UIManager : MonoBehaviour
 
     public void LoginButtonOnClick_01()
     {
-        string user_id = loginPanel01.transform.Find("InputID").GetComponent<InputField>().text;
-        string user_password = loginPanel01.transform.Find("InputPW").GetComponent<InputField>().text;
+        string user_id = loginPanel01.transform.Find("LoginTxt").Find("InputID").GetComponent<InputField>().text;
+        string user_password = loginPanel01.transform.Find("LoginTxt").Find("InputPW").GetComponent<InputField>().text;
         StartCoroutine(WebServerManager.LoginCoroutine(user_id, user_password));
     }
 
@@ -574,4 +664,119 @@ public class UIManager : MonoBehaviour
         }
         #endregion
     }
+    #region Photon
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)SendDataInfo.Info.UI_INFO)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            PlayableButtonInfo.Info _uiInfo = (PlayableButtonInfo.Info)((int)receivedData[0]);
+            bool isOnStay = (bool)receivedData[1];
+            if (isOnStay)
+            {
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.ENGINE_UPGRADE_04))
+                {
+                    ActiveAndDeActive(engineDesPanel04, machineUpgradePanel04, storageDesPanel04);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.STORAGE_UPGRADE_04))
+                {
+                    ActiveAndDeActive(storageDesPanel04, machineUpgradePanel04, engineDesPanel04);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.MACHINE_UPGRADE_04))
+                {
+                    ActiveAndDeActive(machineUpgradePanel04, storageDesPanel04, engineDesPanel04);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04))
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04))
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.WATERTANK_BUY_04))
+                {
+                    machineUpgradePanel04.SetActive(false);
+                    engineDesPanel04.SetActive(false);
+                    storageDesPanel04.SetActive(false);
+                }
+            }
+            else
+            {
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.ENGINE_UPGRADE_04)) 
+                {
+                    upgradeManager.UpgradeEngine();
+                    enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
+                    engineDesText04.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.STORAGE_UPGRADE_04)) 
+                {
+                    upgradeManager.UpgradeStorage();
+                    storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
+                    storageDesText04.text = $"저장소 현재 용량\n {StateManager.Instance().storageMaxVolume}";
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_UPGRADE_04)) 
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
+                    playableButton_PRODUCTIONMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.DYNAMITEMACHINE_UPGRADE_04)) 
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
+                    playableButton_DYNAMITEMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.WATERTANK_UPGRADE_04)) 
+                {
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
+                    playableButton_WATERTANK_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04)) 
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.ProductionMachine);
+                    productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04)) 
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.DynamiteMachine);
+                    dynamiteMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                }
+                if (_uiInfo.Equals(PlayableButtonInfo.Info.WATERTANK_BUY_04)) 
+                {
+                    upgradeManager.BuyMachine(FactoryManager.FACTORYTYPE.WaterTank);
+                    waterTankBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
+                    voltNumText04.text = StateManager.Instance().voltNum.ToString();
+                    upgradeManager.ClearUpgradeMachine(pos);
+                    upgradeManager.ShowUpgradeMachine(pos);
+                }
+            }
+        }
+        
+    }
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    #endregion
 }

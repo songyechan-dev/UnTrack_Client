@@ -24,16 +24,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        playerController = GetComponent<PlayerController>();
+        equipSlot = transform.Find("Duck").Find("Character").Find("Body").Find("armLeft").Find("handSlotLeft").transform;
         if ((photonView != null && photonView.IsMine))
         {
             sensor = transform.GetChild(0).gameObject.GetComponent<Transform>();
-            playerController = GetComponent<PlayerController>();
             inventoryManager = GetComponentInChildren<InventoryManager>();
             if (Camera.main.transform.GetComponent<CameraManager>() != null)
             {
                 Camera.main.transform.GetComponent<CameraManager>().playerTransform = transform;
             }
-            equipSlot = transform.Find("Duck").Find("Character").Find("Body").Find("armLeft").Find("handSlotLeft").transform;
         }
         else if (photonView == null)
         {
@@ -66,8 +66,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     break;
                 case "Item":
                     //playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
-                    playerController.playerAnim.Play("PickUp", 0, 0.5f);
-
+                    photonView.RPC("PlayAnim", RpcTarget.AllBufferedViaServer, "PickUp");
                     if (hit.transform.GetComponent<PhotonView>() != null)
                     {
                         hit.transform.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer); // 소유자 변경
@@ -89,19 +88,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         playerController.isPick = true;
                         castRange = 2f;
                         inventoryManager.SaveInventory(hit.transform.gameObject);
-                        hit.transform.SetParent(pickSlot.transform);
-                        pickSlot.GetChild(0).transform.position = pickSlot.position;
-                        if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.AX))
+
+                        if (hit.transform.GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.AX))
                         {
-                            playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
-                            pickSlot.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
-                            equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                            photonView.RPC("SetItemPos", RpcTarget.All, ItemManager.ITEMTYPE.AX, true, photonView.ViewID, hit.transform.GetComponent<PhotonView>().ViewID);
+                            //playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
+
+                            //pickSlot.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
+                            //equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
                         }
-                        else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
+                        else if (hit.transform.GetComponent<ItemManager>().itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
-                            playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
-                            pickSlot.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
-                            equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = true;
+                            photonView.RPC("SetItemPos", RpcTarget.All, ItemManager.ITEMTYPE.PICK, true, photonView.ViewID, hit.transform.GetComponent<PhotonView>().ViewID);
+                            //playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
+                            //pickSlot.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
+                            //equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = true;
+                        }
+                        else
+                        {
+                            hit.transform.SetParent(pickSlot.transform);
+                            pickSlot.GetChild(0).transform.position = pickSlot.position;
                         }
                         
                     }
@@ -121,9 +127,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                                 playerController.playerAnim.Play("PICK", 0, 0.5f);
                             }
                         }
-                        
-
-
                     }
 
                     break;
@@ -155,7 +158,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     break;
                 case "Storage":
                     //playerController.playerState = PlayerController.PLAYERSTATE.DROP;
-                    playerController.playerAnim.Play("DROP", 0, 0.5f);
+                    photonView.RPC("PlayAnim", RpcTarget.All, "DROP");
                     if ((playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) && photonView.IsMine) || (playerController.isPick && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL) && photonView.IsMine))
                     {
                         Debug.Log("뭔가를 들고있다 " + inventoryManager.itemType.ToString());
@@ -197,7 +200,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     if (playerController.currentTime >= playerController.spaceTime && playerController.isPick)
                     {
                         //playerController.playerState = PlayerController.PLAYERSTATE.DROP;
-                        playerController.playerAnim.Play("DROP", 0, 0.5f);
+                        photonView.RPC("PlayAnim", RpcTarget.All, "DROP");
                         //바닥에 놓은 아이템들 위에 쌓기
                         if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                         {
@@ -221,7 +224,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         
                         if (playerController.isPick)
                         {
-                            playerController.playerAnim.Play("PickUp", 0, 0.5f);
+                            photonView.RPC("PlayAnim", RpcTarget.All, "PickUp");
                             if (inventoryManager.itemType.Equals(droppedSlot.itemType))
                             {
                                 if (inventoryManager.itemNum < 4)
@@ -236,7 +239,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         }
                         else
                         {
-                            
+                            photonView.RPC("PlayAnim", RpcTarget.All, "PickUp");
                             playerController.isPick = true;
                             castRange = 2.0f;
                             
@@ -260,7 +263,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     break;
                 case "Plane":
                     Debug.Log("바닥입니다....");
-                    playerController.playerAnim.Play("DROP", 0, 0.5f);
+                    photonView.RPC("PlayAnim", RpcTarget.All, "DROP");
                     if (playerController.isPick)
                     {
                         
@@ -268,7 +271,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                         {
                             playerController.isPick = false;
                             castRange = 1.0f;
-                            GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot", pickSlot.transform.position, Quaternion.identity);
+                            GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot", new Vector3(pickSlot.transform.position.x, pickSlot.transform.position.y +0.5f, pickSlot.transform.position.z), Quaternion.identity);
                             _droppedSlot.name = "DroppedSlot";
 
                             int num = pickSlot.transform.childCount;
@@ -280,9 +283,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                                 
                                 pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().DroppedSlotIn(_droppedSlot.transform, pickSlot.transform.GetChild(0).gameObject);
                                 pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>().SetParent(_droppedSlot.transform,false);
-
-
-
 
                                 ObjectRotationCheck(_droppedSlot.transform.GetChild(i).gameObject);
                             }
@@ -321,24 +321,29 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             playerController.isPick = false;
                             castRange = 1.0f;
 
-                            pickSlot.transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
-                            equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                            photonView.RPC("SetItemPos", RpcTarget.All, ItemManager.ITEMTYPE.AX, false, photonView.ViewID,-1);
+                            //pickSlot.transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
+                            //equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+
                             inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                             inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
                             ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
-                            pickSlot.transform.GetChild(0).SetParent(null);
+                            photonView.RPC("SetMyParent_Null", RpcTarget.All, photonView.ViewID);
+                            //pickSlot.transform.GetChild(0).SetParent(null);
                         }
                         else if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.PICK))
                         {
                             playerController.isPick = false;
                             castRange = 1.0f;
+                            photonView.RPC("SetItemPos", RpcTarget.All, ItemManager.ITEMTYPE.PICK, false,photonView.ViewID,-1);
+                            //pickSlot.transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
+                            //equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = false;
 
-                            pickSlot.transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
-                            equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = false;
                             inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                             inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
                             ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
-                            pickSlot.transform.GetChild(0).SetParent(null);
+                            photonView.RPC("SetMyParent_Null", RpcTarget.All, photonView.ViewID);
+                            //pickSlot.transform.GetChild(0).SetParent(null);
                         }
                         else
                         {
@@ -349,7 +354,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             inventoryManager.DroppedSlotIn(pickSlot.transform.GetChild(0).gameObject);
                             inventoryManager.OutInventory(pickSlot.transform.GetChild(0).gameObject);
                             ObjectRotationCheck(pickSlot.transform.GetChild(0).gameObject);
-                            pickSlot.transform.GetChild(0).SetParent(null);
+                            //pickSlot.transform.GetChild(0).SetParent(null);
+                            photonView.RPC("SetMyParent_Null", RpcTarget.All, photonView.ViewID);
                         }
                     }
 
@@ -360,6 +366,70 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
 
         }
+    }
+    [PunRPC]
+    void SetMyParent_Null(int viewID)
+    {
+        GameObject go = PhotonView.Find(viewID).gameObject;
+        go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
+    }
+
+
+    [PunRPC]
+    void PlayAnim(string animName)
+    {
+        playerController.playerAnim.Play(animName, 0, 0.5f);
+    }
+
+    [PunRPC]
+    void SetItemPos(ItemManager.ITEMTYPE _itemType,bool _isPickUP,int _viewID,int hitViewID = -1)
+    {
+        GameObject go = PhotonView.Find(_viewID).gameObject;
+        GameObject _hit;
+        if (hitViewID != -1)
+        {
+            _hit = PhotonView.Find(hitViewID).gameObject;
+        }
+        else
+        {
+            _hit = new GameObject();
+        }
+        Debug.Log("무기 :::: " + hitViewID);
+
+        if (_isPickUP)
+        {
+            _hit.transform.SetParent(go.transform.Find("PickSlot"));
+            _hit.transform.position = go.transform.Find("PickSlot").transform.position;
+            if (_itemType.Equals(ItemManager.ITEMTYPE.AX))
+            {
+                playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
+                go.transform.Find("PickSlot").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
+                go.transform.GetComponent<PlayerManager>().equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+            }
+            else
+            {
+                playerController.playerState = PlayerController.PLAYERSTATE.IDLE;
+
+                go.transform.Find("PickSlot").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
+                go.transform.GetComponent<PlayerManager>().equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = true;
+            }
+        }
+        else
+        {
+            if (_itemType.Equals(ItemManager.ITEMTYPE.AX))
+            {
+                go.transform.Find("PickSlot").transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
+                go.transform.GetComponent<PlayerManager>().equipSlot.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                //go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
+            }
+            else
+            {
+                go.transform.Find("PickSlot").transform.GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = true;
+                go.transform.GetComponent<PlayerManager>().equipSlot.GetChild(1).GetComponent<MeshRenderer>().enabled = false;
+                //go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
+            }
+        }
+        
     }
 
 

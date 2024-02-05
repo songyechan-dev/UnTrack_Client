@@ -1,4 +1,5 @@
 using DG.Tweening;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public string playableButtonTagName = "PlayableButton";
     private PhotonView pv;
     public TeamManager teamManager;
+    public Transform sensor;
 
     private bool isReady = false;
     private bool isExit = false;
@@ -56,11 +58,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         pv = GetComponent<PhotonView>();
         playerManager = GetComponent<PlayerManager>();
+        sensor = transform.Find("Sensor").transform;
+        playerAnim = transform.Find("Duck").GetComponent<Animator>();
         if (pv != null && pv.IsMine)
         {
+            sensor = transform.Find("Sensor").transform;
             playerManager = GetComponent<PlayerManager>();
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();
-            playerAnim = transform.Find("Duck").GetComponent<Animator>();
+
         }
         //rb = GetComponent<Rigidbody>();
         if (pv == null)
@@ -116,10 +121,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            Ray ray = new Ray(transform.position, -transform.up);
+            Ray ray = new Ray(sensor.transform.position, -transform.up);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit,3f))
             {
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
@@ -144,15 +149,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            Ray ray = new Ray(transform.position, -transform.up);
+            Ray ray = new Ray(sensor.transform.position, -transform.up);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit,3f))
             {
+                Debug.Log("Hit실행");
                 if (hit.transform.tag != null && hit.transform.CompareTag(playableButtonTagName))
                 {
                     //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
-                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                    UIManager.Instance().PlayAbleButton_OnHit(hit.transform.GetComponent<PlayableButtonInfo>());
+                    Debug.Log(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
                 }
             }
         }
@@ -164,65 +171,88 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (pv == null || (pv != null && pv.IsMine))
         {
-            switch (playerState)
+            if (PhotonNetwork.IsConnected)
             {
-                case PLAYERSTATE.IDLE:
-                    playerAnim.SetInteger("PLAYERSTATE", 0);
-                    if (isWorking)
-                    {
-                        playerState = PLAYERSTATE.EQUIPMENTACTION;
-                    }
-                    
-                    break;
-                case PLAYERSTATE.WALK:
-                    playerAnim.SetInteger("PLAYERSTATE", 1);
-                    if (isWorking)
-                    {
-                        playerState = PLAYERSTATE.EQUIPMENTACTION;
-                    }
-                    if (isPick)
-                    {
-                        playerState = PLAYERSTATE.PICK;
-                    }
-                    if (Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
-                    {
+                switch (playerState)
+                {
+                    case PLAYERSTATE.IDLE:
+                        playerAnim.SetInteger("PLAYERSTATE", 0);
+                        ChangePlayerState(playerState);
+                        if (isWorking)
+                        {
+                            playerState = PLAYERSTATE.EQUIPMENTACTION;
+                            ChangePlayerState(playerState);
+                        }
+
+                        break;
+                    case PLAYERSTATE.WALK:
+                        playerAnim.SetInteger("PLAYERSTATE", 1);
+                        ChangePlayerState(playerState);
+                        if (isWorking)
+                        {
+                            playerState = PLAYERSTATE.EQUIPMENTACTION;
+                            ChangePlayerState(playerState);
+                        }
+                        if (isPick)
+                        {
+                            playerState = PLAYERSTATE.PICK;
+                            ChangePlayerState(playerState);
+                        }
+                        if (Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+                        {
+                            if (!isPick)
+                            {
+                                playerState = PLAYERSTATE.PICKUP;
+                                ChangePlayerState(playerState);
+                            }
+
+                            else
+                            {
+                                playerState = PLAYERSTATE.DROP;
+                                ChangePlayerState(playerState);
+                            }
+
+                        }
+                        break;
+                    case PLAYERSTATE.PICKUP:
+                        playerAnim.SetInteger("PLAYERSTATE", 2);
+                        ChangePlayerState(playerState);
+                        break;
+                    case PLAYERSTATE.DROP:
+                        playerAnim.SetInteger("PLAYERSTATE", 3);
+                        ChangePlayerState(playerState);
+                        dropCurTime += Time.deltaTime;
+                        AnimatorClipInfo[] curClipInfo;
+                        curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
+                        if (dropCurTime > curClipInfo[0].clip.length)
+                        {
+                            dropCurTime = 0;
+                            playerState = PLAYERSTATE.IDLE;
+                            ChangePlayerState(playerState);
+                        }
+                        break;
+                    case PLAYERSTATE.EQUIPMENTACTION:
+                        playerAnim.SetInteger("PLAYERSTATE", 4);
+                        ChangePlayerState(playerState);
+                        if (!isWorking)
+                        {
+                            playerState = PLAYERSTATE.IDLE;
+                            ChangePlayerState(playerState);
+                        }
+                        break;
+
+                    case PLAYERSTATE.PICK:
+                        playerAnim.SetInteger("PLAYERSTATE", 5);
+                        ChangePlayerState(playerState);
                         if (!isPick)
-                            playerState = PLAYERSTATE.PICKUP;
-                        else
+                        {
                             playerState = PLAYERSTATE.DROP;
-                    }
-                    break;
-                case PLAYERSTATE.PICKUP:
-                    playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
-                    break;
-                case PLAYERSTATE.DROP:
-                    playerAnim.SetInteger("PLAYERSTATE", 3);
-                    dropCurTime += Time.deltaTime;
-                    AnimatorClipInfo[] curClipInfo;
-                    curClipInfo = playerAnim.GetCurrentAnimatorClipInfo(0);
-                    if (dropCurTime > curClipInfo[0].clip.length)
-                    {
-                        dropCurTime = 0;
-                        playerState = PLAYERSTATE.IDLE;
-                    }
-                    break;
-                case PLAYERSTATE.EQUIPMENTACTION:
-                    playerAnim.SetInteger("PLAYERSTATE", 4);
-                    if(!isWorking)
-                        playerState = PLAYERSTATE.IDLE;
-                    
-                    break;
-
-                case PLAYERSTATE.PICK:
-                    playerAnim.SetInteger("PLAYERSTATE", 5);
-                    if(!isPick)
-                    {
-                        playerState = PLAYERSTATE.DROP;
-                    }
-                    break;
-
+                            ChangePlayerState(playerState);
+                        }
+                        break;
+                }
             }
+
             if (transform.position.y <= -1f)
             {
                 transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
@@ -242,7 +272,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 currentTime += Time.deltaTime;
             }
-            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode))
+            if (Input.GetKeyUp(KeyCodeInfo.myActionKeyCode) && GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
             {
                 playerManager.CollectIngredient();
                 Debug.Log("실행됨");
@@ -321,6 +351,45 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //}
     }
 
+    private void ChangePlayerState(PLAYERSTATE newState)
+    {
+        playerState = newState;
+        photonView.RPC("RPC_ChangePlayerState", RpcTarget.Others, (int)newState,photonView.ViewID);
+    }
+
+    [PunRPC]
+    private void RPC_ChangePlayerState(int newState,int _viewID)
+    {
+        if (playerAnim == null) return;
+        PlayerController _playerController = PhotonView.Find(_viewID).GetComponent<PlayerController>();
+        _playerController.playerState = (PLAYERSTATE)newState;
+        switch ((PLAYERSTATE)newState)
+            {
+                case PLAYERSTATE.IDLE:
+                    playerAnim.SetInteger("PLAYERSTATE", 0);
+                    break;
+                case PLAYERSTATE.WALK:
+                    playerAnim.SetInteger("PLAYERSTATE", 1);
+                    break;
+                case PLAYERSTATE.PICKUP:
+                    playerAnim.SetInteger("PLAYERSTATE", 2);
+                break;
+                case PLAYERSTATE.DROP:
+                    playerAnim.SetInteger("PLAYERSTATE", 3);
+                    break;
+                case PLAYERSTATE.EQUIPMENTACTION:
+                    playerAnim.SetInteger("PLAYERSTATE", 4);
+                    break;
+
+                case PLAYERSTATE.PICK:
+                    playerAnim.SetInteger("PLAYERSTATE", 5);
+                    break;
+
+            }
+    }
+
+
+
     //플레이어 이동
     public void PlayerMove()
     {
@@ -396,4 +465,28 @@ public class PlayerController : MonoBehaviourPunCallbacks
     //    Debug.Log("여기호출됨");
     //    PhotonNetwork.Destroy(gameObject);
     //}
+    //void OnEvent(EventData photonEvent)
+    //{
+    //    if (photonEvent.Code == (int)SendDataInfo.Info.PLAYER_STATE)
+    //    {
+    //        object[] receivedData = (object[])photonEvent.CustomData;
+    //        PLAYERSTATE _playerState = (PLAYERSTATE)((int)receivedData[0]);
+    //        int viewID = (int)receivedData[1];
+    //        PlayerController _playerController = PhotonView.Find(viewID).GetComponent<PlayerController>();
+    //        _playerController.playerState = _playerState;
+    //    }
+    //}
+
+    //void OnEnable()
+    //{
+    //    PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    //}
+
+    //void OnDisable()
+    //{
+    //    PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    //}
+
+    
+
 }

@@ -61,7 +61,7 @@ public class UpgradeManager : MonoBehaviour
     // 기계 추가 구매
     public void BuyMachine(FactoryManager.FACTORYTYPE _factoryType)
     {
-        if(StateManager.Instance().voltNum >= StateManager.Instance().machineAddPrice[_factoryType.ToString()])
+        if(StateManager.Instance().voltNum >= StateManager.Instance().machineAddPrice[_factoryType.ToString()] && 9 >StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count + StateManager.Instance().waterTanks.Count)
         {
             Debug.Log($":::: {_factoryType} 구매 완료 ::::");
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);

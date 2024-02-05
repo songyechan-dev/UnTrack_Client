@@ -24,6 +24,8 @@ public class SendDataInfo
         FACTORY_HEATING = 15,
         FACTORIES_OBJECT_INFO = 16,
         VOLT_INFO = 17,
-        QUEST_DISPLAY = 18
+        QUEST_DISPLAY = 18,
+        UI_INFO = 19,
+        PLAYER_STATE = 20
     }
 }

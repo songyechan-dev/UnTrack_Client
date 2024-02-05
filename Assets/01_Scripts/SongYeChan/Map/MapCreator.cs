@@ -144,7 +144,7 @@ public class MapCreator : MonoBehaviour
                 if (!isCreatedObStone && !isCreatedObTree)
                 {
                     //장애물 생성x
-                    if (y > mapHeight - 15 && x < 30)
+                    if (y > mapHeight - 15)
                     {
                         notCreateOB = true;
                     }
@@ -207,7 +207,7 @@ public class MapCreator : MonoBehaviour
                             isCreatedEngine = true;
                             Debug.Log("엔진 생성");
                         }
-                        else if (!isCreatedStorage && x >=factoriesCreatedX+6)
+						else if (!isCreatedStorage && x >= factoriesCreatedX + 6)
                         {
                             factoriesCreatedX = x;
                             mapInfo = ((int)(MapInfo.Type.STORAGE)).ToString();
@@ -232,6 +232,7 @@ public class MapCreator : MonoBehaviour
                             factoryCreatedCount++;
                             Debug.Log("팩토리 생성");
                         }
+                        
                     }
                 }
                 //출발Track
@@ -598,11 +599,11 @@ public class MapCreator : MonoBehaviour
                         }
                         else if (StateManager.Instance().waterTanks.Count > 0)
                         {
-                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.WaterTank);
+                            CreateFactory_Master(x, y, z, waterTankPrefab.name, FACTORYTYPE.WaterTank);
                         }
                         else if (StateManager.Instance().dynamiteMachines.Count > 0)
                         {
-                            CreateFactory_Master(x, y, z, productionMachinePrefab.name, FACTORYTYPE.DynamiteMachine);
+                            CreateFactory_Master(x, y, z, dynamiteMachinePrefab.name, FACTORYTYPE.DynamiteMachine);
                         }
                     }
                 }
