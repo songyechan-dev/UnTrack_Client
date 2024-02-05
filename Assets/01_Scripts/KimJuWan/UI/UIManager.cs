@@ -421,13 +421,13 @@ public class UIManager : MonoBehaviour
             rankingPanel01 = canvas.transform.Find("RankingPanel").gameObject;
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
-            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
-            settingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
-            settingPanel01.transform.Find("Setting").transform.Find("KeySetLeft").GetComponent<Button>().onClick.RemoveAllListeners();
-            settingPanel01.transform.Find("Setting").transform.Find("KeySetLeft").GetComponent<Button>().onClick.AddListener(KeySetLeft);
-            settingPanel01.transform.Find("Setting").transform.Find("KeySetRight").GetComponent<Button>().onClick.RemoveAllListeners();
-            settingPanel01.transform.Find("Setting").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
-            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySet").transform.Find("KeySetTxt").GetComponent<Text>();
+            settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
+            settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetLeft").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetLeft").GetComponent<Button>().onClick.AddListener(KeySetLeft);
+            settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.RemoveAllListeners();
+            settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
+            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").GetComponent<Text>();
             
             PlayerPrefs.GetInt(keySet);
             
