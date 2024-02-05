@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public string playableButtonTagName = "PlayableButton";
     private PhotonView pv;
-    private TeamManager teamManager;
+    public TeamManager teamManager;
 
     private bool isReady = false;
     private bool isExit = false;
