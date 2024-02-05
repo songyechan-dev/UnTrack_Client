@@ -87,21 +87,21 @@ public class UpgradeManager : MonoBehaviour
         for (int i = 0; i < StateManager.Instance().productionMachines.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeProductionMachine"), _pos[_idx++]);
-            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+            _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
             _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().waterTanks.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeWaterTank"), _pos[_idx++]);
-            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+            _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
             _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().dynamiteMachines.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeDynamiteMachine"), _pos[_idx++]);
-            _machine.GetComponentInChildren<PlayableButtonInfo_LeeYuJoung>().machineUpgradeIDX = i;
+            _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
             _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][i].ToString();
         }
     }

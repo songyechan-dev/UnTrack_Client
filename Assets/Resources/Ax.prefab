@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 477294265792755013}
   - component: {fileID: 477294265792755012}
   - component: {fileID: 477294265792755015}
-  - component: {fileID: 477294265792755014}
   - component: {fileID: 7962006342166236999}
   - component: {fileID: -7031182239365142740}
   - component: {fileID: 7379673951303765866}
+  - component: {fileID: 5410316546500604579}
   m_Layer: 0
   m_Name: Ax
   m_TagString: Item
@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 477294265792755017}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0.5, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88,19 +88,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &477294265792755014
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 477294265792755017}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7962006342166236999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +140,19 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
   m_UseLocal: 0
+--- !u!65 &5410316546500604579
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477294265792755017}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6445528, y: 0.40171456, z: 0.4692221}
+  m_Center: {x: 0.039442778, y: 0.64700186, z: -0.023532823}
 --- !u!1001 &5611269603659515924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,6 +216,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5754084199372789682, guid: dee706212064ca045a782c5493bde053, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -5002940069103717379, guid: dee706212064ca045a782c5493bde053, type: 3}
     - target: {fileID: 919132149155446097, guid: dee706212064ca045a782c5493bde053, type: 3}
       propertyPath: m_Name
       value: Ax

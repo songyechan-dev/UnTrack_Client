@@ -1,10 +1,16 @@
 using ExitGames.Client.Photon;
+using LeeYuJoung;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviourPun
 {
@@ -25,6 +31,7 @@ public class GameManager : MonoBehaviourPun
     #endregion
 
     #region Value
+    [SerializeField]
     private int round = 1;
     private int finalRound = 5;
     private float meter;
@@ -38,6 +45,8 @@ public class GameManager : MonoBehaviourPun
     public TimeManager timeManager;
     public GameObject firstFactoriesObject;
     public Transform myPlayer;
+    private UnityEngine.AsyncOperation asyncOperation;
+    public List<bool> playerReadyStates = new List<bool>();
     #endregion
 
     #region Instance
@@ -159,20 +168,56 @@ public class GameManager : MonoBehaviourPun
                 object[] data = new object[] { (int)gameState };
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                 PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
+                StartCoroutine(LoadSceneAsync(4));
             }
             else
             {
                 GameEnd();
             }
         }
-        
+    }
+
+    IEnumerator LoadSceneAsync(int sceneNum)
+    {
+        asyncOperation = SceneManager.LoadSceneAsync(sceneNum);
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
+        GameInIt();
+    }
+
+    public void GameInIt()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 4)
+        {
+            UIManager.Instance().voltNumText04.text = StateManager.Instance().voltNum.ToString();
+
+            UIManager.Instance().playerController = PhotonNetwork.Instantiate("Player", new Vector3(0,20,0), Quaternion.identity).GetComponent<PlayerController>();
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    TeamManager teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
+                    teamManager.needReadyUserCount = PhotonNetwork.CurrentRoom.PlayerCount;
+                    myPlayer = players[i].transform;
+                    myPlayer.GetComponent<PlayerController>().teamManager = null;
+                    myPlayer.GetComponent<PlayerController>().teamManager = teamManager;
+                    FactoriesObjectCreator.Instance().Init();
+
+                }
+            }
+            
+
+        }
     }
 
     public void GameEnd()
     {
         gameState = GameState.GameEnd;
         gameMode = GameMode.None;
-        UIManager.Instance().Init();
+        //UIManager.Instance().Init();
         Debug.Log("게임끝");
     }
 
@@ -186,7 +231,6 @@ public class GameManager : MonoBehaviourPun
             object[] data = new object[] { meter };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.METER, data, raiseEventOptions, SendOptions.SendReliable);
-
         }
 
     }
@@ -222,7 +266,7 @@ public class GameManager : MonoBehaviourPun
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
-
+                StartCoroutine(LoadSceneAsync(4));
             }
         }
     }
@@ -243,6 +287,8 @@ public class GameManager : MonoBehaviourPun
         gameMode = _gameMode;
         gameState = _gameState;
     }
+
+
 
     #endregion
 }

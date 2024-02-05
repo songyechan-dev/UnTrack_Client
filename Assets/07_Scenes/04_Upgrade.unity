@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18112557, g: 0.2267088, b: 0.30731195, a: 1}
+  m_IndirectSpecularColor: {r: 0.18112555, g: 0.22670881, b: 0.30731195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,57 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &91787796
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 91787798}
-  - component: {fileID: 91787797}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &91787797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91787796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84f81d3cd9018c248bbda1975a891c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  factoriesObjectPrefab: {fileID: 0}
-  mapCreator: {fileID: 0}
-  gameState: 0
-  gameMode: 0
-  timeManager: {fileID: 0}
-  firstFactoriesObject: {fileID: 0}
-  myPlayer: {fileID: 0}
---- !u!4 &91787798
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91787796}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &100500619
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +308,6 @@ GameObject:
   - component: {fileID: 124524501}
   - component: {fileID: 124524500}
   - component: {fileID: 124524499}
-  - component: {fileID: 124524498}
   m_Layer: 0
   m_Name: ProductionMachine
   m_TagString: PlayableButton
@@ -384,20 +332,6 @@ Transform:
   m_Father: {fileID: 1795109239}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &124524498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 124524496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!64 &124524499
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -462,6 +396,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 124524496}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &150364983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 150364985}
+  - component: {fileID: 150364984}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &150364984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150364983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3791745bbac72f548ad2e5effd1a4913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &150364985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150364983}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &164576310
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +594,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &365974091
 GameObject:
@@ -889,7 +867,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &496206625
 GameObject:
@@ -999,7 +977,6 @@ GameObject:
   - component: {fileID: 527326426}
   - component: {fileID: 527326425}
   - component: {fileID: 527326428}
-  - component: {fileID: 527326429}
   m_Layer: 0
   m_Name: Continue
   m_TagString: PlayableButton
@@ -1087,20 +1064,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &527326429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527326423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!1001 &551129988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1915,7 +1878,6 @@ GameObject:
   - component: {fileID: 713873749}
   - component: {fileID: 713873748}
   - component: {fileID: 713873747}
-  - component: {fileID: 713873746}
   m_Layer: 0
   m_Name: DynamiteMachine
   m_TagString: PlayableButton
@@ -1940,20 +1902,6 @@ Transform:
   m_Father: {fileID: 1795109239}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &713873746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713873744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!64 &713873747
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2030,7 +1978,6 @@ GameObject:
   - component: {fileID: 724697115}
   - component: {fileID: 724697114}
   - component: {fileID: 724697113}
-  - component: {fileID: 724697116}
   m_Layer: 0
   m_Name: StorageUpgrade
   m_TagString: PlayableButton
@@ -2121,20 +2068,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724697111}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &724697116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 724697111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!1 &775365670
 GameObject:
   m_ObjectHideFlags: 0
@@ -2924,7 +2857,6 @@ GameObject:
   - component: {fileID: 991401585}
   - component: {fileID: 991401584}
   - component: {fileID: 991401583}
-  - component: {fileID: 991401587}
   m_Layer: 0
   m_Name: BacktoLobby
   m_TagString: PlayableButton
@@ -3011,20 +2943,6 @@ Transform:
   m_Father: {fileID: 618652525}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &991401587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 991401582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!1 &1080899082
 GameObject:
   m_ObjectHideFlags: 0
@@ -3718,7 +3636,6 @@ GameObject:
   - component: {fileID: 1292500752}
   - component: {fileID: 1292500751}
   - component: {fileID: 1292500754}
-  - component: {fileID: 1292500755}
   m_Layer: 0
   m_Name: MachineUpgrade
   m_TagString: PlayableButton
@@ -3806,20 +3723,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1292500755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292500749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!1 &1376427236
 GameObject:
   m_ObjectHideFlags: 0
@@ -4398,6 +4301,76 @@ RectTransform:
   m_AnchoredPosition: {x: -3, y: 0.1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1492960656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1492960659}
+  - component: {fileID: 1492960658}
+  - component: {fileID: 1492960657}
+  m_Layer: 0
+  m_Name: TeamManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1492960657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492960656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &1492960658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492960656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb4db5588b8a18408531eae24425bf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  needReadyUserCount: 0
+  readyUserCount: 0
+  pv: {fileID: 1492960657}
+--- !u!4 &1492960659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492960656}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1494888847
 GameObject:
   m_ObjectHideFlags: 0
@@ -4811,62 +4784,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1586301908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1586301910}
-  - component: {fileID: 1586301909}
-  m_Layer: 0
-  m_Name: StateManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1586301909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586301908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6df997173eee6a54d9cb6db4a61d6608, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voltNum: 0
-  engineMaxVolume: 5
-  engineCurrentVolume: 3
-  storageMaxVolume: 10
-  sceneFactorys: []
-  engineUpgradePrice: 3
-  storageUpgradePrice: 2
-  currentTime: 0
-  fireTime: 20
-  storageText: {fileID: 0}
-  woodText: {fileID: 0}
-  steelText: {fileID: 0}
---- !u!4 &1586301910
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1586301908}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1676890005
 GameObject:
   m_ObjectHideFlags: 0
@@ -5472,7 +5389,6 @@ GameObject:
   - component: {fileID: 1799271199}
   - component: {fileID: 1799271198}
   - component: {fileID: 1799271201}
-  - component: {fileID: 1799271202}
   m_Layer: 0
   m_Name: EngineUpgrade
   m_TagString: PlayableButton
@@ -5563,20 +5479,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1799271202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799271196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!1 &1804224526
 GameObject:
   m_ObjectHideFlags: 0
@@ -5620,7 +5522,6 @@ GameObject:
   - component: {fileID: 1842103427}
   - component: {fileID: 1842103426}
   - component: {fileID: 1842103425}
-  - component: {fileID: 1842103424}
   m_Layer: 0
   m_Name: WaterTank
   m_TagString: PlayableButton
@@ -5645,20 +5546,6 @@ Transform:
   m_Father: {fileID: 1795109239}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1842103424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842103422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3966a94564337ba41805d4ed409a4400, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myInfo: 0
-  machineUpgradeIDX: 0
 --- !u!64 &1842103425
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6362,90 +6249,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990109618}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &2058502253
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2058502255}
-  - component: {fileID: 2058502254}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2058502254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2058502253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf5940033473d3b4e8b3eb9dfa5d24f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  ground: {fileID: 0}
-  playableButton_GameStart01: {fileID: 0}
-  playableButton_Ranking01: {fileID: 0}
-  playableButton_GameExit01: {fileID: 0}
-  playableButton_Setting01: {fileID: 0}
-  canvas: {fileID: 0}
-  loginPanel: {fileID: 0}
-  settingPanel: {fileID: 0}
-  loginFailPanel: {fileID: 0}
-  upgradeManager: {fileID: 0}
-  pos:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playableButton_CONTINUE_04: {fileID: 0}
-  playableButton_ENGINE_UPGRADE_04: {fileID: 0}
-  playableButton_STORAGE_UPGRADE_04: {fileID: 0}
-  playableButton_MACHINE_UPGRADE_04: {fileID: 0}
-  playableButton_PRODUCTIONMACHINE_BUY_04: {fileID: 0}
-  playableButton_DYNAMITEMACHINE_BUY_04: {fileID: 0}
-  playableButton_WATERTANK_BUY_04: {fileID: 0}
-  playableButton_GAME_EXIT_04: {fileID: 0}
-  machineUpgradePanel: {fileID: 0}
-  engineDesPanel: {fileID: 0}
-  storageDesPanel: {fileID: 0}
-  voltNumText: {fileID: 0}
-  enginePriceText: {fileID: 0}
-  engineDesText: {fileID: 0}
-  storagePriceText: {fileID: 0}
-  storageDesText: {fileID: 0}
-  productionMachineBuyPriceText: {fileID: 0}
-  dynamiteMachineBuyPriceText: {fileID: 0}
-  waterTankBuyPriceText: {fileID: 0}
---- !u!4 &2058502255
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2058502253}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2075519850
 GameObject:
   m_ObjectHideFlags: 0

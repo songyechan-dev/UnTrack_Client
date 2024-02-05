@@ -14,7 +14,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
 {
     private string roomName;
     [SerializeField]
-    private int needReadyUserCount;
+    public int needReadyUserCount;
     [SerializeField]
     private int readyUserCount;
     public PhotonView pv;

@@ -69,7 +69,7 @@ namespace LeeYuJoung
 
         private void Update()
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient && GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play) && GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
             {
                 currentTime += Time.deltaTime;
 
@@ -77,8 +77,7 @@ namespace LeeYuJoung
                 {
                     Fire();
                 }
-            }
-            
+            }            
         }
 
         // :::::: UI 확인용 버튼 나중에 삭제 ::::::
@@ -281,6 +280,13 @@ namespace LeeYuJoung
                 GameObject go = PhotonView.Find(viewID).gameObject;
                 go.GetComponent<FactoryManager>().EngineOverheating();
             }
+            if (photonEvent.Code == (int)SendDataInfo.Info.VOLT_INFO)
+            {
+                object[] receivedData = (object[])photonEvent.CustomData;
+                int _voltCount = (int)receivedData[0];
+                voltNum = _voltCount;
+                UIManager.Instance().volt03.text = voltNum.ToString();
+            }
 
         }
 
@@ -293,6 +299,23 @@ namespace LeeYuJoung
         void OnDisable()
         {
             PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        }
+
+        //TODO : VoltSetter 송예찬
+        public void SetVolt(bool _isAdd, int num)
+        {
+            if (_isAdd)
+            {
+                voltNum += num;
+            }
+            else
+            {
+                voltNum -= num;
+            }
+            UIManager.Instance().volt03.text = voltNum.ToString();
+            object[] data = new object[] { voltNum };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.VOLT_INFO, data, raiseEventOptions, SendOptions.SendReliable);
         }
 
     }

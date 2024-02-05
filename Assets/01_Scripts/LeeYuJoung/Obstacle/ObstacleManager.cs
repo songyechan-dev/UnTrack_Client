@@ -52,6 +52,13 @@ public class ObstacleManager : MonoBehaviour
             {
                 hit.transform.GetComponent<ObstacleManager>().CheckObstacleHeight(_player);
             }
+            else
+            {
+                Debug.Log("맨 위 장애물 입니다");
+                isWorking = true;
+                _player.isWorking = true;
+                StartCoroutine(ObstacleDelete(_player));
+            }
             
         }
         else
