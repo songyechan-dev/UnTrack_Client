@@ -12,10 +12,10 @@ public class MapAnimator : MonoBehaviour
     public Transform camTransform;
 
     public Vector3[] cloudPos = new Vector3[4]
-    {new Vector3(10.0f,11.0f, 35.0f), new Vector3(5.0f, 8.0f, 45.0f), new Vector3(0.0f, 11.0f, 40.0f), new Vector3(-5.0f, 8.0f, 40.0f) };
+    {new Vector3(-40.0f,12.0f, -8.0f), new Vector3(-45.0f, 8.0f, 4.0f), new Vector3(-50.0f, 12.0f, -4.0f), new Vector3(-55.0f, 8.0f, 7.0f) };
 
-    public float ground1_posZ = 10.0f;
-    public float ground2_posZ = -10.0f;
+    public float ground1_posX = -10.0f;
+    public float ground2_posX = 10.0f;
 
     public float shakeTime = 1.5f;
     public float shakeSpeed = 2.0f;
@@ -40,8 +40,8 @@ public class MapAnimator : MonoBehaviour
 
     public void BeginMapGenerate()
     {
-        ground1.transform.DOMoveZ(ground1_posZ, 3.5f);
-        ground2.transform.DOMoveZ(ground2_posZ, 3.5f).OnComplete(CameraShakeCall);
+        ground1.transform.DOMoveX(ground1_posX, 3.5f);
+        ground2.transform.DOMoveX(ground2_posX, 3.5f).OnComplete(CameraShakeCall);
 
         //ground1.transform.DOMoveZ(ground1_posZ, 2.0f).SetEase(Ease.InExpo).SetEase(Ease.OutBounce);
         //ground2.transform.DOMoveZ(ground2_posZ, 2.0f).SetEase(Ease.InExpo).SetEase(Ease.OutBounce);
@@ -55,7 +55,7 @@ public class MapAnimator : MonoBehaviour
         if (!clouds[_idx].activeSelf)
         {
             clouds[_idx].SetActive(true);
-            clouds[_idx].transform.DOMoveZ(-40, _duration).OnComplete(() => clouds[_idx].transform.position = cloudPos[_idx]);
+            clouds[_idx].transform.DOMoveX(40, _duration).OnComplete(() => clouds[_idx].transform.position = cloudPos[_idx]);
 
             yield return new WaitForSeconds(_duration);
 
