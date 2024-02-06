@@ -15,7 +15,7 @@ namespace KLSDev2023
         {
             UIManager.Instance().Init();
             PlayBGM();
-            SceneInit();
+            SceneInit
         }
 
         public void NextScene()
