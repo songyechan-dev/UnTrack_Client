@@ -115,8 +115,8 @@ public class ObstacleManager : MonoBehaviour
     public void GenerateIngredient(PlayerController _player)
     {
         Debug.Log("Generate ::: " + generateItem);
-        QuestManager.Instance().UpdateProgress(generateItem, 1);
-        GameObject _object = PhotonNetwork.Instantiate(generateItem, new Vector3(_player.transform.position.x, _player.transform.position.y +0.5f, _player.transform.position.z), transform.rotation);
+        QuestManager.Instance().UpdateProgress(generateItem, 1); 
+        GameObject _object = PhotonNetwork.Instantiate(generateItem, new Vector3(_player.transform.position.x, _player.transform.position.y, _player.transform.position.z)-transform.forward, transform.rotation);
         _object.name = generateItem;
     }
 

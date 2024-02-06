@@ -40,7 +40,7 @@ public class FactoriesObjectCreator : MonoBehaviour
     
     public void Create()
     {
-        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart) && GameManager.Instance().myPlayer != null)
         {
             if (PhotonNetwork.IsMasterClient)
             {

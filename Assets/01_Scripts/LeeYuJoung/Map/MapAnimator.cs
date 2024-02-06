@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using Photon.Pun;
 
 public class MapAnimator : MonoBehaviour
 {
@@ -21,22 +22,20 @@ public class MapAnimator : MonoBehaviour
     public float shakeSpeed = 2.0f;
     public float shakeAmount = 2.5f;
 
+    public MapCreator mapCreator;
+
     void Start()
     {
         ground1 = transform.GetChild(0).gameObject;
         ground2 = transform.GetChild(1).gameObject;
         camTransform = GameObject.Find("Main Camera").GetComponent<Transform>();
-
+        mapCreator = GameObject.Find("MapCreator").GetComponent<MapCreator>();
         BeginMapGenerate();
-        StartCoroutine(CloudMove());
-        StartCoroutine(CloudMove());
-        StartCoroutine(CloudMove());
+        //StartCoroutine(CloudMove());
+        //StartCoroutine(CloudMove());
+        //StartCoroutine(CloudMove());
     }
 
-    void Update()
-    {
-
-    }
 
     public void BeginMapGenerate()
     {
@@ -75,6 +74,7 @@ public class MapAnimator : MonoBehaviour
 
     IEnumerator CameraShake()
     {
+        Debug.Log("Ä«¸Þ¶ó ½¦ÀÌÅ© È£ÃâµÊ");
         Vector3 originPosition = camTransform.localPosition;
         float currentTime = 0.0f;
 
@@ -89,5 +89,10 @@ public class MapAnimator : MonoBehaviour
         }
 
         camTransform.localPosition = originPosition;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            mapCreator.MapLoad();
+        }
+        PhotonNetwork.Instantiate("Player", new Vector3(0, 0.5f, 0),Quaternion.identity);
     }
 }

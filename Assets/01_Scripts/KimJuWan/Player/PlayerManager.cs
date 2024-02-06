@@ -34,6 +34,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             {
                 Camera.main.transform.GetComponent<CameraManager>().playerTransform = transform;
             }
+            GameManager.Instance().myPlayer = transform;
         }
         else if (photonView == null)
         {

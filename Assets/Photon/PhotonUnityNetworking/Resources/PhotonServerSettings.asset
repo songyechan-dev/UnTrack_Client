@@ -69,6 +69,7 @@ MonoBehaviour:
   - PlayAnim
   - SetItemPos
   - SetMyParent_Null
+  - MapEnvironmentCreate_Others
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
