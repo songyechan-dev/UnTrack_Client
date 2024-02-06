@@ -51,36 +51,42 @@ public static class WebServerManager
 
     public static IEnumerator RankingPanelCoroutine()
     {
-        WWWForm form = new WWWForm();
-        using (UnityWebRequest www = UnityWebRequest.Post(serverURL, form))
+        
+        using (UnityWebRequest www = UnityWebRequest.Get(serverURL))
         {
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
             {
                 var rankingData = JSON.Parse(www.downloadHandler.text);
+                Debug.Log(rankingData);
+                Debug.Log(www.downloadHandler.text);
                 for (int i = 0; i < rankingData.Count; i++)
                 {
-                    UIManager manager = new UIManager();
-                    
-                    GameObject bar = manager.rankingBarPrefab;
-                    manager.rankingBarInstantiate(bar);
+
+                    GameObject bar = UIManager.Instance().CreateBar();
                     bar.transform.SetParent(GameObject.Find("RankingContent").transform);
                     bar.transform.localScale = Vector3.one;
                     bar.transform.GetChild(0).GetComponent<Text>().text = $"{i + 1}.";
                     bar.transform.GetChild(1).GetComponent<Text>().text = rankingData[i]["teamName"];
                     bar.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = rankingData[i]["total_clearTime"];
-                    bar.transform.GetChild(3).GetComponent<Text>().text = rankingData[i]["player_1"];
-                    bar.transform.GetChild(4).GetComponent<Text>().text = rankingData[i]["player_2"];
-                    bar.transform.GetChild(5).GetComponent<Text>().text = rankingData[i]["player_3"];
-                    bar.transform.GetChild(6).GetComponent<Text>().text = rankingData[i]["player_4"];
                     bar.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = rankingData[i]["round1_clearTime"];
                     bar.transform.GetChild(8).GetChild(0).GetComponent<Text>().text = rankingData[i]["round2_clearTime"];
                     bar.transform.GetChild(9).GetChild(0).GetComponent<Text>().text = rankingData[i]["round3_clearTime"];
                     bar.transform.GetChild(10).GetChild(0).GetComponent<Text>().text = rankingData[i]["round4_clearTime"];
                     bar.transform.GetChild(11).GetChild(0).GetComponent<Text>().text = rankingData[i]["round5_clearTime"];
+                    bar.transform.GetChild(3).GetComponent<Text>().text = rankingData[i]["player_1"];
+                    bar.transform.GetChild(4).GetComponent<Text>().text = rankingData[i]["player_2"];
+                    bar.transform.GetChild(5).GetComponent<Text>().text = rankingData[i]["player_3"];
+                    bar.transform.GetChild(6).GetComponent<Text>().text = rankingData[i]["player_4"];
+                    
 
 
                 }
+            }
+            else
+            {
+                Debug.Log(www.result);
+                Debug.Log(www.downloadHandler.text);
             }
 
            

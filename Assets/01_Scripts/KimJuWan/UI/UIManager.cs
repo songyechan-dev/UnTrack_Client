@@ -480,11 +480,6 @@ public class UIManager : MonoBehaviour
         SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
     }
 
-    public void rankingBarInstantiate(GameObject bar)
-    {
-        Instantiate(bar);
-        
-    }
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -790,5 +785,12 @@ public class UIManager : MonoBehaviour
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
+    #endregion
+
+    #region OtherFunc
+    public GameObject CreateBar()
+    {
+        return Instantiate(Resources.Load<GameObject>(rankingBarPrefab.name));
+    }
     #endregion
 }
