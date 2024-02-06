@@ -154,7 +154,6 @@ public class GameManager : MonoBehaviourPun
         {
             PhotonNetwork.LoadLevel(5);
             UIManager.Instance().Init();
-            UIManager.Instance().clearTimeText06.text = ((int)TimeManager.Instance().PrevTime).ToString();
         }
     }
 

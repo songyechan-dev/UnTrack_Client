@@ -17,11 +17,6 @@ public class TimeManager : MonoBehaviour
         private set { curTime = value; }
     }
 
-    public float PrevTime
-    {
-        get { return prevTime; }
-    }
-
     public static TimeManager Instance()
     {
         return instance;

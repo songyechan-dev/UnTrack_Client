@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
@@ -15,11 +14,6 @@ public class TimeManager : MonoBehaviour
     {
         get { return curTime; }
         private set { curTime = value; }
-    }
-
-    public float PrevTime
-    {
-        get { return prevTime; }
     }
 
     public static TimeManager Instance()
@@ -46,7 +40,7 @@ public class TimeManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        prevTime = curTime;
+
         ResetCurTime();
         if (scene.buildIndex != 3)
         {
