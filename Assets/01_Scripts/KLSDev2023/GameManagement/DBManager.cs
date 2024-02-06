@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
+using Unity.VisualScripting;
 
 public static class DBManager
 {
@@ -81,6 +82,50 @@ public static class DBManager
             {
                 command.ExecuteNonQuery();
             }
+        }
+    }
+
+    public static void InsertTeamDataToRanking(string roomName, int num)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            
+            string query = $"INSERT INTO totalranking(teamName, player_{num}) SELECT team, nickName FROM GameInfo WHERE roomName = '{roomName}';";
+            
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+
+        }
+    }
+
+    public static void InsertClearDataToRanking(float totalClearTime, string team)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = $"INSERT INTO totalranking(totalClearTime) VALUES('{totalClearTime}') WHERE teamName = '{team}';";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+
+        }
+    }
+
+    public static void InsertRoundClearData(float roundClearTime, string team, int round)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = $"INSERT INTO totalranking(round{round}_clearTime) VALUES('{roundClearTime}') WHERE teamName = '{team}';";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+
         }
     }
 }

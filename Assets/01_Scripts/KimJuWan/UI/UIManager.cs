@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public PlayerController playerController;
     public GameObject canvas;
     public GameObject ground;
+    public GameObject rankingBarPrefab;
     public string keySet = "PlayerActionKeyCode";
 
     #region Scene01
@@ -41,6 +42,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Text")]
     public Text keySettingText01;
+
+    
 
     #endregion
 
@@ -152,6 +155,7 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
                 ActiveAndDeActive(rankingPanel01, ground);
+                StartCoroutine(WebServerManager.RankingPanelCoroutine());
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 ActiveAndDeActive(settingPanel01, ground);
@@ -476,6 +480,11 @@ public class UIManager : MonoBehaviour
         SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
     }
 
+    public void rankingBarInstantiate(GameObject bar)
+    {
+        Instantiate(bar);
+        
+    }
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -518,7 +527,9 @@ public class UIManager : MonoBehaviour
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
             keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").GetComponent<Text>();
+            rankingBarPrefab = Resources.Load<GameObject>("RankingBar");
             
+
             PlayerPrefs.GetInt(keySet);
             
             keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
@@ -660,6 +671,7 @@ public class UIManager : MonoBehaviour
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
+            
 
         }
         #endregion
