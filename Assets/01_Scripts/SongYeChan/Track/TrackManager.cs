@@ -502,7 +502,7 @@ public class TrackManager : MonoBehaviourPun
     void TrackConnectFailed(GameObject track)
     {
         trackConnectFailed = true;
-        GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot",track.transform.position,track.transform.rotation);
+        GameObject _droppedSlot = PhotonNetwork.Instantiate("DroppedSlot",track.transform.position + new Vector3(0,0.5f,0),track.transform.rotation);
         _droppedSlot.tag = "DroppedSlot";
         _droppedSlot.name = "DroppedSlot";
 

@@ -97,6 +97,7 @@ public class MapCreator : MonoBehaviour
     Dictionary<int,List<int>> planeList = new Dictionary<int,List<int>>();
     int treeCount = 0;
     int stoneCount = 0;
+    private string prevOBname = "";
 
 
 
@@ -468,7 +469,16 @@ public class MapCreator : MonoBehaviour
             return;
         }
         int randOB = Random.Range(0, 2);
-        string _objectName = randOB > 0 ? obStonePrefab.name : obTreePrefab.name;
+        string _objectName;
+        if (string.IsNullOrEmpty(prevOBname))
+        {
+            _objectName = stoneCount < treeCount ? obStonePrefab.name : obTreePrefab.name;
+        }
+        else
+        {
+            _objectName = prevOBname.Equals(obStonePrefab.name) ? obTreePrefab.name : obStonePrefab.name;
+        }
+        prevOBname = _objectName;
         CreateObject_Master(toBeCreatedPos[rand].v1.x, toBeCreatedPos[rand].v1.y, toBeCreatedPos[rand].v1.z, _objectName);
         CreateObject_Master(toBeCreatedPos[rand].v2.x, toBeCreatedPos[rand].v2.y, toBeCreatedPos[rand].v2.z, _objectName);
         CreateObject_Master(toBeCreatedPos[rand].v3.x, toBeCreatedPos[rand].v3.y, toBeCreatedPos[rand].v3.z, _objectName);
@@ -501,7 +511,7 @@ public class MapCreator : MonoBehaviour
                 pv.RPC("CreatePlane_Master",RpcTarget.MasterClient,x,y,z);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
-                    if ((j >= MapInfo.startPosition.x -2 && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.startPosition.x && j <= MapInfo.defaultEndTrackX +2) && (i < MapInfo.defaultStartTrackZ +1f))
                     {
                         //pv.RPC("CreatePlane_Master", RpcTarget.MasterClient, x, y, z)
                     }
@@ -520,7 +530,7 @@ public class MapCreator : MonoBehaviour
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
-                    if ((j >= MapInfo.startPosition.x-2 && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.startPosition.x && j <= MapInfo.defaultEndTrackX +2) && (i < MapInfo.defaultStartTrackZ +1f))
                     {
                         
                     }
