@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 public class TimeManager : MonoBehaviour
 {
     private static TimeManager instance;
-    [SerializeField]
     private float curTime;
 
     // 읽기 전용 프로퍼티로 curTime을 정의
@@ -13,11 +12,6 @@ public class TimeManager : MonoBehaviour
     {
         get { return curTime; }
         private set { curTime = value; }
-    }
-
-    public static TimeManager Instance()
-    {
-        return instance;
     }
 
     private void Awake()
@@ -52,19 +46,20 @@ public class TimeManager : MonoBehaviour
 
     public float GetCurTime()
     {
-        return CurTime;
+        return CurTime; // 프로퍼티를 사용하여 값을 반환
     }
 
     private void ResetCurTime()
     {
         CurTime = 0;
+
     }
 
     private IEnumerator UpdateCurTime()
     {
         while (true)
         {
-            CurTime +=Time.deltaTime;
+            CurTime = Time.time + Time.deltaTime;
             yield return null;
         }
     }

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace LeeYuJoung
@@ -286,14 +285,7 @@ namespace LeeYuJoung
                 object[] receivedData = (object[])photonEvent.CustomData;
                 int _voltCount = (int)receivedData[0];
                 voltNum = _voltCount;
-                if (SceneManager.GetActiveScene().buildIndex == 3)
-                {
-                    UIManager.Instance().volt03.text = voltNum.ToString();
-                }
-                else if (SceneManager.GetActiveScene().buildIndex == 4)
-                {
-                    UIManager.Instance().voltNumText04.text = voltNum.ToString();
-                }
+                UIManager.Instance().volt03.text = voltNum.ToString();
             }
 
         }
@@ -320,15 +312,7 @@ namespace LeeYuJoung
             {
                 voltNum -= num;
             }
-            if (SceneManager.GetActiveScene().buildIndex == 3)
-            {
-                UIManager.Instance().volt03.text = voltNum.ToString();
-            }
-            else if (SceneManager.GetActiveScene().buildIndex == 4)
-            {
-                UIManager.Instance().voltNumText04.text = voltNum.ToString();
-            }
-            
+            UIManager.Instance().volt03.text = voltNum.ToString();
             object[] data = new object[] { voltNum };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.VOLT_INFO, data, raiseEventOptions, SendOptions.SendReliable);

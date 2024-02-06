@@ -64,7 +64,7 @@ public class TimeManager : MonoBehaviour
     {
         while (true)
         {
-            CurTime +=Time.deltaTime;
+            CurTime = Time.time + Time.deltaTime;
             yield return null;
         }
     }

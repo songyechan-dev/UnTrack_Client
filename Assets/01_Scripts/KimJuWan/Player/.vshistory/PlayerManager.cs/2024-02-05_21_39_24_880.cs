@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Transform sensor;
     public Transform droppedSlotPrefab;
     public Transform equipSlot;
-    float castRange = 3f;
+    float castRange = 1f;
 
     public ItemManager itemManager;
 
@@ -301,7 +301,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                                     playerController.isPick = false;
                                     castRange = 1.0f;
                                     Debug.Log("여기는통과");
-                                    DestroyOnNetwork(pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>());
+                                    //DestroyOnNetwork(pickSlot.transform.GetChild(0).GetComponent<PhotonSyncManager>());
                                     inventoryManager.DroppedSlotOut();
                                     GameObject.Find("TrackManager").GetComponent<TrackManager>().TrackCreate(ray);
                                 }

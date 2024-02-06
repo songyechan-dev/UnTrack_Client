@@ -104,10 +104,6 @@ public class QuestManager : MonoBehaviourPun
     // 퀘스트 성공 시 보상 지급 → 라운드 종료 후 실행 
     public void CheckCompletion()
     {
-        if (questType.Equals("Time"))
-        {
-            UpdateProgress();
-        }
         if(isCompleted && PhotonNetwork.IsMasterClient)
         {
             StateManager.Instance().SetVolt(true, reward);

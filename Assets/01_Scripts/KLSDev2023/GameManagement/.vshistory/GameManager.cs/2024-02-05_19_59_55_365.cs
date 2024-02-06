@@ -195,8 +195,6 @@ public class GameManager : MonoBehaviourPun
 
             UIManager.Instance().playerController = PhotonNetwork.Instantiate("Player", new Vector3(0,20,0), Quaternion.identity).GetComponent<PlayerController>();
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            QuestManager.Instance().CheckCompletion();
-
             for (int i = 0; i < players.Length; i++)
             {
                 if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
@@ -206,7 +204,11 @@ public class GameManager : MonoBehaviourPun
                     myPlayer = players[i].transform;
                     myPlayer.GetComponent<PlayerController>().teamManager = null;
                     myPlayer.GetComponent<PlayerController>().teamManager = teamManager;
-                    FactoriesObjectCreator.Instance().Init();       
+                    FactoriesObjectCreator.Instance().Init();
+                    if (QuestManager.Instance().isCompleted)
+                    {
+                        StateManager.Instance().voltNum++;
+                    }
                 }
             }
             

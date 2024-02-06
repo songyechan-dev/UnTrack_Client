@@ -529,7 +529,7 @@ public class MapCreator : MonoBehaviour
                 pv.RPC("CreatePlane_Master",RpcTarget.MasterClient,x,y,z);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
-                    if ((j >= MapInfo.startPosition.x && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i > MapInfo.defaultStartTrackZ + 1))
                     {
                         //pv.RPC("CreatePlane_Master", RpcTarget.MasterClient, x, y, z)
                     }
@@ -548,7 +548,7 @@ public class MapCreator : MonoBehaviour
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
-                    if ((j >= MapInfo.startPosition.x && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.defaultStartTrackX && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i > MapInfo.defaultStartTrackZ + 1))
                     {
                         
                     }

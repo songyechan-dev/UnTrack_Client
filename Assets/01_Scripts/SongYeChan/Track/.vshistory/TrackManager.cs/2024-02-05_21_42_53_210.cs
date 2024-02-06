@@ -63,7 +63,6 @@ public class TrackManager : MonoBehaviourPun
             Debug.Log($"_ray.origin :: {_ray.origin}");
             Debug.Log($"hit.transform :: {hit.transform.position}");
             GameObject track = PhotonNetwork.Instantiate("Track", new Vector3(Mathf.Round(_ray.origin.x), hit.transform.localPosition.y + (0.05f), Mathf.Round(_ray.origin.z)), trackPrefab.transform.rotation);
-            Debug.Log("생성됨");
             track.tag = trackTagName;
             track.AddComponent<TrackInfo>();
             object[] data = new object[] { track.GetComponent<PhotonView>().ViewID};

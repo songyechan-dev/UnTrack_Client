@@ -18,7 +18,7 @@ public class QuestManager : MonoBehaviourPun
 
     public string dataPath;
     private string content;
-    public string questType;
+    private string questType;
     private string progressType;
     private int progressGoal;
     private int reward;
@@ -82,7 +82,7 @@ public class QuestManager : MonoBehaviourPun
     }
 
     // 시간형 퀘스트 진행도 업그레이드 → StateManager.cs에서 
-    public void UpdateProgress()
+    public void UpdateProgress(float _amount)
     {
         if (!isCompleted && questType.Equals("Time"))
         {
@@ -94,20 +94,12 @@ public class QuestManager : MonoBehaviourPun
                 Debug.Log(":::: Quest Completed ::::");
                 isCompleted = true;
             }
-            else
-            {
-                isCompleted = false;
-            }
         }
     }
 
     // 퀘스트 성공 시 보상 지급 → 라운드 종료 후 실행 
     public void CheckCompletion()
     {
-        if (questType.Equals("Time"))
-        {
-            UpdateProgress();
-        }
         if(isCompleted && PhotonNetwork.IsMasterClient)
         {
             StateManager.Instance().SetVolt(true, reward);
