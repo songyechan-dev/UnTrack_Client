@@ -5687,8 +5687,17 @@ MonoBehaviour:
   - {fileID: 0}
   ground1: {fileID: 0}
   ground2: {fileID: 0}
+  camTransform: {fileID: 0}
+  cloudPos:
+  - {x: 10, y: 11, z: 35}
+  - {x: 5, y: 8, z: 45}
+  - {x: 0, y: 11, z: 40}
+  - {x: -5, y: 8, z: 40}
   ground1_posZ: 10
   ground2_posZ: -10
+  shakeTime: 1.5
+  shakeSpeed: 2
+  shakeAmount: 2.5
 --- !u!1001 &56754527452056901
 PrefabInstance:
   m_ObjectHideFlags: 0
