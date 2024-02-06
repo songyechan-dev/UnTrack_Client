@@ -1285,7 +1285,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Active
   - m_Version: 1
-    m_Start: 14.66666666666667
+    m_Start: 14.749999999999998
     m_ClipIn: 0
     m_Asset: {fileID: 5249707614101771603}
     m_Duration: 1.9499999999999957
@@ -1354,7 +1354,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Active
   - m_Version: 1
-    m_Start: 18.000000000000004
+    m_Start: 18.083333333333336
     m_ClipIn: 0
     m_Asset: {fileID: 2284422920016184567}
     m_Duration: 1.9499999999999957
@@ -1845,7 +1845,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Active
   - m_Version: 1
-    m_Start: 15.35000000000001
+    m_Start: 15.433333333333332
     m_ClipIn: 0
     m_Asset: {fileID: 2900486877508016094}
     m_Duration: 1.2666666666666622
@@ -1914,7 +1914,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Active
   - m_Version: 1
-    m_Start: 18.683333333333344
+    m_Start: 18.76666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 3838481332189922239}
     m_Duration: 1.2666666666666622

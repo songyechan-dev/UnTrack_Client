@@ -4,11 +4,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
-public class Sound
+public enum SOUNDTYPE
 {
-    public string name;
-    public AudioClip clip;
+    WALK = 0,          // Player 걷는 소리
+    PICKUP = 1,        // Player 아이템 잡는 소리
+    DIG = 2,           // Player 장애물 제거 소리
+    TRAIN_START = 3,   // 기차 출발
+    TRAIN_MOVE = 4,    // 기차 이동
+    TRAIN_CRASH = 5,   // 기차 충돌 
+    FACTORY_WORK = 6,  // 제작소 제작 중
+    FACTORY_FIRE = 7,  // 제작소 화재 발생
+    WATER = 8,         // 제작소 화재 진압 
+    UI_CLICK = 9,      // UI 클릭 소리
+    UI_GAZE = 10,      // UI 게이지 소리
+    UPGRADE = 11       // 업그레이드 성공
 }
 
 public class AudioManager : MonoBehaviour
@@ -20,9 +29,9 @@ public class AudioManager : MonoBehaviour
     }
 
     [SerializeField]
-    Sound[] bgms = null;
+    AudioClip[] bgms;
     [SerializeField]
-    Sound[] sfxs = null;
+    AudioClip[] sfxs;
 
     public AudioSource bgmPlayer = null;
     public AudioSource[] sfxPlayer = null;
@@ -51,25 +60,32 @@ public class AudioManager : MonoBehaviour
         switch (_sceneNumber)
         {
             case 0:
-                bgmPlayer.clip = bgms[0].clip;
+                bgmPlayer.clip = bgms[0];
+                bgmPlayer.Play();
                 break;
             case 1:
-                bgmPlayer.clip = bgms[1].clip;
+                bgmPlayer.clip = bgms[1];
+                bgmPlayer.Play();
                 break;
             case 2:
-                bgmPlayer.clip = bgms[1].clip;
+                bgmPlayer.clip = bgms[1];
+                bgmPlayer.Play();
                 break;
             case 3:
-                bgmPlayer.clip = bgms[2].clip;
+                bgmPlayer.clip = bgms[2];
+                bgmPlayer.Play();
                 break;
             case 4:
-                bgmPlayer.clip = bgms[1].clip;
+                bgmPlayer.clip = bgms[1];
+                bgmPlayer.Play();
                 break;
             case 5:
-                bgmPlayer.clip = bgms[3].clip;
+                bgmPlayer.clip = bgms[3];
+                bgmPlayer.Play();
                 break;
             case 6:
-                bgmPlayer.clip = bgms[4].clip;
+                bgmPlayer.clip = bgms[4];
+                bgmPlayer.Play();
                 break;
             default:
                 break;
@@ -91,21 +107,17 @@ public class AudioManager : MonoBehaviour
         bgmVolume = bgmSlider.value;
     }
 
-    public void PlaySFX(AudioSource _audioSource, string _name)
+    public void PlaySFX(AudioSource _audioSource, SOUNDTYPE _soundType)
     {
-        for(int i = 0; i < sfxs.Length; i++)
+        if (sfxs[(int)_soundType] != null)
         {
-            if (_name.Equals(sfxs[i].name))
-            {
-                _audioSource.clip = sfxs[i].clip;
-                _audioSource.Play();
-
-                return;
-            }
+            _audioSource.clip = sfxs[(int)_soundType];
+            _audioSource.Play();
         }
-
-        Debug.Log("::: 효과음 존재 안함 :::");
-        return;
+        else
+        {
+            Debug.Log("::: 해당 SFX 없음 :::");
+        }
     }
 
     public void StopSFX()
