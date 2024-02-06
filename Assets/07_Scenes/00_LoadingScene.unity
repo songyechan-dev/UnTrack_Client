@@ -1289,6 +1289,10 @@ MonoBehaviour:
   sfxs: []
   bgmPlayer: {fileID: 0}
   sfxPlayer: []
+  bgmSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}
+  bgmVolume: 0
+  sfxVolume: 0
 --- !u!4 &1639517278
 Transform:
   m_ObjectHideFlags: 0
