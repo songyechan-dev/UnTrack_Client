@@ -74,6 +74,7 @@ public class MapCreator : MonoBehaviour
     public GameObject storagePrefab;
     public GameObject axPrefab;
     public GameObject pickPrefab;
+    public GameObject mapEnvironmentPrefab;
 
     GameObject obStoneObject;
     GameObject trackObject;
@@ -97,25 +98,39 @@ public class MapCreator : MonoBehaviour
     int treeCount = 0;
     int stoneCount = 0;
 
+
+
     private void Awake()
     {
+        trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
+        photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
+        pv = GetComponent<PhotonView>();
         //방장인지 확인
         if (PhotonNetwork.IsMasterClient)
         {
             planeList.Clear();
             treeCount = 0;
             stoneCount = 0;
-            MapLoad();
+            MapEnvironmentCreate_Master();
+            //MapLoad();
         }
-        trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
-        photonObjectCreator = GameObject.Find("PhotonObjectCreator").GetComponent<PhotonObjectCreator>();
-        pv = GetComponent<PhotonView>();
-        photonObjectCreator.Create("Player", new Vector3(0, 0.5f, 0));
         if (PhotonNetwork.IsMasterClient)
         {
             GameManager.Instance().GameStart();
             QuestManager.Instance().Init();
         }
+    }
+
+    private void MapEnvironmentCreate_Master()
+    {
+        GameObject go = Instantiate(Resources.Load<GameObject>(mapEnvironmentPrefab.name), new Vector3(26.1000004f, -1.05f, 7.2f), Quaternion.Euler(new Vector3(0,90f,0)));
+        pv.RPC("MapEnvironmentCreate_Others", RpcTarget.Others);
+    }
+
+    [PunRPC]
+    private void MapEnvironmentCreate_Others()
+    {
+        GameObject go = Instantiate(Resources.Load<GameObject>(mapEnvironmentPrefab.name), new Vector3(26.1000004f, -1.05f, 7.2f), Quaternion.Euler(new Vector3(0,90f,0)));
     }
 
 
@@ -419,89 +434,46 @@ public class MapCreator : MonoBehaviour
                 }
             }
         }
-        if (treeCount > stoneCount)
-        {
-            int rand = Random.Range(0, toBeCreatedPos.Count);
-            RaycastHit hit;
-            Ray rayV1 = new Ray(new Vector3(toBeCreatedPos[rand].v1.x, 0, toBeCreatedPos[rand].v1.z), Vector3.up);
-            Ray rayV2 = new Ray(new Vector3(toBeCreatedPos[rand].v2.x, 0, toBeCreatedPos[rand].v2.z), Vector3.up);
-            Ray rayV3 = new Ray(new Vector3(toBeCreatedPos[rand].v3.x, 0, toBeCreatedPos[rand].v3.z), Vector3.up);
-            Ray rayV4 = new Ray(new Vector3(toBeCreatedPos[rand].v4.x, 0, toBeCreatedPos[rand].v4.z), Vector3.up);
 
-            //생성전 오브젝트들이 생성이 되어있는지 확인
-            if (Physics.Raycast(rayV1, out hit,1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV2, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV3, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV4, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            CreateObject_Master(toBeCreatedPos[rand].v1.x, toBeCreatedPos[rand].v1.y, toBeCreatedPos[rand].v1.z, obStonePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v2.x, toBeCreatedPos[rand].v2.y, toBeCreatedPos[rand].v2.z, obStonePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v3.x, toBeCreatedPos[rand].v3.y, toBeCreatedPos[rand].v3.z, obStonePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v4.x, toBeCreatedPos[rand].v4.y, toBeCreatedPos[rand].v4.z, obStonePrefab.name);
-            stoneCount+=4;
-            toBeCreatedPos.RemoveAt(rand);
-        }
-        else
-        {
-            int rand = Random.Range(0, toBeCreatedPos.Count);
-            RaycastHit hit;
-            Ray rayV1 = new Ray(new Vector3(toBeCreatedPos[rand].v1.x, 0, toBeCreatedPos[rand].v1.z), Vector3.up);
-            Ray rayV2 = new Ray(new Vector3(toBeCreatedPos[rand].v2.x, 0, toBeCreatedPos[rand].v2.z), Vector3.up);
-            Ray rayV3 = new Ray(new Vector3(toBeCreatedPos[rand].v3.x, 0, toBeCreatedPos[rand].v3.z), Vector3.up);
-            Ray rayV4 = new Ray(new Vector3(toBeCreatedPos[rand].v4.x, 0, toBeCreatedPos[rand].v4.z), Vector3.up);
+        int rand = Random.Range(0, toBeCreatedPos.Count);
+        RaycastHit hit;
+        Ray rayV1 = new Ray(new Vector3(toBeCreatedPos[rand].v1.x, 0, toBeCreatedPos[rand].v1.z), Vector3.up * 3f);
+        Ray rayV2 = new Ray(new Vector3(toBeCreatedPos[rand].v2.x, 0, toBeCreatedPos[rand].v2.z), Vector3.up * 3f);
+        Ray rayV3 = new Ray(new Vector3(toBeCreatedPos[rand].v3.x, 0, toBeCreatedPos[rand].v3.z), Vector3.up * 3f);
+        Ray rayV4 = new Ray(new Vector3(toBeCreatedPos[rand].v4.x, 0, toBeCreatedPos[rand].v4.z), Vector3.up * 3f);
 
-            //생성전 오브젝트들이 생성이 되어있는지 확인
-            if (Physics.Raycast(rayV1, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV2, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV3, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            else if (Physics.Raycast(rayV4, out hit, 1f))
-            {
-                Debug.Log("통과");
-                CreateOB();
-                return;
-            }
-            CreateObject_Master(toBeCreatedPos[rand].v1.x, toBeCreatedPos[rand].v1.y, toBeCreatedPos[rand].v1.z, obTreePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v2.x, toBeCreatedPos[rand].v2.y, toBeCreatedPos[rand].v2.z, obTreePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v3.x, toBeCreatedPos[rand].v3.y, toBeCreatedPos[rand].v3.z, obTreePrefab.name);
-            CreateObject_Master(toBeCreatedPos[rand].v4.x, toBeCreatedPos[rand].v4.y, toBeCreatedPos[rand].v4.z, obTreePrefab.name);
-            treeCount+=4;
-            toBeCreatedPos.RemoveAt(rand);
+        //생성전 오브젝트들이 생성이 되어있는지 확인
+        if (Physics.Raycast(rayV1, out hit,1f))
+        {
+            Debug.Log("통과");
+            CreateOB();
+            return;
         }
-        
+        else if (Physics.Raycast(rayV2, out hit, 1f))
+        {
+            Debug.Log("통과");
+            CreateOB();
+            return;
+        }
+        else if (Physics.Raycast(rayV3, out hit, 1f))
+        {
+            Debug.Log("통과");
+            CreateOB();
+            return;
+        }
+        else if (Physics.Raycast(rayV4, out hit, 1f))
+        {
+            Debug.Log("통과");
+            CreateOB();
+            return;
+        }
+        int randOB = Random.Range(0, 2);
+        string _objectName = randOB > 0 ? obStonePrefab.name : obTreePrefab.name;
+        CreateObject_Master(toBeCreatedPos[rand].v1.x, toBeCreatedPos[rand].v1.y, toBeCreatedPos[rand].v1.z, _objectName);
+        CreateObject_Master(toBeCreatedPos[rand].v2.x, toBeCreatedPos[rand].v2.y, toBeCreatedPos[rand].v2.z, _objectName);
+        CreateObject_Master(toBeCreatedPos[rand].v3.x, toBeCreatedPos[rand].v3.y, toBeCreatedPos[rand].v3.z, _objectName);
+        CreateObject_Master(toBeCreatedPos[rand].v4.x, toBeCreatedPos[rand].v4.y, toBeCreatedPos[rand].v4.z, _objectName);
+        toBeCreatedPos.RemoveAt(rand);
     }
 
 
@@ -529,7 +501,7 @@ public class MapCreator : MonoBehaviour
                 pv.RPC("CreatePlane_Master",RpcTarget.MasterClient,x,y,z);
                 if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_STONE)
                 {
-                    if ((j >= MapInfo.startPosition.x && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.startPosition.x -2 && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
                     {
                         //pv.RPC("CreatePlane_Master", RpcTarget.MasterClient, x, y, z)
                     }
@@ -548,7 +520,7 @@ public class MapCreator : MonoBehaviour
                 }
                 else if (mapInfo[i][j] == (int)MapInfo.Type.OBSTACLE_TREE)
                 {
-                    if ((j >= MapInfo.startPosition.x && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
+                    if ((j >= MapInfo.startPosition.x-2 && j < MapInfo.defaultEndTrackX) && (i < MapInfo.defaultStartTrackZ || i == MapInfo.defaultStartTrackZ + 1))
                     {
                         
                     }
@@ -642,6 +614,12 @@ public class MapCreator : MonoBehaviour
         pv.RPC("SetSceneFactorys_Others", RpcTarget.Others);
         Debug.Log("찾았다 ::::" + StateManager.Instance().sceneFactorys.Count);
     }
+
+    
+
+
+
+
     [PunRPC]
     void SetSceneFactorys_Others()
     {

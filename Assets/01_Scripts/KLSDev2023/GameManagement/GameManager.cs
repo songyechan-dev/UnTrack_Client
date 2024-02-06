@@ -133,14 +133,7 @@ public class GameManager : MonoBehaviourPun
         }
         gameState = GameState.GameStart;
         gameMode = GameMode.Play;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
-            {
-                myPlayer = players[i].transform;
-            }
-        }
+        
         object[] data = new object[] { (int)gameState };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
@@ -253,14 +246,6 @@ public class GameManager : MonoBehaviourPun
             if (_gameState.Equals(GameState.GameStart))
             {
                 SetGameMode(GameMode.Play,GameState.GameStart);
-                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-                for (int i = 0; i < players.Length; i++)
-                {
-                    if (players[i].GetComponent<PhotonView>().OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
-                    {
-                        myPlayer = players[i].transform;
-                    }
-                }
             }
             if (_gameState.Equals(GameState.GameClear))
             {

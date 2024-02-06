@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         PICK = 5
 
     }
-    
-    private float moveSpeed = 10f;
+    [SerializeField]
+    private float moveSpeed = 2f;
 
     Vector3 moveDirection;
     //Rigidbody rb;

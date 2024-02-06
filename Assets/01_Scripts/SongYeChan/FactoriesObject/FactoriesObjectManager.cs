@@ -72,7 +72,6 @@ public class FactoriesObjectManager : MonoBehaviourPun
     // 업데이트
     void Update()
     {
-        
         if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             SensorDetect();

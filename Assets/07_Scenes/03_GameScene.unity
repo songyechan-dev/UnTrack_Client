@@ -1934,9 +1934,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataPath: 
+  questType: 
   progress: 0
   isCompleted: 0
-  questText: {fileID: 227078141}
 --- !u!4 &1256588981
 Transform:
   m_ObjectHideFlags: 0
@@ -2082,9 +2082,9 @@ MonoBehaviour:
   backTrackPrevAngle: {x: 0, y: 0, z: 0}
   electricityFlowingList: []
   factoriesObjectPrefab: {fileID: 0}
-  trackLeftMesh: {fileID: 4300000, guid: 33e58982e67908442b36bc976ecdd8b3, type: 2}
-  trackRightMesh: {fileID: 4300000, guid: d58bdddf49b28604eb7e7929665d3522, type: 2}
-  trackOriginMesh: {fileID: 4300000, guid: 6d4a65b1560a43144af6fa4c83ff9ed3, type: 2}
+  trackLeftMesh: {fileID: 4300000, guid: 8944143040456b944ad238e41ffe3916, type: 2}
+  trackRightMesh: {fileID: 4300000, guid: d414df95790952645bd797f5b84ef0e9, type: 2}
+  trackOriginMesh: {fileID: 4300000, guid: 22013e6ad4139c1499d7a3c2874e36de, type: 2}
 --- !u!4 &1288476560
 Transform:
   m_ObjectHideFlags: 0
@@ -2374,6 +2374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be26041f2a35f74385d87f56f199090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curTime: 0
 --- !u!4 &1606855963
 Transform:
   m_ObjectHideFlags: 0
@@ -2859,6 +2860,7 @@ MonoBehaviour:
   storagePrefab: {fileID: 3686851000239159954, guid: e777703bf66a5484c806eed6ef40d9db, type: 3}
   axPrefab: {fileID: 477294265792755017, guid: 4413acb013bb9464cb2dc294529f3956, type: 3}
   pickPrefab: {fileID: 477294265792755017, guid: d45de115bb345f542b5ef636ff21dea7, type: 3}
+  mapEnvironmentPrefab: {fileID: 9217719079885732193, guid: 8ce53746bc8886047a4ee387ce419275, type: 3}
   trackManager: {fileID: 1288476559}
   photonObjectCreator: {fileID: 1612677541}
 --- !u!4 &1933982561
