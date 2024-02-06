@@ -36,7 +36,9 @@ public class GameManager : MonoBehaviourPun
     private int finalRound = 5;
     private float meter;
 
-
+    [SerializeField]
+    private int derailmentCount = 0;
+    private int maxDederailmentCount = 6;
 
     public GameObject factoriesObjectPrefab;
     public MapCreator mapCreator;
@@ -47,6 +49,8 @@ public class GameManager : MonoBehaviourPun
     public Transform myPlayer;
     private UnityEngine.AsyncOperation asyncOperation;
     public List<bool> playerReadyStates = new List<bool>();
+
+
     #endregion
 
     #region Instance
@@ -137,7 +141,6 @@ public class GameManager : MonoBehaviourPun
         object[] data = new object[] { (int)gameState };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
-        
     }
 
     /// <summary>
@@ -226,7 +229,25 @@ public class GameManager : MonoBehaviourPun
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.METER, data, raiseEventOptions, SendOptions.SendReliable);
         }
+    }
 
+
+    public void SetDerailmentCount()
+    {
+        derailmentCount++;
+        if (derailmentCount == maxDederailmentCount)
+        {
+            derailmentCount = 0;
+            GameOver();
+        }
+        object[] data = new object[] { derailmentCount };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.DERAILMENT_COUNT, data, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public int GetDerailmentCount()
+    {
+        return derailmentCount;
     }
 
     void OnEvent(EventData photonEvent)
@@ -255,6 +276,11 @@ public class GameManager : MonoBehaviourPun
                 StartCoroutine(LoadSceneAsync(4));
             }
         }
+        if (photonEvent.Code == (int)SendDataInfo.Info.DERAILMENT_COUNT)
+        {
+            object[] receivedData = (object[])photonEvent.CustomData;
+            derailmentCount = (int)receivedData[0];
+        }
     }
 
 
@@ -273,6 +299,14 @@ public class GameManager : MonoBehaviourPun
         gameMode = _gameMode;
         gameState = _gameState;
     }
+
+
+    public IEnumerator SleepCoroutine(float seconds, Action _action)
+    {
+        yield return new WaitForSeconds(seconds);
+        _action();
+    }
+
 
 
 

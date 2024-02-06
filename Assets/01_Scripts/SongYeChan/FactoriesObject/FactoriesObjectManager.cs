@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,7 +49,6 @@ public class FactoriesObjectManager : MonoBehaviourPun
     Transform sensorTransform;
     RaycastHit hit;
 
-
     Coroutine coroutine;
 
     private float curTime = 0f;
@@ -56,6 +56,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
     void Awake()
     {
         sensorTransform = transform.Find("Sensor");
+        
         StartCoroutine(SetTag());
     }
 
@@ -235,6 +236,21 @@ public class FactoriesObjectManager : MonoBehaviourPun
         }
     }
 
- 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag(transform.tag))
+        {
+            Instantiate(Resources.Load<GameObject>("CartEffect"),other.transform.position,Quaternion.identity);
+            //사운드 재생시켜야됨
+            DestroyMyObject(other.transform.GetComponent<PhotonView>().ViewID);
+        }
+    }
+    public void DestroyMyObject(int _targetViewID)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(gameObject);
+            GameManager.Instance().SetDerailmentCount();
+        }
+    }
 }

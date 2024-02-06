@@ -1,8 +1,10 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using static GameManager;
 
@@ -40,23 +42,34 @@ public class FactoriesObjectCreator : MonoBehaviour
     
     public void Create()
     {
-        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart) && GameManager.Instance().myPlayer != null)
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (GameManager.Instance().myPlayer != null)
             {
-                if (count <= 0)
+                if (PhotonNetwork.IsMasterClient)
                 {
-                    FirstCreate_Master(); 
+                    if (count <= 0)
+                    {
+                        FirstCreate_Master();
+                    }
+                    else
+                    {
+                        Create_Master();
+                        mapCreator.CreateOB();
+                    }
+
                 }
-                else
-                {
-                    Create_Master();
-                    mapCreator.CreateOB();
-                }
-                
             }
+            else
+            {
+                StartCoroutine(GameManager.Instance().SleepCoroutine(1f,Create));
+            }
+            
         }
+        
     }
+
+
 
     public void Create_Master()
     {
@@ -86,6 +99,7 @@ public class FactoriesObjectCreator : MonoBehaviour
         factoriesFirstObject.GetComponent<FactoriesObjectManager>().Init();
         GameManager.Instance().firstFactoriesObject = factoriesFirstObject;
         factoriesFirstObject.GetComponent<MeshRenderer>().enabled = false;
+        factoriesFirstObject.transform.Find("MineCart_02").gameObject.SetActive(false);
         factoriesFirstObject.layer = LayerMask.NameToLayer("FactoriesObject_First");
         factoriesFirstObject.transform.Find("Sensor").gameObject.layer = LayerMask.NameToLayer("FactoriesObject_First");
         factoriesFirstObject.tag = "FactoriesObject";
