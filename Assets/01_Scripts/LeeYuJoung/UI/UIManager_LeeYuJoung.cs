@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using LeeYuJoung;
-using JetBrains.Annotations;
+using UnityEngine.Playables;
 
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
@@ -16,6 +16,12 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     }
     #endregion
     public PlayerController playerController;
+    public AudioManager audioManager;
+
+    #region Scene00
+    public GameObject loadPanel;
+    public PlayableDirector clip;
+    #endregion
 
     #region Scene01
     [Header("PlayableButtons")]
@@ -77,6 +83,31 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         DontDestroyOnLoad(this);
         Init();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            StartLoading();
+        }
+    }
+
+    #region Scene00
+    public void StartLoading()
+    {
+        Invoke("EndLoading", (float)clip.duration);
+
+        audioManager.Instnce().PlayBGM(SceneManager.GetActiveScene().buildIndex);
+        loadPanel.SetActive(false);
+        clip.Play();
+    }
+
+    public void EndLoading()
+    {
+        SceneManager.LoadScene(1);
+        audioManager.Instnce().PlayBGM(1);
+    }
+    #endregion
 
     /// <summary>
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
@@ -274,8 +305,18 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     public void Init()
     {
         playerController = GetComponent<PlayerController>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         ground = GameObject.Find("Ground");
         canvas = GameObject.Find("Canvas");
+
+        #region Scene00
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            loadPanel = canvas.transform.GetChild(0).gameObject;
+            clip = GameObject.Find("LoadingRail").GetComponent<PlayableDirector>();
+        }
+        #endregion
+
         #region Scene01
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
