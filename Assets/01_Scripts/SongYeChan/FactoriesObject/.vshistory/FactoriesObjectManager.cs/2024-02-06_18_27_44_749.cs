@@ -241,7 +241,6 @@ public class FactoriesObjectManager : MonoBehaviourPun
         if (other.transform.CompareTag(transform.tag))
         {
             Instantiate(Resources.Load<GameObject>("CartEffect"),other.transform.position,Quaternion.identity);
-            AudioManager.Instnce().PlaySFX(Camera.main.transform.GetComponent<AudioSource>(), SOUNDTYPE.TRAIN_CRASH);
             //사운드 재생시켜야됨
             DestroyMyObject(other.transform.GetComponent<PhotonView>().ViewID);
         }

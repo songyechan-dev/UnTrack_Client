@@ -150,10 +150,6 @@ public class GameManager : MonoBehaviourPun
     {
         gameMode = GameMode.None;
         gameState = GameState.GameOver;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel(5);
-        }
     }
 
     public void GameClear()

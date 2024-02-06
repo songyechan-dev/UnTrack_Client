@@ -135,7 +135,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            photonView.RPC("SetReadyUserCount_Others", RpcTarget.Others, readyUserCount);
+        
         }
     }
 

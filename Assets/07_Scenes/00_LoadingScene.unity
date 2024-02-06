@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18112555, g: 0.22670881, b: 0.30731195, a: 1}
+  m_IndirectSpecularColor: {r: 0.18112557, g: 0.2267088, b: 0.30731195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -756,6 +756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   round: 1
+  derailmentCount: 0
   factoriesObjectPrefab: {fileID: 7203300641634766932, guid: 072646592c73e174babb034ff5c22666, type: 3}
   mapCreator: {fileID: 0}
   gameState: 0
@@ -913,7 +914,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
-  audioManager: {fileID: 0}
   loadPanel: {fileID: 0}
   clip: {fileID: 0}
   ground: {fileID: 0}

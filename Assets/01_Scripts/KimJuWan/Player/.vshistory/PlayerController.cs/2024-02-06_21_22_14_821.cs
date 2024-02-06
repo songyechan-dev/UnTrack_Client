@@ -431,14 +431,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             Debug.Log("ready Set");
             this.isReady = _isReady;
-            if (!isReady_Scene.ContainsKey(SceneManager.GetActiveScene().buildIndex))
-            {
-                isReady_Scene.Add(SceneManager.GetActiveScene().buildIndex, _isReady);
-            }
-            else
-            {
-                isReady_Scene[SceneManager.GetActiveScene().buildIndex] = _isReady;
-            }
+            isReady_Scene.Add(SceneManager.GetActiveScene().buildIndex, _isReady);
             teamManager.SetReadyUserCount(_isReady);
         }
 

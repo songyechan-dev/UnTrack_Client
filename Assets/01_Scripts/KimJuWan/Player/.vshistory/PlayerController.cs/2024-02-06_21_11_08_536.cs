@@ -10,8 +10,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.SceneManagement;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+
+[Serializable]
+public class PlayerData
+{
+    public bool isReady;
+    public int sceneIndex;
+
+    public PlayerData(bool isReady, int sceneIndex)
+    {
+        this.isReady = isReady;
+        this.sceneIndex = sceneIndex;
+    }
+}
 public class PlayerController : MonoBehaviourPunCallbacks
 {
     //Player 애니메이션용 STATE
@@ -50,7 +62,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private bool isReady = false;
     private bool isExit = false;
-    private Dictionary<int,bool> isReady_Scene = new Dictionary<int,bool>();
+
 
     // 시작
 
@@ -112,10 +124,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         else if (PhotonNetwork.IsMasterClient && isExit)
         {
-            if (isReady_Scene.ContainsKey(SceneManager.GetActiveScene().buildIndex) && isReady_Scene[SceneManager.GetActiveScene().buildIndex])
-            {
-                teamManager.SetReadyUserCount(false);
-            }
             PhotonNetwork.Destroy(gameObject);
         }
 
@@ -431,20 +439,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             Debug.Log("ready Set");
             this.isReady = _isReady;
-            if (!isReady_Scene.ContainsKey(SceneManager.GetActiveScene().buildIndex))
-            {
-                isReady_Scene.Add(SceneManager.GetActiveScene().buildIndex, _isReady);
-            }
-            else
-            {
-                isReady_Scene[SceneManager.GetActiveScene().buildIndex] = _isReady;
-            }
             teamManager.SetReadyUserCount(_isReady);
+            (bool isReady, int sceneIndex) data = (isReady: _isReady, sceneIndex: SceneManager.GetActiveScene().buildIndex);
+            ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+            customProperties["Data"] = data;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
 
     }
-
-
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {

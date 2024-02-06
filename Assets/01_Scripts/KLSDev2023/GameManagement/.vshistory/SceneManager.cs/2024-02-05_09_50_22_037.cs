@@ -3,7 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace KLSDev2023
 {
@@ -12,7 +12,6 @@ namespace KLSDev2023
         private void Awake()
         {
             UIManager.Instance().Init();
-            PlayBGM();
         }
 
         public void NextScene()
@@ -26,11 +25,6 @@ namespace KLSDev2023
             {
                 PhotonNetwork.LoadLevel(3);
             }
-        }
-
-        public void PlayBGM()
-        {
-            AudioManager.Instnce().PlayBGM(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

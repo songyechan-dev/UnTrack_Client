@@ -127,24 +127,13 @@ public class TeamManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient && exitedPlayerActNo != otherPlayer.ActorNumber)
         {
             exitedPlayerActNo = otherPlayer.ActorNumber;
+            Hashtable playerCustomProperties = otherPlayer.CustomProperties;
+            if (playerCustomProperties.ContainsKey("IsReady") && (bool)playerCustomProperties["IsReady"])
+            {
+                SetReadyUserCount(false);
+            }
             SetNeedReadyUserCount(false);
         }
     }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SetReadyUserCount_Others", RpcTarget.Others, readyUserCount);
-        }
-    }
-
-    [PunRPC]
-    void SetReadyUserCount_Others(int _count)
-    {
-        readyUserCount = _count;
-    }
-
-
 
 }

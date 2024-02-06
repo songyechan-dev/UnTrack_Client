@@ -131,20 +131,4 @@ public class TeamManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SetReadyUserCount_Others", RpcTarget.Others, readyUserCount);
-        }
-    }
-
-    [PunRPC]
-    void SetReadyUserCount_Others(int _count)
-    {
-        readyUserCount = _count;
-    }
-
-
-
 }

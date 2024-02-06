@@ -305,7 +305,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     public void Init()
     {
         playerController = GetComponent<PlayerController>();
-        //audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         ground = GameObject.Find("Ground");
         canvas = GameObject.Find("Canvas");
 

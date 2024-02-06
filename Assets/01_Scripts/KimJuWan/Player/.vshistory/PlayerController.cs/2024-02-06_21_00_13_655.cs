@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
-using UnityEngine.SceneManagement;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
+
+
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private bool isReady = false;
     private bool isExit = false;
-    private Dictionary<int,bool> isReady_Scene = new Dictionary<int,bool>();
+
 
     // 시작
 
@@ -112,10 +112,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         else if (PhotonNetwork.IsMasterClient && isExit)
         {
-            if (isReady_Scene.ContainsKey(SceneManager.GetActiveScene().buildIndex) && isReady_Scene[SceneManager.GetActiveScene().buildIndex])
-            {
-                teamManager.SetReadyUserCount(false);
-            }
             PhotonNetwork.Destroy(gameObject);
         }
 
@@ -431,20 +427,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             Debug.Log("ready Set");
             this.isReady = _isReady;
-            if (!isReady_Scene.ContainsKey(SceneManager.GetActiveScene().buildIndex))
-            {
-                isReady_Scene.Add(SceneManager.GetActiveScene().buildIndex, _isReady);
-            }
-            else
-            {
-                isReady_Scene[SceneManager.GetActiveScene().buildIndex] = _isReady;
-            }
             teamManager.SetReadyUserCount(_isReady);
+            Hashtable customProperties = new Hashtable();
+            customProperties["IsReady"] = _isReady;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
 
     }
-
-
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {

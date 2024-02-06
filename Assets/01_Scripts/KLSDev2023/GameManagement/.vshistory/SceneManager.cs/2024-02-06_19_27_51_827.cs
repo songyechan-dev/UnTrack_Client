@@ -12,7 +12,6 @@ namespace KLSDev2023
         private void Awake()
         {
             UIManager.Instance().Init();
-            PlayBGM();
         }
 
         public void NextScene()

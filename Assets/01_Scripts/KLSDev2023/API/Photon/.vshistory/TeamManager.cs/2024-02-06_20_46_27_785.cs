@@ -1,7 +1,6 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web;
@@ -121,30 +120,15 @@ public class TeamManager : MonoBehaviourPunCallbacks
     #endregion
 
     //TODO : 트러블 슈팅 - 송예찬
-    int exitedPlayerActNo = -1;
+    int exitedPlayerActNo;
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (PhotonNetwork.IsMasterClient && exitedPlayerActNo != otherPlayer.ActorNumber)
+        exitedPlayerActNo = otherPlayer.ActorNumber;
+        if (PhotonNetwork.IsMasterClient)
         {
-            exitedPlayerActNo = otherPlayer.ActorNumber;
+            SetReadyUserCount(false);
             SetNeedReadyUserCount(false);
         }
     }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SetReadyUserCount_Others", RpcTarget.Others, readyUserCount);
-        }
-    }
-
-    [PunRPC]
-    void SetReadyUserCount_Others(int _count)
-    {
-        readyUserCount = _count;
-    }
-
-
 
 }
