@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Transform sensor;
     public Transform droppedSlotPrefab;
     public Transform equipSlot;
-    float castRange = 3f;
+    float castRange = 1f;
 
     public ItemManager itemManager;
 

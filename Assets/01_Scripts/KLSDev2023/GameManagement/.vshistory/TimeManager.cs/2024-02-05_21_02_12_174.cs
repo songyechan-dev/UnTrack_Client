@@ -65,6 +65,10 @@ public class TimeManager : MonoBehaviour
         while (true)
         {
             CurTime +=Time.deltaTime;
+            if (QuestManager.Instance().questType.Equals("Time"))
+            {
+                QuestManager.Instance().UpdateProgress();
+            }
             yield return null;
         }
     }

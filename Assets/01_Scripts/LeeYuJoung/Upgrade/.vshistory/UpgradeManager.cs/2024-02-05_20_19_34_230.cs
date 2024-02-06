@@ -14,7 +14,7 @@ public class UpgradeManager : MonoBehaviour
         {
             Debug.Log(":::: 엔진 업그레이드 성공 ::::");
             StateManager.Instance().engineMaxVolume += 1;
-            StateManager.Instance().SetVolt(false, StateManager.Instance().engineUpgradePrice);
+            StateManager.Instance().voltNum -= StateManager.Instance().engineUpgradePrice;
             StateManager.Instance().engineUpgradePrice += 1;
         }
         else
@@ -30,7 +30,7 @@ public class UpgradeManager : MonoBehaviour
         {
             Debug.Log(":::: 저장소 업그레이드 성공 ::::");
             StateManager.Instance().storageMaxVolume += 5;
-            StateManager.Instance().SetVolt(false,StateManager.Instance().storageUpgradePrice);
+            StateManager.Instance().voltNum -= StateManager.Instance().storageUpgradePrice;
             StateManager.Instance().storageUpgradePrice += 1;
         }
         else
@@ -67,7 +67,7 @@ public class UpgradeManager : MonoBehaviour
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
 
             StateManager.Instance().factorys[_factoryType.ToString()].Add(new int[] { 0, 5 });
-            StateManager.Instance().SetVolt(false, StateManager.Instance().machineAddPrice[_factoryType.ToString()]);
+            StateManager.Instance().voltNum -= StateManager.Instance().machineAddPrice[_factoryType.ToString()];
             StateManager.Instance().machineAddPrice[_factoryType.ToString()] += 1;
             StateManager.Instance().factoryPrice[_factoryType.ToString()].Add(1);
 

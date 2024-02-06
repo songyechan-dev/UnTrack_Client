@@ -59,7 +59,7 @@ public class TrackManager : MonoBehaviourPun
         if (Physics.Raycast(_ray, out hit,3f))
         {
             Debug.Log("설치 시작");
-            if (hit.transform.tag != "Plane") return ;
+            //if (hit.transform.tag != "Plane") return ;
             Debug.Log($"_ray.origin :: {_ray.origin}");
             Debug.Log($"hit.transform :: {hit.transform.position}");
             GameObject track = PhotonNetwork.Instantiate("Track", new Vector3(Mathf.Round(_ray.origin.x), hit.transform.localPosition.y + (0.05f), Mathf.Round(_ray.origin.z)), trackPrefab.transform.rotation);
