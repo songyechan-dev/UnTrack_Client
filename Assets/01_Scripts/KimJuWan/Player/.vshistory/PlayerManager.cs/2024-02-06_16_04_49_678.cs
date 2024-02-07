@@ -372,17 +372,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     void SetMyParent_Null(int viewID)
     {
         GameObject go = PhotonView.Find(viewID).gameObject;
-        if (go != null)
-        {
-            if (go.transform.Find("PickSlot") != null)
-            {
-                if (go.transform.Find("PickSlot").transform.GetChild(0) != null)
-                {
-                    go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
-                }
-            }
-        }
-        
+        go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
     }
 
 
