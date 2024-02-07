@@ -11,6 +11,7 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine.Playables;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour
     public GameObject ground;
     public GameObject rankingBarPrefab;
     public string keySet = "PlayerActionKeyCode";
+    public Action OnSpaceKeyPress;
 
     #region Scene00
     public GameObject loadPanel;
@@ -140,17 +142,6 @@ public class UIManager : MonoBehaviour
         Init();
         Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
         Debug.Log(KeyCodeInfo.myActionKeyCode);
-    }
-
-    private void Update()
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                StartLoading();
-            }
-        }
     }
 
     #region Scene00
@@ -538,6 +529,15 @@ public class UIManager : MonoBehaviour
             canvas = GameObject.Find("Canvas");
             loadPanel = canvas.transform.GetChild(0).gameObject;
             clip = GameObject.Find("LoadingRail").GetComponent<PlayableDirector>();
+            OnSpaceKeyPress += CheckSpaceKeyUp;
+            if (OnSpaceKeyPress != null)
+            {
+                OnSpaceKeyPress();
+            }
+        }
+        else
+        {
+            OnSpaceKeyPress -= CheckSpaceKeyUp;
         }
         #endregion
 
@@ -677,6 +677,13 @@ public class UIManager : MonoBehaviour
             }
 
             upgradeManager.ShowUpgradeMachine(pos);
+
+            storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
+            enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
+            productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
+            waterTankBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.WaterTank.ToString()].ToString();
+            dynamiteMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.DynamiteMachine.ToString()].ToString();
+
         }
         #endregion
 
@@ -715,25 +722,44 @@ public class UIManager : MonoBehaviour
             playableButton_BackToLobby06 = ground.transform.Find("BacktoLobby").gameObject;
             playableButton_BackToMain06 = ground.transform.Find("Main").gameObject;
 
-            clearTimeText06 = ground.transform.Find("FinalRecord").transform.Find("FinalTimeTxt").GetComponent<TextMeshPro>();
-            storageLvText06 = ground.transform.Find("Finalstorage").transform.Find("FinalStorageTxt").GetComponent<TextMeshPro>();
-            dynamiteLvText06 = ground.transform.Find("FinalDynamite").transform.Find("FinalDynamiteTxt").GetComponent<TextMeshPro>();
-            productionLvText06 = ground.transform.Find("FinalProduction").transform.Find("FinalProductionTxt").GetComponent<TextMeshPro>();
-            watertankLvText06 = ground.transform.Find("FinalWaterTank").transform.Find("FinalWaterTankTxt").GetComponent<TextMeshPro>();
+            playableButton_ReStart06.AddComponent<PlayableButtonInfo>();
+            playableButton_BackToLobby06.AddComponent<PlayableButtonInfo>();
+            playableButton_BackToMain06.AddComponent<PlayableButtonInfo>();
 
             playableButton_ReStart06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.REPLAY_06;
             playableButton_BackToMain06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACKTOMAIN_06;
             playableButton_BackToLobby06.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACKTOLOBBY_06;
 
-            //SetText(clearTimeText06, TimeManager.Instance().GetCurTime().ToString());
+            clearTimeText06 = ground.transform.Find("FinalRecord").transform.Find("FinalTimeTxt").GetComponent<TextMeshPro>();
+            storageLvText06 = ground.transform.Find("FinalStorage").transform.Find("FinalStorageTxt").GetComponent<TextMeshPro>();
+            dynamiteLvText06 = ground.transform.Find("FinalDynamite").transform.Find("FinalDynamiteTxt").GetComponent<TextMeshPro>();
+            productionLvText06 = ground.transform.Find("FinalProduction").transform.Find("FinalProductionTxt").GetComponent<TextMeshPro>();
+            watertankLvText06 = ground.transform.Find("FinalWaterTank").transform.Find("FinalWaterTankTxt").GetComponent<TextMeshPro>();
+
+            int time = (int)TimeManager.Instance().finalTime;
+            string formattedTime = string.Format("{0:00}:{1:00}", time / 60, time % 60);
+
+
+            SetText(clearTimeText06, formattedTime);
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
+
+
+
+            TimeManager.Instance().finalTime = 0;
             GameManager.Instance().SetRound(1);
 
         }
         #endregion
     }
+
+    [PunRPC]
+    void SetText_Others(string _str)
+    {
+        clearTimeText06.text = _str;
+    }
+
     #region Photon
     void OnEvent(EventData photonEvent)
     {
@@ -838,15 +864,7 @@ public class UIManager : MonoBehaviour
         
     }
 
-    void OnEnable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-    }
-
-    void OnDisable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
-    }
+    
 
     #endregion
 
@@ -869,8 +887,37 @@ public class UIManager : MonoBehaviour
         {
             yield return null;
         }
-
+        GameManager.Instance().GameExit();
         SceneManager.LoadScene(sceneIndex);
+    }
+
+    #endregion
+
+    #region Event
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        OnSpaceKeyPress -= CheckSpaceKeyUp;
+    }
+
+    void CheckSpaceKeyUp()
+    {
+        StartCoroutine(CheckSpaceKeyUp_Coroutine());
+    }
+
+    IEnumerator CheckSpaceKeyUp_Coroutine()
+    {
+        while (!Input.GetKeyUp(KeyCode.Space))
+        {
+            yield return null;
+        }
+        Debug.Log("실행됨");
+        StartLoading();
     }
 
     #endregion

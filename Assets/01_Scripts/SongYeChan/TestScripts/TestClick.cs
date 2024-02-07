@@ -1,4 +1,5 @@
 using LeeYuJoung;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,5 +19,10 @@ public class TestClick : MonoBehaviour
     public void AddVolt()
     {
         StateManager.Instance().SetVolt(true, 1);
+    }
+
+    public void AddPlayer()
+    {
+        PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity);
     }
 }

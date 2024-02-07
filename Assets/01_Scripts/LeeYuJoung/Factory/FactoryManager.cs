@@ -158,7 +158,6 @@ public class FactoryManager : MonoBehaviourPun
         while (true)
         {
             // 아이템 제작 효과 구현
-
             yield return new WaitForEndOfFrame();
             currentGenerateTime += Time.deltaTime;
 
