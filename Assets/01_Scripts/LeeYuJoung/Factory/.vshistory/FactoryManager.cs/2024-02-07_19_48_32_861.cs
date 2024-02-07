@@ -51,7 +51,7 @@ public class FactoryManager : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("라운드 변경됨");
+            Debug.Log("여기 호출");
             FactoryJsonLoad(dataPath);
 
             switch (factoryType)
