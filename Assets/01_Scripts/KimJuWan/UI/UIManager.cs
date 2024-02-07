@@ -10,6 +10,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Unity.VisualScripting;
+using UnityEngine.Playables;
 
 public class UIManager : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class UIManager : MonoBehaviour
     public GameObject ground;
     public GameObject rankingBarPrefab;
     public string keySet = "PlayerActionKeyCode";
+
+    #region Scene00
+    public GameObject loadPanel;
+    public PlayableDirector clip;
+    #endregion
 
     #region Scene01
     [Header("PlayableButtons")]
@@ -136,6 +142,33 @@ public class UIManager : MonoBehaviour
         Debug.Log(KeyCodeInfo.myActionKeyCode);
     }
 
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                StartLoading();
+            }
+        }
+    }
+
+    #region Scene00
+    public void StartLoading()
+    {
+        Invoke("EndLoading", (float)clip.duration);
+
+        AudioManager.Instnce().PlayBGM(SceneManager.GetActiveScene().buildIndex);
+        loadPanel.SetActive(false);
+        clip.Play();
+    }
+
+    public void EndLoading()
+    {
+        SceneManager.LoadScene(1);
+        AudioManager.Instnce().PlayBGM(1);
+    }
+    #endregion
 
     /// <summary>
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
@@ -483,6 +516,16 @@ public class UIManager : MonoBehaviour
     public void Init()
     {
         //playerController = GetComponent<PlayerController>();
+
+        #region Scene00
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            ground = GameObject.Find("Ground");
+            canvas = GameObject.Find("Canvas");
+            loadPanel = canvas.transform.GetChild(0).gameObject;
+            clip = GameObject.Find("LoadingRail").GetComponent<PlayableDirector>();
+        }
+        #endregion
 
         #region Scene01
         if (SceneManager.GetActiveScene().buildIndex == 1)

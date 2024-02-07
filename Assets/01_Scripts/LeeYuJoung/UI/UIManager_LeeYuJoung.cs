@@ -86,9 +86,12 @@ public class UIManager_LeeYuJoung : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            StartLoading();
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                StartLoading();
+            }
         }
     }
 
