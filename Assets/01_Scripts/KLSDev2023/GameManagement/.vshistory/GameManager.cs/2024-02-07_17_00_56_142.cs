@@ -132,7 +132,6 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     public void GameStart()
     {
-        Debug.Log("게임시작됨");
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -225,51 +224,42 @@ public class GameManager : MonoBehaviourPun
 
     public void GameExit()
     {
-        if (StateManager.Instance() != null)
-        {
-            StateManager.Instance().voltNum = 0;
-            StateManager.Instance().engineMaxVolume = 5;
-            StateManager.Instance().engineCurrentVolume = 4;
+        StateManager.Instance().voltNum = 0;
+        StateManager.Instance().engineMaxVolume = 5;
+        StateManager.Instance().engineCurrentVolume = 4;
 
-            StateManager.Instance().storageMaxVolume = 10;
-            if (StateManager.Instance().storages.ContainsKey("WOOD"))
-            {
-                StateManager.Instance().storages["WOOD"] = 0;
-            }
-            else
-            {
-                StateManager.Instance().storages.Add("WOOD", 0);
-            }
-            if (StateManager.Instance().storages.ContainsKey("STEEL"))
-            {
-                StateManager.Instance().storages["STEEL"] = 0;
-            }
-            else
-            {
-                StateManager.Instance().storages.Add("STEEL", 0);
-            }
-            StateManager.Instance().factorys = new Dictionary<string, List<int[]>>() { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
-            StateManager.Instance().engineUpgradePrice = 3;
-            StateManager.Instance().storageUpgradePrice = 2;
-            StateManager.Instance().factoryPrice = new Dictionary<string, List<int>>() { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
-            StateManager.Instance().machineAddPrice = new Dictionary<string, int>() { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
-            StateManager.Instance().currentTime = 0.0f;
-            StateManager.Instance().fireTime = 20.0f;
-            StateManager.Instance().BringFactoryValue();
-            StateManager.Instance().productionMachines.Clear();
-            StateManager.Instance().dynamiteMachines.Clear();
-            StateManager.Instance().waterTanks.Clear();
+        StateManager.Instance().storageMaxVolume = 10;
+        if (StateManager.Instance().storages.ContainsKey("WOOD"))
+        {
+            StateManager.Instance().storages["WOOD"] = 0;
         }
+        else
+        {
+            StateManager.Instance().storages.Add("WOOD", 0);
+        }
+        if (StateManager.Instance().storages.ContainsKey("STEEL"))
+        {
+            StateManager.Instance().storages["STEEL"] = 0;
+        }
+        else
+        {
+            StateManager.Instance().storages.Add("STEEL", 0);
+        }
+        StateManager.Instance().factorys = new Dictionary<string, List<int[]>>() { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
+        StateManager.Instance().engineUpgradePrice = 3;
+        StateManager.Instance().storageUpgradePrice = 2;
+        StateManager.Instance().factoryPrice = new Dictionary<string, List<int>>() { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
+        StateManager.Instance().machineAddPrice = new Dictionary<string, int>() { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
+        StateManager.Instance().currentTime = 0.0f;
+        StateManager.Instance().fireTime = 20.0f;
 
-        if (GameManager.Instance() != null)
-        {
-            GameManager.Instance().SetRound(1);
-        }
-        if (TimeManager.Instance() != null)
-        {
-            TimeManager.Instance().roundClearTimeList.Clear();
-            TimeManager.Instance().finalTime = 0;
-        }
+        StateManager.Instance().BringFactoryValue();
+        GameManager.Instance().SetRound(1);
+        StateManager.Instance().productionMachines.Clear();
+        StateManager.Instance().dynamiteMachines.Clear();
+        StateManager.Instance().waterTanks.Clear();
+        TimeManager.Instance().roundClearTimeList.Clear();
+        TimeManager.Instance().finalTime = 0;
     }
 
 

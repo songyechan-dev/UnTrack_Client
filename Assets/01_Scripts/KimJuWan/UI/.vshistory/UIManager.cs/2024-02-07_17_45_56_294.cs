@@ -708,11 +708,7 @@ public class UIManager : MonoBehaviour
             string formattedTime = string.Format("{0:00}:{1:00}", time / 60, time % 60);
             SetText(gameOverTimeText05, formattedTime);
             Debug.Log("게임오버 시간 :::"+ ((int)TimeManager.Instance().PrevTime).ToString());
-            if (GameManager.Instance() != null)
-            {
-                playerController = PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity).GetComponent<PlayerController>();
-            }
-            
+            PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity);
             GameManager.Instance().SetRound(1);
         }
         #endregion
