@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,9 @@ public class TimeManager : MonoBehaviour
     [SerializeField]
     private float curTime;
     private float prevTime;
+
+    public List<float> roundClearTimeList;
+    public float finalTime;
 
     // 읽기 전용 프로퍼티로 curTime을 정의
     public float CurTime

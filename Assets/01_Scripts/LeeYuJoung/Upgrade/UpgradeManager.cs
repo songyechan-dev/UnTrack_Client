@@ -4,18 +4,34 @@ using UnityEngine;
 using LeeYuJoung;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using static GameManager;
+using Photon.Realtime;
+using static FactoryManager;
+
+public enum upgradeType
+{
+    UPGRADE_ENGINE = 0,
+    UPGRADE_STORAGE = 1,
+    UPGRADE_MACHINE = 2,
+    BUY_MACHINE = 3,
+}
 
 public class UpgradeManager : MonoBehaviour
 {
     // 엔진 업그레이드
     public void UpgradeEngine()
     {
-        if(StateManager.Instance().voltNum >= StateManager.Instance().engineUpgradePrice)
+        if (StateManager.Instance().voltNum >= StateManager.Instance().engineUpgradePrice)
         {
             Debug.Log(":::: 엔진 업그레이드 성공 ::::");
             StateManager.Instance().engineMaxVolume += 1;
             StateManager.Instance().SetVolt(false, StateManager.Instance().engineUpgradePrice);
             StateManager.Instance().engineUpgradePrice += 1;
+            object[] data = new object[] { (int)upgradeType.UPGRADE_ENGINE, StateManager.Instance().engineMaxVolume, StateManager.Instance().engineUpgradePrice };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UPGRADE_INFO, data, raiseEventOptions, SendOptions.SendReliable);
         }
         else
         {
@@ -30,8 +46,11 @@ public class UpgradeManager : MonoBehaviour
         {
             Debug.Log(":::: 저장소 업그레이드 성공 ::::");
             StateManager.Instance().storageMaxVolume += 5;
-            StateManager.Instance().SetVolt(false,StateManager.Instance().storageUpgradePrice);
+            StateManager.Instance().SetVolt(false, StateManager.Instance().storageUpgradePrice);
             StateManager.Instance().storageUpgradePrice += 1;
+            object[] data = new object[] { (int)upgradeType.UPGRADE_STORAGE, StateManager.Instance().storageMaxVolume, StateManager.Instance().storageUpgradePrice };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UPGRADE_INFO, data, raiseEventOptions, SendOptions.SendReliable);
         }
         else
         {
@@ -50,6 +69,9 @@ public class UpgradeManager : MonoBehaviour
                 StateManager.Instance().factorys[_factoryType.ToString()][_idx][1] += 2;
                 StateManager.Instance().SetVolt(false, StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx]);
                 StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx] += 1;
+                object[] data = new object[] { (int)upgradeType.UPGRADE_MACHINE, _factoryType.ToString(), _idx };
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UPGRADE_INFO, data, raiseEventOptions, SendOptions.SendReliable);
             }
         }
         else
@@ -61,7 +83,7 @@ public class UpgradeManager : MonoBehaviour
     // 기계 추가 구매
     public void BuyMachine(FactoryManager.FACTORYTYPE _factoryType)
     {
-        if(StateManager.Instance().voltNum >= StateManager.Instance().machineAddPrice[_factoryType.ToString()] && 9 >StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count + StateManager.Instance().waterTanks.Count)
+        if (StateManager.Instance().voltNum >= StateManager.Instance().machineAddPrice[_factoryType.ToString()] && 9 > StateManager.Instance().productionMachines.Count + StateManager.Instance().dynamiteMachines.Count + StateManager.Instance().waterTanks.Count)
         {
             Debug.Log($":::: {_factoryType} 구매 완료 ::::");
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
@@ -70,6 +92,14 @@ public class UpgradeManager : MonoBehaviour
             StateManager.Instance().SetVolt(false, StateManager.Instance().machineAddPrice[_factoryType.ToString()]);
             StateManager.Instance().machineAddPrice[_factoryType.ToString()] += 1;
             StateManager.Instance().factoryPrice[_factoryType.ToString()].Add(1);
+
+            object[] data = new object[] { (int)upgradeType.BUY_MACHINE, _factoryType.ToString() };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UPGRADE_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+
+
+
+
 
             Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
         }
@@ -88,6 +118,7 @@ public class UpgradeManager : MonoBehaviour
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeProductionMachine"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
+            Debug.Log("::::::::::::::::::::::::::::" + StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString());
             _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString();
         }
 
@@ -120,4 +151,51 @@ public class UpgradeManager : MonoBehaviour
         StateManager.Instance().dynamiteMachines.Clear();
         StateManager.Instance().waterTanks.Clear();
     }
+
+
+
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)SendDataInfo.Info.UPGRADE_INFO)
+        {
+            //// 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            //object[] receivedData = (object[])photonEvent.CustomData;
+            //upgradeType _upgradeType = (upgradeType)((int)receivedData[0]);
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_ENGINE))
+            //{
+            //    StateManager.Instance().engineMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().engineUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_STORAGE))
+            //{
+            //    StateManager.Instance().storageMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().storageUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]][(int)receivedData[2]][1] += 2;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]][(int)receivedData[2]] += 1;
+            //}
+            //if (_upgradeType.Equals(upgradeType.BUY_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]].Add(new int[] { 0, 5 });
+            //    StateManager.Instance().machineAddPrice[(string)receivedData[1]] += 1;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]].Add(1);
+            //}
+        }
+    }
+
+
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
 }

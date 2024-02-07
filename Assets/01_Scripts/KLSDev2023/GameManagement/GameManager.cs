@@ -151,7 +151,11 @@ public class GameManager : MonoBehaviourPun
     {
         gameMode = GameMode.None;
         gameState = GameState.GameOver;
+        TimeManager.Instance().roundClearTimeList.Clear();
         TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
+        object[] data = new object[] { (int)gameState };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel(5);
@@ -162,12 +166,14 @@ public class GameManager : MonoBehaviourPun
     {
         if (gameState < GameState.GameClear)
         {
+            float time = TimeManager.Instance().GetCurTime();
+            TimeManager.Instance().roundClearTimeList.Add(time);
             if (GetRound() < GetFinalRound())
             {
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
-                object[] data = new object[] { (int)gameState };
+                object[] data = new object[] { (int)gameState, time };
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                 PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
                 StartCoroutine(LoadSceneAsync(4));
@@ -216,10 +222,63 @@ public class GameManager : MonoBehaviourPun
         }
     }
 
+    public void GameExit()
+    {
+        StateManager.Instance().voltNum = 0;
+        StateManager.Instance().engineMaxVolume = 5;
+        StateManager.Instance().engineCurrentVolume = 4;
+
+        StateManager.Instance().storageMaxVolume = 10;
+        if (StateManager.Instance().storages.ContainsKey("WOOD"))
+        {
+            StateManager.Instance().storages["WOOD"] = 0;
+        }
+        else
+        {
+            StateManager.Instance().storages.Add("WOOD", 0);
+        }
+        if (StateManager.Instance().storages.ContainsKey("STEEL"))
+        {
+            StateManager.Instance().storages["STEEL"] = 0;
+        }
+        else
+        {
+            StateManager.Instance().storages.Add("STEEL", 0);
+        }
+        StateManager.Instance().factorys = new Dictionary<string, List<int[]>>() { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
+        StateManager.Instance().engineUpgradePrice = 3;
+        StateManager.Instance().storageUpgradePrice = 2;
+        StateManager.Instance().factoryPrice = new Dictionary<string, List<int>>() { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
+        StateManager.Instance().machineAddPrice = new Dictionary<string, int>() { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
+        StateManager.Instance().currentTime = 0.0f;
+        StateManager.Instance().fireTime = 20.0f;
+
+        StateManager.Instance().BringFactoryValue();
+        GameManager.Instance().SetRound(1);
+        StateManager.Instance().productionMachines.Clear();
+        StateManager.Instance().dynamiteMachines.Clear();
+        StateManager.Instance().waterTanks.Clear();
+        TimeManager.Instance().roundClearTimeList.Clear();
+        TimeManager.Instance().finalTime = 0;
+    }
+
+
     public void GameEnd()
     {
         gameState = GameState.GameEnd;
         gameMode = GameMode.None;
+        float time = TimeManager.Instance().GetCurTime();
+        TimeManager.Instance().roundClearTimeList.Add(time);
+        for (int i = 0; i < TimeManager.Instance().roundClearTimeList.Count; i++)
+        {
+            TimeManager.Instance().finalTime += TimeManager.Instance().roundClearTimeList[i];
+        }
+        object[] data = new object[] { (int)gameState, time, TimeManager.Instance().finalTime };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
+        TimeManager.Instance().roundClearTimeList.Clear();
+        
+
         //UIManager.Instance().Init();
         if (PhotonNetwork.IsMasterClient)
         {
@@ -279,11 +338,32 @@ public class GameManager : MonoBehaviourPun
             }
             if (_gameState.Equals(GameState.GameClear))
             {
+                TimeManager.Instance().roundClearTimeList.Add((float)receivedData[1]);
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
                 StartCoroutine(LoadSceneAsync(4));
             }
+            if (_gameState.Equals(GameState.GameOver))
+            {
+                TimeManager.Instance().roundClearTimeList.Clear();
+                TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
+                gameMode = GameMode.None;
+                gameState = GameState.GameOver;
+            }
+            if (_gameState.Equals(GameState.GameEnd))
+            {
+                gameState = GameState.GameEnd;
+                gameMode = GameMode.None;
+                TimeManager.Instance().roundClearTimeList.Add((float)receivedData[1]);
+                for (int i = 0; i < TimeManager.Instance().roundClearTimeList.Count; i++)
+                {
+                    TimeManager.Instance().finalTime = (float)receivedData[2];
+                }
+
+                TimeManager.Instance().roundClearTimeList.Clear();
+            }
+
         }
         if (photonEvent.Code == (int)SendDataInfo.Info.DERAILMENT_COUNT)
         {

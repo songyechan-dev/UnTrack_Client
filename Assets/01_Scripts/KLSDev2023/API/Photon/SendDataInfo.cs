@@ -28,6 +28,6 @@ public class SendDataInfo
         UI_INFO = 19,
         PLAYER_STATE = 20,
         DERAILMENT_COUNT = 21,
-
+        UPGRADE_INFO = 22,
     }
 }
