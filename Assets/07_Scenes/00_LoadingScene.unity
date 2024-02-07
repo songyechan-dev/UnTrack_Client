@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18112557, g: 0.2267088, b: 0.30731195, a: 1}
+  m_IndirectSpecularColor: {r: 0.18112555, g: 0.22670881, b: 0.30731195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -224,7 +224,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -884,92 +884,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!1 &1448850643
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1448850645}
-  - component: {fileID: 1448850644}
-  m_Layer: 0
-  m_Name: UIManager_LeeYuJoung
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1448850644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1448850643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf5940033473d3b4e8b3eb9dfa5d24f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  loadPanel: {fileID: 0}
-  clip: {fileID: 0}
-  ground: {fileID: 0}
-  playableButton_GameStart01: {fileID: 0}
-  playableButton_Ranking01: {fileID: 0}
-  playableButton_GameExit01: {fileID: 0}
-  playableButton_Setting01: {fileID: 0}
-  canvas: {fileID: 0}
-  loginPanel: {fileID: 0}
-  settingPanel: {fileID: 0}
-  loginFailPanel: {fileID: 0}
-  upgradeManager: {fileID: 0}
-  pos:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playableButton_CONTINUE_04: {fileID: 0}
-  playableButton_ENGINE_UPGRADE_04: {fileID: 0}
-  playableButton_STORAGE_UPGRADE_04: {fileID: 0}
-  playableButton_MACHINE_UPGRADE_04: {fileID: 0}
-  playableButton_PRODUCTIONMACHINE_BUY_04: {fileID: 0}
-  playableButton_DYNAMITEMACHINE_BUY_04: {fileID: 0}
-  playableButton_WATERTANK_BUY_04: {fileID: 0}
-  playableButton_GAME_EXIT_04: {fileID: 0}
-  machineUpgradePanel: {fileID: 0}
-  engineDesPanel: {fileID: 0}
-  storageDesPanel: {fileID: 0}
-  voltNumText: {fileID: 0}
-  enginePriceText: {fileID: 0}
-  engineDesText: {fileID: 0}
-  storagePriceText: {fileID: 0}
-  storageDesText: {fileID: 0}
-  productionMachineBuyPriceText: {fileID: 0}
-  dynamiteMachineBuyPriceText: {fileID: 0}
-  waterTankBuyPriceText: {fileID: 0}
---- !u!4 &1448850645
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1448850643}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1457362012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,7 +1006,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1607778133
 GameObject:
@@ -1128,6 +1042,8 @@ MonoBehaviour:
   ground: {fileID: 0}
   rankingBarPrefab: {fileID: 0}
   keySet: PlayerActionKeyCode
+  loadPanel: {fileID: 0}
+  clip: {fileID: 0}
   playableButton_GameStart01: {fileID: 0}
   playableButton_Ranking01: {fileID: 0}
   playableButton_GameExit01: {fileID: 0}
@@ -1273,7 +1189,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1639517279
 AudioSource:
@@ -1539,7 +1455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3191647700115880267, guid: 0bea2e66669a0b349b5f71ccb5612141, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3191647700115880267, guid: 0bea2e66669a0b349b5f71ccb5612141, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1736,7 +1652,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1972605120
 GameObject:
@@ -1948,7 +1864,7 @@ Transform:
   m_Children:
   - {fileID: 2040406368758931630}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 35, y: 180, z: 0}
 --- !u!33 &915233334060049926
 MeshFilter:
@@ -1967,7 +1883,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 988934895366236418, guid: 01b818d09d594a64e819eb406af358a4, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 988934895366236418, guid: 01b818d09d594a64e819eb406af358a4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2069,7 +1985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5984260012385800017, guid: d2046edbde64227489b417e701cc1314, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 5984260012385800017, guid: d2046edbde64227489b417e701cc1314, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2172,7 +2088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7684015686978995023, guid: 133d537fd56a4344c9f5d4d62acb04c5, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7684015686978995023, guid: 133d537fd56a4344c9f5d4d62acb04c5, type: 3}
       propertyPath: m_LocalPosition.x
