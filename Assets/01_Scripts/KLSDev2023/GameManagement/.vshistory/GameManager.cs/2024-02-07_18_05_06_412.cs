@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviourPun
             StateManager.Instance().machineAddPrice = new Dictionary<string, int>() { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
             StateManager.Instance().currentTime = 0.0f;
             StateManager.Instance().fireTime = 20.0f;
-            
+            StateManager.Instance().BringFactoryValue();
             StateManager.Instance().productionMachines.Clear();
             StateManager.Instance().dynamiteMachines.Clear();
             StateManager.Instance().waterTanks.Clear();

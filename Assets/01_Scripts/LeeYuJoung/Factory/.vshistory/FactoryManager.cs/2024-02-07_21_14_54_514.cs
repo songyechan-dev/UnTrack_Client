@@ -32,7 +32,7 @@ public class FactoryManager : MonoBehaviourPun
     public float currentFireTime = 0;
     public float currentGenerateTime = 0;
 
-    public int currentItemNum;
+    public int currentItemNum = 0;
     public int itemMaxVolume = 5;
 
     public bool isWorking = false;
@@ -52,13 +52,13 @@ public class FactoryManager : MonoBehaviourPun
         else
         {
             FactoryJsonLoad(dataPath);
-            StateManager.Instance().BringFactoryValue();
+
             switch (factoryType)
             {
                 case FACTORYTYPE.ProductionMachine:
                     if(StateManager.Instance().productionMachines.Count > 0)
                     {
-                        Debug.Log("프로덕션 갯수 :: "+ StateManager.Instance().productionMachines[0]["currentItemNum"]);
+                        Debug.Log("프로덕션");
                         currentItemNum = StateManager.Instance().productionMachines[0]["currentItemNum"];
                         itemMaxVolume = StateManager.Instance().productionMachines[0]["itemMaxVolume"];
                         StateManager.Instance().productionMachines.RemoveAt(0);
@@ -68,7 +68,7 @@ public class FactoryManager : MonoBehaviourPun
                 case FACTORYTYPE.WaterTank:
                     if(StateManager.Instance().waterTanks.Count > 0)
                     {
-                        Debug.Log("워터탱크 갯수 ::"+ StateManager.Instance().waterTanks[0]["currentItemNum"]);
+                        Debug.Log("워터탱크");
                         currentItemNum = StateManager.Instance().waterTanks[0]["currentItemNum"];
                         itemMaxVolume = StateManager.Instance().waterTanks[0]["itemMaxVolume"];
                         StateManager.Instance().waterTanks.RemoveAt(0);

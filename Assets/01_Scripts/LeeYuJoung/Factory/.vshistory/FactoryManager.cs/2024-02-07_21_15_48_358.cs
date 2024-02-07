@@ -32,7 +32,7 @@ public class FactoryManager : MonoBehaviourPun
     public float currentFireTime = 0;
     public float currentGenerateTime = 0;
 
-    public int currentItemNum;
+    public int currentItemNum = 0;
     public int itemMaxVolume = 5;
 
     public bool isWorking = false;
@@ -52,7 +52,7 @@ public class FactoryManager : MonoBehaviourPun
         else
         {
             FactoryJsonLoad(dataPath);
-            StateManager.Instance().BringFactoryValue();
+
             switch (factoryType)
             {
                 case FACTORYTYPE.ProductionMachine:
