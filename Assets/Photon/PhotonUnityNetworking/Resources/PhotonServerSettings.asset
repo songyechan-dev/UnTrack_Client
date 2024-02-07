@@ -71,6 +71,7 @@ MonoBehaviour:
   - SetMyParent_Null
   - MapEnvironmentCreate_Others
   - SetReadyUserCount_Others
+  - SetText_Others
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
