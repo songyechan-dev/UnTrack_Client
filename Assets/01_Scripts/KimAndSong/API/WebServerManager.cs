@@ -84,37 +84,35 @@ public static class WebServerManager
 
                 if (rankingList != null && rankingList.lankingList != null)
                 {
-                    
-                    
+
+
                     foreach (TeamData teamData in rankingList.lankingList)
                     {
-                        
-                            GameObject bar = UIManager.Instance().CreateBar();
-                            bar.transform.SetParent(GameObject.Find("RankingContent").transform);
-                            bar.transform.localScale = Vector3.one;
-                            bar.transform.GetChild(0).GetComponent<Text>().text = $"{rankingList.lankingList.IndexOf(teamData) + 1}."; // 순위
-                            bar.transform.GetChild(1).GetComponent<Text>().text = teamData.teamName; // 팀 이름
-                            bar.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = teamData.total_clearTime.ToString(); // 총 클리어 시간
-                            bar.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = teamData.round1_clearTime.ToString(); // 라운드 1 클리어 시간
-                            bar.transform.GetChild(8).GetChild(0).GetComponent<Text>().text = teamData.round2_clearTime.ToString(); // 라운드 2 클리어 시간
-                            bar.transform.GetChild(9).GetChild(0).GetComponent<Text>().text = teamData.round3_clearTime.ToString(); // 라운드 3 클리어 시간
-                            bar.transform.GetChild(10).GetChild(0).GetComponent<Text>().text = teamData.round4_clearTime.ToString(); // 라운드 4 클리어 시간
-                            bar.transform.GetChild(11).GetChild(0).GetComponent<Text>().text = teamData.round5_clearTime.ToString(); // 라운드 5 클리어 시간
-                            bar.transform.GetChild(3).GetComponent<Text>().text = teamData.player_1; // 플레이어 1
-                            bar.transform.GetChild(4).GetComponent<Text>().text = teamData.player_2; // 플레이어 2
-                            bar.transform.GetChild(5).GetComponent<Text>().text = teamData.player_3; // 플레이어 3
-                            bar.transform.GetChild(6).GetComponent<Text>().text = teamData.player_4; // 플레이어 4
-                        
-                           
-                        
-                       
+
+                        GameObject bar = UIManager.Instance().CreateBar();
+                        bar.transform.SetParent(GameObject.Find("RankingContent").transform);
+                        bar.transform.localScale = Vector3.one;
+                        bar.transform.GetChild(0).GetComponent<Text>().text = $"{rankingList.lankingList.IndexOf(teamData) + 1}."; // 순위
+                        bar.transform.GetChild(1).GetComponent<Text>().text = teamData.teamName; // 팀 이름
+                        bar.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = teamData.total_clearTime.ToString(); // 총 클리어 시간
+                        bar.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = teamData.round1_clearTime.ToString(); // 라운드 1 클리어 시간
+                        bar.transform.GetChild(8).GetChild(0).GetComponent<Text>().text = teamData.round2_clearTime.ToString(); // 라운드 2 클리어 시간
+                        bar.transform.GetChild(9).GetChild(0).GetComponent<Text>().text = teamData.round3_clearTime.ToString(); // 라운드 3 클리어 시간
+                        bar.transform.GetChild(10).GetChild(0).GetComponent<Text>().text = teamData.round4_clearTime.ToString(); // 라운드 4 클리어 시간
+                        bar.transform.GetChild(11).GetChild(0).GetComponent<Text>().text = teamData.round5_clearTime.ToString(); // 라운드 5 클리어 시간
+                        bar.transform.GetChild(3).GetComponent<Text>().text = teamData.player_1; // 플레이어 1
+                        bar.transform.GetChild(4).GetComponent<Text>().text = teamData.player_2; // 플레이어 2
+                        bar.transform.GetChild(5).GetComponent<Text>().text = teamData.player_3; // 플레이어 3
+                        bar.transform.GetChild(6).GetComponent<Text>().text = teamData.player_4; // 플레이어 4
+
                     }
                 }
-                
+
             }
             www.Dispose();
         }
     }
+
 }
 
 
