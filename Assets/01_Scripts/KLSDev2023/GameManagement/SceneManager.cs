@@ -15,7 +15,6 @@ namespace KLSDev2023
         {
             UIManager.Instance().Init();
             PlayBGM();
-            SceneInit();
         }
 
         public void NextScene()
@@ -34,14 +33,6 @@ namespace KLSDev2023
         public void PlayBGM()
         {
             AudioManager.Instnce().PlayBGM(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-        }
-
-        public void SceneInit()
-        {
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 6)
-            {
-                UIManager.Instance().clearTimeText06.text = ((int)TimeManager.Instance().PrevTime).ToString();
-            }
         }
     }
 }

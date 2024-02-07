@@ -670,7 +670,7 @@ public class UIManager : MonoBehaviour
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
-            GameManager.Instance().SetRound(1);
+
 
         }
         #endregion

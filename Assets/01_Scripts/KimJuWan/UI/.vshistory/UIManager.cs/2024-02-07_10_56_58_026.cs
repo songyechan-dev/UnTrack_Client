@@ -262,9 +262,12 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.BACKTOMAIN_06:
                 LeaveRoomAndLoadScene(1);
+
                 break;
             case PlayableButtonInfo.Info.BACKTOLOBBY_06:
-                LeaveRoomAndLoadScene(2);
+                SceneManager.LoadScene("02_Lobby");
+                PhotonNetwork.LeaveRoom();
+
                 break;
             default:
                 break;
@@ -643,7 +646,6 @@ public class UIManager : MonoBehaviour
             SetText(gameOverTimeText05, formattedTime);
             Debug.Log("게임오버 시간 :::"+ ((int)TimeManager.Instance().PrevTime).ToString());
             PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity);
-            GameManager.Instance().SetRound(1);
         }
         #endregion
 
@@ -670,7 +672,7 @@ public class UIManager : MonoBehaviour
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
-            GameManager.Instance().SetRound(1);
+
 
         }
         #endregion

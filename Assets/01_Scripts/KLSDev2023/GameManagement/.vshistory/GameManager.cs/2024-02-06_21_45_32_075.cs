@@ -9,7 +9,6 @@ using System.ComponentModel;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -151,7 +150,6 @@ public class GameManager : MonoBehaviourPun
     {
         gameMode = GameMode.None;
         gameState = GameState.GameOver;
-        TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel(5);
@@ -221,10 +219,7 @@ public class GameManager : MonoBehaviourPun
         gameState = GameState.GameEnd;
         gameMode = GameMode.None;
         //UIManager.Instance().Init();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel(6);
-        }
+        Debug.Log("게임끝");
     }
 
     public void MeterCalculate()

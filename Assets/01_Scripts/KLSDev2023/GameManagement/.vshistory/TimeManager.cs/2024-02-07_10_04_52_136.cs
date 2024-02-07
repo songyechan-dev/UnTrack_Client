@@ -20,7 +20,6 @@ public class TimeManager : MonoBehaviour
     public float PrevTime
     {
         get { return prevTime; }
-        set { prevTime = value; }
     }
 
     public static TimeManager Instance()

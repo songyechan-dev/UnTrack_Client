@@ -221,10 +221,7 @@ public class GameManager : MonoBehaviourPun
         gameState = GameState.GameEnd;
         gameMode = GameMode.None;
         //UIManager.Instance().Init();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel(6);
-        }
+        Debug.Log("게임끝");
     }
 
     public void MeterCalculate()

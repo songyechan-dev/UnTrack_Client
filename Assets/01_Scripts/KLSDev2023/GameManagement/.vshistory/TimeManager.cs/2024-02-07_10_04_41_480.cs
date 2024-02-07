@@ -20,7 +20,6 @@ public class TimeManager : MonoBehaviour
     public float PrevTime
     {
         get { return prevTime; }
-        set { prevTime = value; }
     }
 
     public static TimeManager Instance()
@@ -47,6 +46,7 @@ public class TimeManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        prevTime = curTime;
         ResetCurTime();
         if (scene.buildIndex != 3)
         {
