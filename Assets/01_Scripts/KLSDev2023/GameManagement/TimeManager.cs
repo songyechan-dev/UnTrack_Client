@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
@@ -7,12 +8,19 @@ public class TimeManager : MonoBehaviour
     private static TimeManager instance;
     [SerializeField]
     private float curTime;
+    private float prevTime;
 
     // 읽기 전용 프로퍼티로 curTime을 정의
     public float CurTime
     {
         get { return curTime; }
         private set { curTime = value; }
+    }
+
+    public float PrevTime
+    {
+        get { return prevTime; }
+        set { prevTime = value; }
     }
 
     public static TimeManager Instance()

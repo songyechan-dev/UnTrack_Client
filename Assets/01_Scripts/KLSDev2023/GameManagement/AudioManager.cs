@@ -23,7 +23,7 @@ public enum SOUNDTYPE
 public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
-    public AudioManager Instnce()
+    public static AudioManager Instnce()
     {
         return instance;
     }

@@ -16,7 +16,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     }
     #endregion
     public PlayerController playerController;
-    public AudioManager audioManager;
+
 
     #region Scene00
     public GameObject loadPanel;
@@ -97,7 +97,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     {
         Invoke("EndLoading", (float)clip.duration);
 
-        audioManager.Instnce().PlayBGM(SceneManager.GetActiveScene().buildIndex);
+        AudioManager.Instnce().PlayBGM(SceneManager.GetActiveScene().buildIndex);
         loadPanel.SetActive(false);
         clip.Play();
     }
@@ -105,7 +105,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     public void EndLoading()
     {
         SceneManager.LoadScene(1);
-        audioManager.Instnce().PlayBGM(1);
+        AudioManager.Instnce().PlayBGM(1);
     }
     #endregion
 
@@ -305,7 +305,7 @@ public class UIManager_LeeYuJoung : MonoBehaviour
     public void Init()
     {
         playerController = GetComponent<PlayerController>();
-        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        //audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         ground = GameObject.Find("Ground");
         canvas = GameObject.Find("Canvas");
 
