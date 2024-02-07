@@ -174,6 +174,7 @@ public class UIManager : MonoBehaviour
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
     /// </summary>
     /// <param name="_info">PlayableButton 종류</param>
+    
     public void PlayAbleButton_OnStay(PlayableButtonInfo.Info _info)
     {
         switch (_info)
@@ -187,12 +188,16 @@ public class UIManager : MonoBehaviour
                 Application.Quit();
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
+                GameObject player = GameObject.FindWithTag("Player");
+                Destroy(player);
                 ActiveAndDeActive(rankingPanel01, ground);
-                if(GameObject.Find("RankingContent").transform.childCount<=1)
+                if (GameObject.Find("RankingContent").transform.childCount <= 1)
                     StartCoroutine(WebServerManager.RankingPanelCoroutine());
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 ActiveAndDeActive(settingPanel01, ground);
+                GameObject player_1 = GameObject.FindWithTag("Player");
+                Destroy(player_1);
                 break;
             case PlayableButtonInfo.Info.GAME_START_02:
                 if (!playerController.GetIsReady())
@@ -201,6 +206,7 @@ public class UIManager : MonoBehaviour
                 }
                 break;
             case PlayableButtonInfo.Info.BACK_02:
+                LeaveRoomAndLoadScene(1);
                 break;
             case PlayableButtonInfo.Info.FIND_ROOM_02:
                 break;
@@ -485,18 +491,19 @@ public class UIManager : MonoBehaviour
     public void RankingPanelOff_01()
     {
         ActiveAndDeActive(ground, rankingPanel01);
-        if (GameObject.Find("RankingContent").transform.childCount > 1)
-        {
-            for (int i = 0; i < GameObject.Find("RankingContent").transform.childCount; i++)
-            {
-                Destroy(GameObject.Find("RankingContent").transform.GetChild(i + 1));
-            }
-        }
+
+        GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
+        
+        player.transform.position = new Vector3(0, 20, 0);
     }
+    
 
     public void SettingPanelOff_01()
     {
         ActiveAndDeActive(ground, settingPanel01);
+        GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
+
+        player.transform.position = new Vector3(0, 20, 0);
     }
 
     public void KeySetRight()
@@ -568,7 +575,7 @@ public class UIManager : MonoBehaviour
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetLeft").GetComponent<Button>().onClick.AddListener(KeySetLeft);
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
-            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").GetComponent<Text>();
+            keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetTxt").GetComponent<Text>();
             rankingBarPrefab = Resources.Load<GameObject>("RankingBar");
             
 
@@ -849,6 +856,7 @@ public class UIManager : MonoBehaviour
         return Instantiate(Resources.Load<GameObject>(rankingBarPrefab.name));
     }
 
+    
     public void LeaveRoomAndLoadScene(int sceneIndex)
     {
         PhotonNetwork.Disconnect();

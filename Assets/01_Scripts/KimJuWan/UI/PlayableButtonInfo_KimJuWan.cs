@@ -21,4 +21,5 @@ public class PlayableButtonInfo_KimJuWan : MonoBehaviour
     }
     public Info myInfo;
     
+    
 }
