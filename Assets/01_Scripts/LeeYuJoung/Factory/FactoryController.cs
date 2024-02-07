@@ -44,7 +44,6 @@ public class FactoryController : MonoBehaviourPun
         }    
     }
 
-    // 제작소 제작 중 일 시 효과
     public void MachineOperation()
     {
         if(factoryManager != null)
@@ -53,7 +52,7 @@ public class FactoryController : MonoBehaviourPun
         }
         else
         {
-
+            StartCoroutine(StorageEffect());
         }
     }
 
@@ -82,6 +81,15 @@ public class FactoryController : MonoBehaviourPun
             if (loopNum++ > 10000)
                 throw new Exception("Infinite Loop");
         }
+    }
+
+    IEnumerator StorageEffect()
+    {
+        transform.DOScale(new Vector3(1.0f, 0.25f, 1.0f), 1.0f);
+        yield return new WaitForSeconds(0.25f);
+
+        transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f);
+        yield return new WaitForSeconds(0.25f);
     }
 
     public void DescriptionActive()
