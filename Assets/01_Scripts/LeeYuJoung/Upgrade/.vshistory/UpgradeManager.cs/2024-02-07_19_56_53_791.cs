@@ -9,7 +9,6 @@ using ExitGames.Client.Photon;
 using static GameManager;
 using Photon.Realtime;
 using static FactoryManager;
-using TMPro;
 
 public enum upgradeType
 {
@@ -120,21 +119,21 @@ public class UpgradeManager : MonoBehaviour
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeProductionMachine"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
             Debug.Log("::::::::::::::::::::::::::::" + StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString());
-            _machine.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().waterTanks.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeWaterTank"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
-            _machine.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][i].ToString();
         }
 
         for (int i = 0; i < StateManager.Instance().dynamiteMachines.Count; i++)
         {
             GameObject _machine = Instantiate((GameObject)Resources.Load("UpgradeMachine/UpgradeDynamiteMachine"), _pos[_idx++]);
             _machine.GetComponentInChildren<PlayableButtonInfo>().machineUpgradeIDX = i;
-            _machine.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][i].ToString();
+            _machine.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][i].ToString();
         }
     }
 
@@ -160,30 +159,30 @@ public class UpgradeManager : MonoBehaviour
     {
         if (photonEvent.Code == (int)SendDataInfo.Info.UPGRADE_INFO)
         {
-            // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
-            object[] receivedData = (object[])photonEvent.CustomData;
-            upgradeType _upgradeType = (upgradeType)((int)receivedData[0]);
-            if (_upgradeType.Equals(upgradeType.UPGRADE_ENGINE))
-            {
-                StateManager.Instance().engineMaxVolume = (int)receivedData[1];
-                StateManager.Instance().engineUpgradePrice = (int)receivedData[2];
-            }
-            if (_upgradeType.Equals(upgradeType.UPGRADE_STORAGE))
-            {
-                StateManager.Instance().storageMaxVolume = (int)receivedData[1];
-                StateManager.Instance().storageUpgradePrice = (int)receivedData[2];
-            }
-            if (_upgradeType.Equals(upgradeType.UPGRADE_MACHINE))
-            {
-                StateManager.Instance().factorys[(string)receivedData[1]][(int)receivedData[2]][1] += 2;
-                StateManager.Instance().factoryPrice[(string)receivedData[1]][(int)receivedData[2]] += 1;
-            }
-            if (_upgradeType.Equals(upgradeType.BUY_MACHINE))
-            {
-                StateManager.Instance().factorys[(string)receivedData[1]].Add(new int[] { 0, 5 });
-                StateManager.Instance().machineAddPrice[(string)receivedData[1]] += 1;
-                StateManager.Instance().factoryPrice[(string)receivedData[1]].Add(1);
-            }
+            //// 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            //object[] receivedData = (object[])photonEvent.CustomData;
+            //upgradeType _upgradeType = (upgradeType)((int)receivedData[0]);
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_ENGINE))
+            //{
+            //    StateManager.Instance().engineMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().engineUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_STORAGE))
+            //{
+            //    StateManager.Instance().storageMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().storageUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]][(int)receivedData[2]][1] += 2;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]][(int)receivedData[2]] += 1;
+            //}
+            //if (_upgradeType.Equals(upgradeType.BUY_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]].Add(new int[] { 0, 5 });
+            //    StateManager.Instance().machineAddPrice[(string)receivedData[1]] += 1;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]].Add(1);
+            //}
         }
     }
 

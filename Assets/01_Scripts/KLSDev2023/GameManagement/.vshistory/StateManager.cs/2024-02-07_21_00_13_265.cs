@@ -94,7 +94,6 @@ namespace LeeYuJoung
         {
             for(int i = 0; i < factorys["ProductionMachine"].Count; i++)
             {
-
                 productionMachines.Add(new Dictionary<string, int> { { "currentItemNum", factorys["ProductionMachine"][i][0] }, { "itemMaxVolume", factorys["ProductionMachine"][i][1] } });
             }
 
