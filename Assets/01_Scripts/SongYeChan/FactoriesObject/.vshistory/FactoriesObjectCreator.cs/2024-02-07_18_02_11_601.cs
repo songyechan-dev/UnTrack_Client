@@ -42,14 +42,12 @@ public class FactoriesObjectCreator : MonoBehaviour
     
     public void Create()
     {
-        Debug.Log("FactoriesObject 실행1::::");
         if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             if (GameManager.Instance().myPlayer != null)
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    Debug.Log("FactoriesObject 실행2::::");
                     if (count <= 0)
                     {
                         FirstCreate_Master();

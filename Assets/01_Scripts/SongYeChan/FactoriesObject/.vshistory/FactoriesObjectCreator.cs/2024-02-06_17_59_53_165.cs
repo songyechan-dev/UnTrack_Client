@@ -33,7 +33,7 @@ public class FactoriesObjectCreator : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        if (PhotonNetwork.IsMasterClient)
+        if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart) && PhotonNetwork.IsMasterClient)
         {
             InvokeRepeating("Create", 0f, createdTime);
         }
@@ -42,14 +42,12 @@ public class FactoriesObjectCreator : MonoBehaviour
     
     public void Create()
     {
-        Debug.Log("FactoriesObject 실행1::::");
         if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             if (GameManager.Instance().myPlayer != null)
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    Debug.Log("FactoriesObject 실행2::::");
                     if (count <= 0)
                     {
                         FirstCreate_Master();

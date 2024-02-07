@@ -49,7 +49,6 @@ public class FactoriesObjectCreator : MonoBehaviour
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    Debug.Log("FactoriesObject ½ÇÇà2::::");
                     if (count <= 0)
                     {
                         FirstCreate_Master();
