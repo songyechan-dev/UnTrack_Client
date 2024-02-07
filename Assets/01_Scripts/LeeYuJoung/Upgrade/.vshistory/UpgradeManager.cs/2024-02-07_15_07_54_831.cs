@@ -159,30 +159,30 @@ public class UpgradeManager : MonoBehaviour
     {
         if (photonEvent.Code == (int)SendDataInfo.Info.UPGRADE_INFO)
         {
-            // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
-            object[] receivedData = (object[])photonEvent.CustomData;
-            upgradeType _upgradeType = (upgradeType)((int)receivedData[0]);
-            if (_upgradeType.Equals(upgradeType.UPGRADE_ENGINE))
-            {
-                StateManager.Instance().engineMaxVolume = (int)receivedData[1];
-                StateManager.Instance().engineUpgradePrice = (int)receivedData[2];
-            }
-            if (_upgradeType.Equals(upgradeType.UPGRADE_STORAGE))
-            {
-                StateManager.Instance().storageMaxVolume = (int)receivedData[1];
-                StateManager.Instance().storageUpgradePrice = (int)receivedData[2];
-            }
-            if (_upgradeType.Equals(upgradeType.UPGRADE_MACHINE))
-            {
-                StateManager.Instance().factorys[(string)receivedData[1]][(int)receivedData[2]][1] += 2;
-                StateManager.Instance().factoryPrice[(string)receivedData[1]][(int)receivedData[2]] += 1;
-            }
-            if (_upgradeType.Equals(upgradeType.BUY_MACHINE))
-            {
-                StateManager.Instance().factorys[(string)receivedData[1]].Add(new int[] { 0, 5 });
-                StateManager.Instance().machineAddPrice[(string)receivedData[1]] += 1;
-                StateManager.Instance().factoryPrice[(string)receivedData[1]].Add(1);
-            }
+            //// 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            //object[] receivedData = (object[])photonEvent.CustomData;
+            //upgradeType _upgradeType = (upgradeType)((int)receivedData[0]);
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_ENGINE))
+            //{
+            //    StateManager.Instance().engineMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().engineUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_STORAGE))
+            //{
+            //    StateManager.Instance().storageMaxVolume = (int)receivedData[1];
+            //    StateManager.Instance().storageUpgradePrice = (int)receivedData[2];
+            //}
+            //if (_upgradeType.Equals(upgradeType.UPGRADE_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]][(int)receivedData[2]][1] += 2;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]][(int)receivedData[2]] += 1;
+            //}
+            //if (_upgradeType.Equals(upgradeType.BUY_MACHINE))
+            //{
+            //    StateManager.Instance().factorys[(string)receivedData[1]].Add(new int[] { 0, 5 });
+            //    StateManager.Instance().machineAddPrice[(string)receivedData[1]] += 1;
+            //    StateManager.Instance().factoryPrice[(string)receivedData[1]].Add(1);
+            //}
         }
     }
 
