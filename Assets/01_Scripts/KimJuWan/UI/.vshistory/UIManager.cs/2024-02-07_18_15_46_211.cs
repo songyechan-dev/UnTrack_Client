@@ -348,7 +348,7 @@ public class UIManager : MonoBehaviour
                 if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, _info.machineUpgradeIDX);
-                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][_info.machineUpgradeIDX].ToString();
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                     object[] data = new object[] { (int)_info.myInfo, false };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
@@ -361,7 +361,7 @@ public class UIManager : MonoBehaviour
                 if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, _info.machineUpgradeIDX);
-                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][_info.machineUpgradeIDX].ToString();
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                     object[] data = new object[] { (int)_info.myInfo, false };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
@@ -374,7 +374,7 @@ public class UIManager : MonoBehaviour
                 if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, _info.machineUpgradeIDX);
-                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][_info.machineUpgradeIDX].ToString();
+                    _info.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                     object[] data = new object[] { (int)_info.myInfo, false };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
@@ -824,19 +824,19 @@ public class UIManager : MonoBehaviour
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_UPGRADE_04)) 
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_PRODUCTIONMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    playableButton_PRODUCTIONMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["ProductionMachine"][playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.DYNAMITEMACHINE_UPGRADE_04)) 
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_DYNAMITEMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    playableButton_DYNAMITEMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.WATERTANK_UPGRADE_04)) 
                 {
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_WATERTANK_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    playableButton_WATERTANK_BUY_04.transform.GetChild(1).GetComponent<TextMesh>().text = StateManager.Instance().factoryPrice["WaterTank"][playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04)) 
