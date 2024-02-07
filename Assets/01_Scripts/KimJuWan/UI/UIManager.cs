@@ -456,6 +456,7 @@ public class UIManager : MonoBehaviour
     public void RankingPanelOff_01()
     {
         ActiveAndDeActive(ground, rankingPanel01);
+        
     }
 
     public void SettingPanelOff_01()
@@ -480,6 +481,7 @@ public class UIManager : MonoBehaviour
         SetText(keySettingText01, KeyCodeInfo.myActionKeyCode.ToString());
     }
 
+    
     /// <summary>
     /// 각씬 별로 panel및 playablebutton 초기화
     /// </summary>
@@ -514,7 +516,7 @@ public class UIManager : MonoBehaviour
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
             rankingPanel01 = canvas.transform.Find("RankingPanel").gameObject;
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
-            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
+            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(() => ActiveAndDeActive(ground, rankingPanel01));
             settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetLeft").GetComponent<Button>().onClick.RemoveAllListeners();
