@@ -91,7 +91,7 @@ public static class DBManager
         {
             connection.Open();
             
-            string query = $"INSERT INTO totalranking(teamName, player_{num}) SELECT team, nickName FROM GameInfo WHERE roomName = '{roomName}';";
+            string query = $"INSERT INTO totalranking(teamName, player_{num}) SELECT roomName, nickName FROM GameInfo WHERE roomName = '{roomName}';";
             
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
