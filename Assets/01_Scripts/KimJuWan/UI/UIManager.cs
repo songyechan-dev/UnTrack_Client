@@ -188,7 +188,8 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
                 ActiveAndDeActive(rankingPanel01, ground);
-                StartCoroutine(WebServerManager.RankingPanelCoroutine());
+                if(GameObject.Find("RankingContent").transform.childCount<=1)
+                    StartCoroutine(WebServerManager.RankingPanelCoroutine());
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 ActiveAndDeActive(settingPanel01, ground);
@@ -484,7 +485,13 @@ public class UIManager : MonoBehaviour
     public void RankingPanelOff_01()
     {
         ActiveAndDeActive(ground, rankingPanel01);
-        
+        if (GameObject.Find("RankingContent").transform.childCount > 1)
+        {
+            for (int i = 0; i < GameObject.Find("RankingContent").transform.childCount; i++)
+            {
+                Destroy(GameObject.Find("RankingContent").transform.GetChild(i + 1));
+            }
+        }
     }
 
     public void SettingPanelOff_01()
@@ -554,7 +561,7 @@ public class UIManager : MonoBehaviour
             loginFailPanel01 = canvas.transform.Find("LoginFailPanel").gameObject;
             rankingPanel01 = canvas.transform.Find("RankingPanel").gameObject;
             rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
-            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(() => ActiveAndDeActive(ground, rankingPanel01));
+            rankingPanel01.transform.Find("XButton").GetComponent<Button>().onClick.AddListener(RankingPanelOff_01);
             settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
             settingPanel01.transform.Find("Setting").transform.Find("XButton").GetComponent<Button>().onClick.AddListener(SettingPanelOff_01);
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetLeft").GetComponent<Button>().onClick.RemoveAllListeners();
