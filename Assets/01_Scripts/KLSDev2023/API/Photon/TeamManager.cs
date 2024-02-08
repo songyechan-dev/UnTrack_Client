@@ -124,10 +124,19 @@ public class TeamManager : MonoBehaviourPunCallbacks
     int exitedPlayerActNo = -1;
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        
         if (PhotonNetwork.IsMasterClient && exitedPlayerActNo != otherPlayer.ActorNumber)
         {
-            exitedPlayerActNo = otherPlayer.ActorNumber;
-            SetNeedReadyUserCount(false);
+            if (otherPlayer.CustomProperties.ContainsKey("isLoginFailed"))
+            {
+                return;
+            }
+            else
+            {
+                exitedPlayerActNo = otherPlayer.ActorNumber;
+                needReadyUserCount = PhotonNetwork.CurrentRoom.Players.Count;
+                photonView.RPC("SetNeedReadyUserCount_Others", RpcTarget.Others, readyUserCount);
+            }
         }
     }
 
@@ -143,6 +152,12 @@ public class TeamManager : MonoBehaviourPunCallbacks
     void SetReadyUserCount_Others(int _count)
     {
         readyUserCount = _count;
+    }
+
+    [PunRPC]
+    void SetNeedReadyUserCount_Others(int _count)
+    {
+        needReadyUserCount = _count;
     }
 
 

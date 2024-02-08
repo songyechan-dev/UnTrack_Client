@@ -21,6 +21,8 @@ public class BoxColliderReset : EditorWindow
             }
         }
 
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
         Debug.Log("Box Colliders have been reset.");
     }
 }

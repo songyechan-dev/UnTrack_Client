@@ -317,7 +317,6 @@ GameObject:
   - component: {fileID: -482669073529749514}
   - component: {fileID: 6258059926074263839}
   - component: {fileID: -8407487530328457645}
-  - component: {fileID: 2446511257526840589}
   - component: {fileID: 392537381970993266}
   - component: {fileID: 5370837724803900844}
   - component: {fileID: 8278274555722848212}
@@ -475,7 +474,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -482669073529749514}
-  - {fileID: 2446511257526840589}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -495,22 +493,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &2446511257526840589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9017414315893891914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!65 &392537381970993266
 BoxCollider:
   m_ObjectHideFlags: 0

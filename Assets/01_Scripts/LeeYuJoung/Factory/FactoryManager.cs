@@ -52,7 +52,7 @@ public class FactoryManager : MonoBehaviourPun
         else
         {
             FactoryJsonLoad(dataPath);
-            StateManager.Instance().BringFactoryValue();
+
             switch (factoryType)
             {
                 case FACTORYTYPE.ProductionMachine:

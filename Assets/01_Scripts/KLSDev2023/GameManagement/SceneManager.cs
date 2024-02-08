@@ -34,6 +34,11 @@ namespace KLSDev2023
         {
             AudioManager.Instnce().PlayBGM(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
+
+        public void LoadScene(int id)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(id);
+        }
     }
 }
 

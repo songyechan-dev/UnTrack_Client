@@ -13,6 +13,11 @@ using Unity.VisualScripting;
 using UnityEngine.Playables;
 using System;
 
+public enum closeBtnType
+{
+    ROOMLIST01_CLOSE =0,
+}
+
 public class UIManager : MonoBehaviour
 {
     #region Instance
@@ -28,6 +33,7 @@ public class UIManager : MonoBehaviour
     public GameObject rankingBarPrefab;
     public string keySet = "PlayerActionKeyCode";
     public Action OnSpaceKeyPress;
+
 
     #region Scene00
     public GameObject loadPanel;
@@ -51,17 +57,19 @@ public class UIManager : MonoBehaviour
     [Header("Text")]
     public Text keySettingText01;
 
-    
+
 
     #endregion
 
     #region Scene02
+    public GameObject tempPlayer;
     [Header("PlayableButtons")]
     public GameObject playableButton_GameStart02;
     public GameObject playableButton_Back02;
     public GameObject playableButton_FindRoom02;
     [Header("Panel")]
     public GameObject roomListPanel02;
+    public GameObject loginFailPanel02;
     [Header("Text")]
     public TextMeshPro roomIdText02;
     #endregion
@@ -81,6 +89,9 @@ public class UIManager : MonoBehaviour
     #region Scene04
     public UpgradeManager upgradeManager;
     public Transform[] pos = new Transform[9];
+    public List<GameObject> productionMachineList = new List<GameObject>();
+    public List<GameObject> dynamiteMachineList = new List<GameObject>();
+    public List<GameObject> waterTankList = new List<GameObject>();
 
     [Header("PlayableButtons")]
     public GameObject playableButton_CONTINUE_04;
@@ -201,6 +212,9 @@ public class UIManager : MonoBehaviour
                 LeaveRoomAndLoadScene(1);
                 break;
             case PlayableButtonInfo.Info.FIND_ROOM_02:
+                tempPlayer = GameObject.FindWithTag("Player");
+                tempPlayer.GetComponent<BoxCollider>().enabled = false;
+                roomListPanel02.SetActive(true);
                 break;
             case PlayableButtonInfo.Info.CONTINUE_04:
                 // 다음 라운드 게임 시작 
@@ -351,7 +365,15 @@ public class UIManager : MonoBehaviour
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, _info.machineUpgradeIDX);
                     _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                    object[] data = new object[] { (int)_info.myInfo, false };
+                    int count = 0;
+                    for (int i = 0; i < productionMachineList.Count; i++)
+                    {
+                        if (_info.gameObject == productionMachineList[i])
+                        {
+                            count = i;
+                        }
+                    }
+                    object[] data = new object[] { (int)_info.myInfo, false,count };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
                 }
@@ -364,7 +386,15 @@ public class UIManager : MonoBehaviour
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, _info.machineUpgradeIDX);
                     _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                    object[] data = new object[] { (int)_info.myInfo, false };
+                    int count = 0;
+                    for (int i = 0; i < dynamiteMachineList.Count; i++)
+                    {
+                        if (_info.gameObject == dynamiteMachineList[i])
+                        {
+                            count = i;
+                        }
+                    }
+                    object[] data = new object[] { (int)_info.myInfo, false,count };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
                 }
@@ -377,7 +407,15 @@ public class UIManager : MonoBehaviour
                     upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, _info.machineUpgradeIDX);
                     _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
-                    object[] data = new object[] { (int)_info.myInfo, false };
+                    int count = 0;
+                    for (int i = 0; i < waterTankList.Count; i++)
+                    {
+                        if (_info.gameObject == waterTankList[i])
+                        {
+                            count = i;
+                        }
+                    }
+                    object[] data = new object[] { (int)_info.myInfo, false,count };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
                 }
@@ -604,9 +642,10 @@ public class UIManager : MonoBehaviour
             playableButton_Back02.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.BACK_02;
             playableButton_FindRoom02.GetComponent<PlayableButtonInfo>().myInfo = PlayableButtonInfo.Info.FIND_ROOM_02;
 
-
+            loginFailPanel02 = canvas.transform.Find("LoginFailPanel").gameObject;
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
-
+            roomListPanel02.transform.Find("RoomListBackGround").transform.Find("XButton").GetComponent<Button>().onClick.RemoveAllListeners();
+            roomListPanel02.transform.Find("RoomListBackGround").transform.Find("XButton").GetComponent<Button>().onClick.AddListener(() => OnClickCloseBtn(closeBtnType.ROOMLIST01_CLOSE));
             roomIdText02 = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMeshPro>();
             
         }
@@ -681,6 +720,9 @@ public class UIManager : MonoBehaviour
 
             upgradeManager.ShowUpgradeMachine(pos);
 
+            storageDesText04.text = $"저장소 현재 용량\n {StateManager.Instance().storageMaxVolume}";
+            engineDesText04.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
+
             storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
             enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
             productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
@@ -754,6 +796,7 @@ public class UIManager : MonoBehaviour
 
             //}
             SetText(clearTimeText06, formattedTime);
+            SetText(storageLvText06, StateManager.Instance().storageMaxVolume.ToString());
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
@@ -762,6 +805,8 @@ public class UIManager : MonoBehaviour
 
             TimeManager.Instance().finalTime = 0;
             GameManager.Instance().SetRound(1);
+            GameManager.Instance().GameExit();
+            PhotonNetwork.Instantiate("Player", new Vector3(30, 20, 0), Quaternion.identity);
 
         }
         #endregion
@@ -776,7 +821,7 @@ public class UIManager : MonoBehaviour
     #region Photon
     void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == (int)SendDataInfo.Info.UI_INFO)
+        if (photonEvent.Code == (int)SendDataInfo.Info.UI_INFO && !PhotonNetwork.IsMasterClient)
         {
             object[] receivedData = (object[])photonEvent.CustomData;
             PlayableButtonInfo.Info _uiInfo = (PlayableButtonInfo.Info)((int)receivedData[0]);
@@ -832,20 +877,23 @@ public class UIManager : MonoBehaviour
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_UPGRADE_04)) 
                 {
-                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_PRODUCTIONMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][playableButton_PRODUCTIONMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    PlayableButtonInfo _info = productionMachineList[(int)receivedData[2]].GetComponent<PlayableButtonInfo>();
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.ProductionMachine, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["ProductionMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.DYNAMITEMACHINE_UPGRADE_04)) 
                 {
-                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_DYNAMITEMACHINE_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][playableButton_DYNAMITEMACHINE_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    PlayableButtonInfo _info = dynamiteMachineList[(int)receivedData[2]].GetComponent<PlayableButtonInfo>();
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.DynamiteMachine, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["DynamiteMachine"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.WATERTANK_UPGRADE_04)) 
                 {
-                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX);
-                    playableButton_WATERTANK_BUY_04.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][playableButton_WATERTANK_BUY_04.GetOrAddComponent<PlayableButtonInfo>().machineUpgradeIDX].ToString();
+                    PlayableButtonInfo _info = waterTankList[(int)receivedData[2]].GetComponent<PlayableButtonInfo>();
+                    upgradeManager.UpgradeMachine(FactoryManager.FACTORYTYPE.WaterTank, _info.machineUpgradeIDX);
+                    _info.transform.GetChild(1).GetComponent<TextMeshPro>().text = StateManager.Instance().factoryPrice["WaterTank"][_info.machineUpgradeIDX].ToString();
                     voltNumText04.text = StateManager.Instance().voltNum.ToString();
                 }
                 if (_uiInfo.Equals(PlayableButtonInfo.Info.PRODUCTIONMACHINE_BUY_04)) 
@@ -904,6 +952,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    void OnClickCloseBtn(closeBtnType type)
+    {
+        if (type.Equals(closeBtnType.ROOMLIST01_CLOSE))
+        {
+            tempPlayer.transform.position = new Vector3(0, 20, 0);
+            tempPlayer.GetComponent<BoxCollider>().enabled = true;
+            tempPlayer = null;
+            roomListPanel02.SetActive(false);
+        }
+    }
+
     #endregion
 
     #region Event
@@ -917,6 +976,7 @@ public class UIManager : MonoBehaviour
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
         OnSpaceKeyPress -= CheckSpaceKeyUp;
     }
+
 
     void CheckSpaceKeyUp()
     {
