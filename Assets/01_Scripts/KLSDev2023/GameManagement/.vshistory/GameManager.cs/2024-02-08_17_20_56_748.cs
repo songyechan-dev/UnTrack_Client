@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviourPun
             {
                 StateManager.Instance().storages.Add("STEEL", 0);
             }
-            StateManager.Instance().factorys = new Dictionary<string, List<int[]>>() { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
+            StateManager.Instance().factorys = new SerializedDictionary<string, List<int[]>>() { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
             StateManager.Instance().engineUpgradePrice = 3;
             StateManager.Instance().storageUpgradePrice = 2;
             StateManager.Instance().factoryPrice = new Dictionary<string, List<int>>() { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
