@@ -94,12 +94,12 @@ public static class WebServerManager
                         bar.transform.localScale = Vector3.one;
                         bar.transform.GetChild(0).GetComponent<Text>().text = $"{rankingList.lankingList.IndexOf(teamData) + 1}."; // 순위
                         bar.transform.GetChild(1).GetComponent<Text>().text = teamData.teamName; // 팀 이름
-                        bar.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = teamData.total_clearTime.ToString(); // 총 클리어 시간
-                        bar.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = teamData.round1_clearTime.ToString(); // 라운드 1 클리어 시간
-                        bar.transform.GetChild(8).GetChild(0).GetComponent<Text>().text = teamData.round2_clearTime.ToString(); // 라운드 2 클리어 시간
-                        bar.transform.GetChild(9).GetChild(0).GetComponent<Text>().text = teamData.round3_clearTime.ToString(); // 라운드 3 클리어 시간
-                        bar.transform.GetChild(10).GetChild(0).GetComponent<Text>().text = teamData.round4_clearTime.ToString(); // 라운드 4 클리어 시간
-                        bar.transform.GetChild(11).GetChild(0).GetComponent<Text>().text = teamData.round5_clearTime.ToString(); // 라운드 5 클리어 시간
+                        bar.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.total_clearTime / 60, teamData.total_clearTime % 60); // 총 클리어 시간
+                        bar.transform.GetChild(7).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.round1_clearTime / 60, teamData.round1_clearTime % 60); // 라운드 1 클리어 시간
+                        bar.transform.GetChild(8).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.round2_clearTime / 60, teamData.round2_clearTime % 60); // 라운드 2 클리어 시간
+                        bar.transform.GetChild(9).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.round3_clearTime / 60, teamData.round3_clearTime % 60); // 라운드 3 클리어 시간
+                        bar.transform.GetChild(10).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.round4_clearTime / 60, teamData.round4_clearTime % 60); // 라운드 4 클리어 시간
+                        bar.transform.GetChild(11).GetChild(0).GetComponent<Text>().text = string.Format("{0:00}:{1:00}", teamData.round5_clearTime / 60, teamData.round5_clearTime % 60); // 라운드 5 클리어 시간
                         bar.transform.GetChild(3).GetComponent<Text>().text = teamData.player_1; // 플레이어 1
                         bar.transform.GetChild(4).GetComponent<Text>().text = teamData.player_2; // 플레이어 2
                         bar.transform.GetChild(5).GetComponent<Text>().text = teamData.player_3; // 플레이어 3
@@ -113,6 +113,41 @@ public static class WebServerManager
         }
     }
 
+    public static IEnumerator InsertDataCoroutine(string teamName, float total_clearTime, float round1_clearTime, float round2_clearTime, float round3_clearTime, float round4_clearTime,
+            float round5_clearTime, string player_1, string player_2, string player_3, string player_4)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("teamName", teamName);
+        form.AddField("total_clearTime", total_clearTime.ToString());
+        form.AddField("round1_clearTime", round1_clearTime.ToString());
+        form.AddField("round2_clearTime", round2_clearTime.ToString());
+        form.AddField("round3_clearTime", round3_clearTime.ToString());
+        form.AddField("round4_clearTime", round4_clearTime.ToString());
+        form.AddField("round5_clearTime", round5_clearTime.ToString());
+        form.AddField("player_1", player_1);
+        form.AddField("player_2", player_2);
+        form.AddField("player_3", player_3);
+        form.AddField("player_4", player_4);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(serverURL + "/rank", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                string responseTxt = www.downloadHandler.text;
+
+                JSONNode dataResponse = JSON.Parse(responseTxt);
+
+                bool success = dataResponse["success"].AsBool;
+                if (success)
+                {
+                    yield return null;
+                }
+
+            }
+        }
+    }
 }
 
 

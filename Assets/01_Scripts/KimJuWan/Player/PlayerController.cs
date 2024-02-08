@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        //플레이어 애니메이션 재생
         if (pv == null || (pv != null && pv.IsMine))
         {
             if (PhotonNetwork.IsConnected)

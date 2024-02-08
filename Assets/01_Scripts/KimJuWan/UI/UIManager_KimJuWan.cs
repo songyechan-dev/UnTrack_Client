@@ -100,6 +100,7 @@ public class UIManager_KimJuWan : MonoBehaviour
         Init();
 
         Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
+       
     }
 
 
