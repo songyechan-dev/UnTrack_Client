@@ -29,6 +29,5 @@ public class SendDataInfo
         PLAYER_STATE = 20,
         DERAILMENT_COUNT = 21,
         UPGRADE_INFO = 22,
-        CHAT_HIDE = 23,
     }
 }
