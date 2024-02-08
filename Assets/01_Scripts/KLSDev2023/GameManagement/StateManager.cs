@@ -26,7 +26,7 @@ namespace LeeYuJoung
         public Dictionary<string, int> storages = new Dictionary<string, int>();  // Storage 재료 저장 공간
         public int storageMaxVolume = 10;  // Storage 저장 용량 (재료 종류 상관 없이 총 합 비교)
 
-        public Dictionary<string, List<int[]>> factorys = new Dictionary<string, List<int[]>>()
+        public SerializedDictionary<string, List<int[]>> factorys = new SerializedDictionary<string, List<int[]>>()
         { { "ProductionMachine", new List<int[]> { new int[] { 0, 5 } } }, { "WaterTank", new List<int[]> { new int[] { 0, 5 } } }, { "DynamiteMachine", new List<int[]>() } };
 
         public List<Dictionary<string, int>> productionMachines = new List<Dictionary<string, int>>();
@@ -94,7 +94,6 @@ namespace LeeYuJoung
         {
             for(int i = 0; i < factorys["ProductionMachine"].Count; i++)
             {
-
                 productionMachines.Add(new Dictionary<string, int> { { "currentItemNum", factorys["ProductionMachine"][i][0] }, { "itemMaxVolume", factorys["ProductionMachine"][i][1] } });
             }
 

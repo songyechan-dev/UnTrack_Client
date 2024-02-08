@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+using KLSDev2023;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -5,7 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -29,7 +33,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = version;
         PhotonNetwork.NickName = DataManager.GetUserID();
-        roomPrefab = Resources.Load<GameObject>("Room");
+        roomPrefab = Resources.Load<GameObject>("RoomItem");
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -100,13 +104,17 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             foreach (var playerInfo in PhotonNetwork.PlayerListOthers)
             {
-                //if (PhotonNetwork.NickName.Equals(playerInfo.NickName))
-                //{
-                //    Debug.Log("사용자가 이미 로그인 중 입니다.\n다시 로그인해주세요.");
-                //    PhotonNetwork.LeaveLobby();
-                //    PhotonNetwork.LeaveRoom();
-                //    return;
-                //}
+                if (PhotonNetwork.NickName.Equals(playerInfo.NickName))
+                {
+                    Hashtable playerProps = new Hashtable();
+                    playerProps["isLoginFailed"] = true;
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+                    PhotonNetwork.Disconnect();
+                    Debug.Log("사용자가 이미 로그인 중 입니다.\n다시 로그인해주세요.");
+                    UIManager.Instance().loginFailPanel02.SetActive(true);
+                    //UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+                    return;
+                }
             }
 
             // 마스터 클라이언트인 경우에 룸에 입장한 후 전투 씬을 로딩한다.
@@ -156,7 +164,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
                 // 딕셔너리에서 해당 룸 이름의 데이터를 삭제
                 rooms.Remove(roomInfo.Name);
-                DBManager.DeleteDataAll(roomInfo.Name);
             }
             else // 룸 정보가 변경된 경우
             {
