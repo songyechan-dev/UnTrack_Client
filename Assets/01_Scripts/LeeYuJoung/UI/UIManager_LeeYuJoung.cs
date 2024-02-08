@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using LeeYuJoung;
 using UnityEngine.Playables;
+using DG.Tweening;
 
 public class UIManager_LeeYuJoung : MonoBehaviour
 {
@@ -111,6 +112,11 @@ public class UIManager_LeeYuJoung : MonoBehaviour
         AudioManager.Instnce().PlayBGM(1);
     }
     #endregion
+
+    public void UIButtonTween(GameObject _button)
+    {
+        
+    }
 
     /// <summary>
     /// 플레이어가 해당 버튼에 머물때 해야할 함수 호출
