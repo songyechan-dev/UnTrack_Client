@@ -72,6 +72,7 @@ MonoBehaviour:
   - MapEnvironmentCreate_Others
   - SetReadyUserCount_Others
   - SetText_Others
+  - SetNeedReadyUserCount_Others
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
