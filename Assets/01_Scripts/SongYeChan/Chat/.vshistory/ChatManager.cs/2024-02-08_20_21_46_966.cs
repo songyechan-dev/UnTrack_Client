@@ -13,8 +13,6 @@ public class ChatManager : MonoBehaviourPun
 {
     public GameObject player;
     public float hideTime = 5.0f;
-    private Coroutine hideCoroutine;
-
     private void Start()
     {
         UIManager.Instance().chat.transform.Find("Chat_Btn").GetComponent<Button>().onClick.RemoveAllListeners();
@@ -26,45 +24,11 @@ public class ChatManager : MonoBehaviourPun
     {
         string text = value;
         player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
-
-        if (hideCoroutine != null)
-        {
-            StopCoroutine(hideCoroutine);
-        }
-
-        hideCoroutine = StartCoroutine(WaitAndHideChat());
-
-        object[] data = new object[] { text, player.GetComponent<PhotonView>().ViewID };
+        Invoke("HideChat",hideTime);
+        object[] data = new object[] { text,player.GetComponent<PhotonView>().ViewID };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT, data, raiseEventOptions, SendOptions.SendReliable);
         UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text = "";
-    }
-
-    public void ChatBtnOnClick()
-    {
-        string text = UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text;
-        player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
-
-        if (hideCoroutine != null)
-        {
-            StopCoroutine(hideCoroutine);
-        }
-
-        hideCoroutine = StartCoroutine(WaitAndHideChat());
-
-        object[] data = new object[] { text, player.GetComponent<PhotonView>().ViewID };
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT, data, raiseEventOptions, SendOptions.SendReliable);
-        UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text = "";
-    }
-
-
-
-
-    private IEnumerator WaitAndHideChat()
-    {
-        yield return new WaitForSeconds(hideTime);
-        HideChat();
     }
 
     public void HideChat()
@@ -72,8 +36,22 @@ public class ChatManager : MonoBehaviourPun
         player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = "";
         object[] data = new object[] { player.GetComponent<PhotonView>().ViewID };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
-        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT_HIDE, data, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT, data, raiseEventOptions, SendOptions.SendReliable);
     }
+
+    public void ChatBtnOnClick()
+    {
+        string text = UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text;
+        player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
+        Invoke("HideChat", hideTime);
+
+        object[] data = new object[] { text, player.GetComponent<PhotonView>().ViewID };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT, data, raiseEventOptions, SendOptions.SendReliable);
+        UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text = "";
+    }
+
+
 
     void OnEvent(EventData photonEvent)
     {
@@ -105,4 +83,7 @@ public class ChatManager : MonoBehaviourPun
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
+
+
+
 }
