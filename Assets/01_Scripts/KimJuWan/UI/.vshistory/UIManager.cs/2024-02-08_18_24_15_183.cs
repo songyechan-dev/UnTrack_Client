@@ -755,7 +755,7 @@ public class UIManager : MonoBehaviour
             Debug.Log("게임오버 시간 :::"+ ((int)TimeManager.Instance().PrevTime).ToString());
             if (GameManager.Instance() != null)
             {
-                playerController = PhotonNetwork.Instantiate("Player", new Vector3(10, 2, 0), Quaternion.identity).GetComponent<PlayerController>();
+                playerController = PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity).GetComponent<PlayerController>();
             }
             
             GameManager.Instance().SetRound(1);

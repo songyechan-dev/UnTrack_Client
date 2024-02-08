@@ -13,6 +13,14 @@ public class ChatManager : MonoBehaviourPun
     public GameObject player;
     private void Start()
     {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (PhotonNetwork.LocalPlayer == players[i].GetComponent<PhotonView>().Owner)
+            {
+                player = players[i].gameObject;
+            }
+        }
         UIManager.Instance().chat.transform.Find("Chat_Btn").GetComponent<Button>().onClick.RemoveAllListeners();
         UIManager.Instance().chat.transform.Find("Chat_Btn").GetComponent<Button>().onClick.AddListener(ChatBtnOnClick);
         UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().onSubmit.AddListener(ChatBtnOnClick);
