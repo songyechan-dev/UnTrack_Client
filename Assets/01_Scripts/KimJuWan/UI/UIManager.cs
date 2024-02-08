@@ -142,6 +142,7 @@ public class UIManager : MonoBehaviour
         Init();
         Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
         Debug.Log(KeyCodeInfo.myActionKeyCode);
+        
     }
 
     #region Scene00
@@ -181,12 +182,12 @@ public class UIManager : MonoBehaviour
             case PlayableButtonInfo.Info.RANKING_01:
                 GameObject player = GameObject.FindWithTag("Player");
                 Destroy(player);
-                ActiveAndDeActive(rankingPanel01, ground);
+                rankingPanel01.SetActive(true);
                 if (GameObject.Find("RankingContent").transform.childCount <= 1)
                     StartCoroutine(WebServerManager.RankingPanelCoroutine());
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
-                ActiveAndDeActive(settingPanel01, ground);
+                settingPanel01.SetActive(true);
                 GameObject player_1 = GameObject.FindWithTag("Player");
                 Destroy(player_1);
                 break;
@@ -481,7 +482,7 @@ public class UIManager : MonoBehaviour
 
     public void RankingPanelOff_01()
     {
-        ActiveAndDeActive(ground, rankingPanel01);
+        rankingPanel01.SetActive(false);
 
         GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
         
@@ -491,7 +492,7 @@ public class UIManager : MonoBehaviour
 
     public void SettingPanelOff_01()
     {
-        ActiveAndDeActive(ground, settingPanel01);
+        settingPanel01.SetActive(false);
         GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
 
         player.transform.position = new Vector3(0, 20, 0);
@@ -588,6 +589,7 @@ public class UIManager : MonoBehaviour
         #region Scene02
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
+            
             ground = GameObject.Find("Ground");
             canvas = GameObject.Find("Canvas");
             playableButton_GameStart02 = ground.transform.Find("GameStart").gameObject;
@@ -606,6 +608,7 @@ public class UIManager : MonoBehaviour
             roomListPanel02 = canvas.transform.Find("RoomListPanel").gameObject;
 
             roomIdText02 = ground.transform.Find("RoomNumber").transform.Find("RoomIDTxt").GetComponent<TextMeshPro>();
+            
         }
         #endregion
         #region Scene03
@@ -743,7 +746,13 @@ public class UIManager : MonoBehaviour
             int time = (int)TimeManager.Instance().finalTime;
             string formattedTime = string.Format("{0:00}:{1:00}", time / 60, time % 60);
 
+            //TODO_0208_김주완: 같은 방에 있는 플레이어의 userId를 리스트로 저장
+            //if (PhotonNetwork.IsMasterClient)
+            //{
+            //    StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1]),
+            //        TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], player_ID[0], player_ID[1], player_ID[2], player_ID[3]);
 
+            //}
             SetText(clearTimeText06, formattedTime);
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
             SetText(productionLvText06, StateManager.Instance().productionMachines.Count.ToString());
