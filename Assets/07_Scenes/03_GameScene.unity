@@ -1475,7 +1475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
-  minX: 15
+  minX: 1.7
   maxX: 85
 --- !u!82 &963194230
 AudioSource:
