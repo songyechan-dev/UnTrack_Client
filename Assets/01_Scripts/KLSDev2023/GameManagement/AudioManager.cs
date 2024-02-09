@@ -53,6 +53,7 @@ public class AudioManager : MonoBehaviour
             Destroy(instance);
         }
         DontDestroyOnLoad(this);
+        bgmPlayer.volume = PlayerPrefs.GetFloat("bgm_Volume");
     }
 
     public void PlayBGM(int _sceneNumber)
@@ -97,7 +98,7 @@ public class AudioManager : MonoBehaviour
         bgmPlayer.Stop();
     }
 
-    public void ChangeBGMVolume()
+    public  void ChangeBGMVolume()
     {
         bgmPlayer.volume = bgmVolume;
     }
@@ -105,6 +106,7 @@ public class AudioManager : MonoBehaviour
     public void SaveBGMVolume()
     {
         bgmVolume = bgmSlider.value;
+        
     }
 
     public void PlaySFX(AudioSource _audioSource, SOUNDTYPE _soundType)
@@ -136,5 +138,6 @@ public class AudioManager : MonoBehaviour
     public void SaveSFXVolume()
     {
         sfxVolume = sfxSlider.value;
+       
     }
 }
