@@ -33,7 +33,7 @@ public class TeamData
 }
 public static class WebServerManager 
 {
-    private static string serverURL = "http://localhost:3000";  // 서버 URL을 적절히 변경하세요
+    private static string serverURL = "http://211.47.91.114:3000";  // 서버 URL을 적절히 변경하세요
     
     
     public static IEnumerator LoginCoroutine(string userId, string password)
