@@ -193,6 +193,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                         break;
                     case PLAYERSTATE.WALK:
                         playerAnim.SetInteger("PLAYERSTATE", 1);
+                        
                         ChangePlayerState(playerState);
                         if (isWorking)
                         {

@@ -140,11 +140,13 @@ public class UIManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         Init();
-        Debug.Log((KeyCode)PlayerPrefs.GetInt(keySet));
-        Debug.Log(KeyCodeInfo.myActionKeyCode);
+        
+        
+        
         
     }
 
+    
     #region Scene00
     public void StartLoading()
     {
@@ -190,6 +192,7 @@ public class UIManager : MonoBehaviour
                 settingPanel01.SetActive(true);
                 GameObject player_1 = GameObject.FindWithTag("Player");
                 Destroy(player_1);
+                
                 break;
             case PlayableButtonInfo.Info.GAME_START_02:
                 if (!playerController.GetIsReady())
@@ -494,6 +497,7 @@ public class UIManager : MonoBehaviour
     {
         settingPanel01.SetActive(false);
         GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
+        PlayerPrefs.SetFloat("bgm_Volume", AudioManager.Instnce().bgmPlayer.volume);
 
         player.transform.position = new Vector3(0, 20, 0);
     }
@@ -578,8 +582,10 @@ public class UIManager : MonoBehaviour
             settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetRight").GetComponent<Button>().onClick.AddListener(KeySetRight);
             keySettingText01 = settingPanel01.transform.Find("Setting").transform.Find("KeySettingTxt").transform.Find("KeySet").transform.Find("KeySetTxt").GetComponent<Text>();
             rankingBarPrefab = Resources.Load<GameObject>("RankingBar");
-            
-
+            AudioManager.Instnce().bgmSlider = settingPanel01.transform.Find("Setting").transform.Find("SoundTxt").transform.Find("SoundSlider").GetComponent<Slider>();
+            AudioManager.Instnce().bgmSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().SaveBGMVolume(); });
+            AudioManager.Instnce().bgmSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().ChangeBGMVolume(); });
+            AudioManager.Instnce().bgmSlider.value = PlayerPrefs.GetFloat("bgm_Volume");
             PlayerPrefs.GetInt(keySet);
             
             keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();
