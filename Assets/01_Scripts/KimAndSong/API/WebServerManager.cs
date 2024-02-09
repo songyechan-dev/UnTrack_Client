@@ -33,7 +33,7 @@ public class TeamData
 }
 public static class WebServerManager 
 {
-    private static string serverURL = "http://localhost:3000";  // 서버 URL을 적절히 변경하세요
+    private static string serverURL = "http://211.47.91.114:3000";  // 서버 URL을 적절히 변경하세요
     
     
     public static IEnumerator LoginCoroutine(string userId, string password)
@@ -114,7 +114,7 @@ public static class WebServerManager
     }
 
     public static IEnumerator InsertDataCoroutine(string teamName, float total_clearTime, float round1_clearTime, float round2_clearTime, float round3_clearTime, float round4_clearTime,
-            float round5_clearTime, string player_1, string player_2, string player_3, string player_4)
+            float round5_clearTime,List<string>players)
     {
         WWWForm form = new WWWForm();
         form.AddField("teamName", teamName);
@@ -124,10 +124,10 @@ public static class WebServerManager
         form.AddField("round3_clearTime", round3_clearTime.ToString());
         form.AddField("round4_clearTime", round4_clearTime.ToString());
         form.AddField("round5_clearTime", round5_clearTime.ToString());
-        form.AddField("player_1", player_1);
-        form.AddField("player_2", player_2);
-        form.AddField("player_3", player_3);
-        form.AddField("player_4", player_4);
+        for (int i = 0; i < players.Count; i++)
+        {
+            form.AddField("player_" + (i + 1), players[i]);
+        }
 
         using (UnityWebRequest www = UnityWebRequest.Post(serverURL + "/rank", form))
         {

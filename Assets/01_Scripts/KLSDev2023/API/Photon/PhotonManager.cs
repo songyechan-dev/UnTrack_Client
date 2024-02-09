@@ -74,7 +74,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("랜덤룸 생성");
         // 룸의 속성 정의
         RoomOptions ro = new RoomOptions();
-        ro.MaxPlayers = 20;     // 룸에 입장할 수 있는 최대 접속자 수
+        ro.MaxPlayers = 4;     // 룸에 입장할 수 있는 최대 접속자 수
         ro.IsOpen = true;       // 룸의 오픈 여부
         ro.IsVisible = true;    // 로비에서 룸 목록에 노출시킬 여부
         ro.CleanupCacheOnLeave = false;

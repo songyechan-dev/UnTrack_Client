@@ -788,13 +788,16 @@ public class UIManager : MonoBehaviour
             int time = (int)TimeManager.Instance().finalTime;
             string formattedTime = string.Format("{0:00}:{1:00}", time / 60, time % 60);
 
-            //TODO_0208_김주완: 같은 방에 있는 플레이어의 userId를 리스트로 저장
-            //if (PhotonNetwork.IsMasterClient)
-            //{
-            //    StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1]),
-            //        TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], player_ID[0], player_ID[1], player_ID[2], player_ID[3]);
-
-            //}
+            //TODO : 0208_김주완: 같은 방에 있는 플레이어의 userId를 리스트로 저장
+            if (PhotonNetwork.IsMasterClient)
+            {
+                List<string> playerNickNames = new List<string>();
+                for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+                {
+                    playerNickNames.Add(PhotonNetwork.CurrentRoom.GetPlayer(i).NickName);
+                }
+                StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1],TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], TimeManager.Instance().roundClearTimeList[4], playerNickNames));
+            }
             SetText(clearTimeText06, formattedTime);
             SetText(storageLvText06, StateManager.Instance().storageMaxVolume.ToString());
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());

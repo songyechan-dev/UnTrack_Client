@@ -175,6 +175,7 @@ namespace LeeYuJoung
             else
             {
                 storages[_ingredient] += _amount;
+                GameObject.FindWithTag("Storage").GetComponent<FactoryController>().MachineOperation();
                 Debug.Log("아이템 추가 :::::" + storages[_ingredient]);
                 for (int i = 0; i < sceneFactorys.Count; i++)
                 {
@@ -257,6 +258,7 @@ namespace LeeYuJoung
                 string _ingredient = (string)receivedData[0];
                 int _amount = (int)receivedData[1];
                 bool isAdd = (bool)receivedData[2];
+                GameObject.FindWithTag("Storage").GetComponent<FactoryController>().MachineOperation();
                 if (!storages.ContainsKey(_ingredient))
                 {
                     storages.Add(_ingredient, 0);
