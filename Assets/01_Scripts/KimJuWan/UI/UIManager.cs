@@ -12,6 +12,7 @@ using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine.Playables;
 using System;
+using System.Linq;
 
 public enum closeBtnType
 {
@@ -797,13 +798,10 @@ public class UIManager : MonoBehaviour
             //TODO : 0208_김주완: 같은 방에 있는 플레이어의 userId를 리스트로 저장
             if (PhotonNetwork.IsMasterClient)
             {
-                List<string> playerNickNames = new List<string>();
-                for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-                {
-                    playerNickNames.Add(PhotonNetwork.CurrentRoom.GetPlayer(i).NickName);
-                }
-                StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1],TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], TimeManager.Instance().roundClearTimeList[4], playerNickNames));
+                List<string> playerNickNames = PhotonNetwork.PlayerList.Select(player => player.NickName).ToList();
+                StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1], TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], TimeManager.Instance().roundClearTimeList[4], playerNickNames));
             }
+
             SetText(clearTimeText06, formattedTime);
             SetText(storageLvText06, StateManager.Instance().storageMaxVolume.ToString());
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
@@ -811,7 +809,7 @@ public class UIManager : MonoBehaviour
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
 
 
-
+            TimeManager.Instance().roundClearTimeList.Clear();
             TimeManager.Instance().finalTime = 0;
             GameManager.Instance().SetRound(1);
             GameManager.Instance().GameExit();

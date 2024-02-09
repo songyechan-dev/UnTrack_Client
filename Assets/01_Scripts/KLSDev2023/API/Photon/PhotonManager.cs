@@ -95,6 +95,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        PhotonNetwork.NickName = DataManager.GetUserID();
         if (PhotonNetwork.IsConnected == false)
         {
             PhotonNetwork.ConnectUsingSettings();

@@ -67,6 +67,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 GameObject.Find("ChatManager").GetComponent<ChatManager>().player = gameObject;
             }
+            if (GameObject.Find("UIManager") != null && GameObject.Find("UIManager").GetComponent<UIManager>().playerController == null)
+            {
+                GameObject.Find("UIManager").GetComponent<UIManager>().playerController = gameObject.GetComponent<PlayerController>();
+            }
             sensor = transform.Find("Sensor").transform;
             playerManager = GetComponent<PlayerManager>();
             teamManager = GameObject.Find("TeamManager")?.GetComponent<TeamManager>();

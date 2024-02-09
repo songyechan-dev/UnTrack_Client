@@ -179,6 +179,8 @@ public class GameManager : MonoBehaviourPun
             TimeManager.Instance().roundClearTimeList.Add(time);
             if (GetRound() < GetFinalRound())
             {
+                StateManager.Instance().currentTime= 0f;
+                maxDederailmentCount = 0;
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
@@ -233,8 +235,10 @@ public class GameManager : MonoBehaviourPun
 
     public void GameExit()
     {
+        maxDederailmentCount = 0;
         if (StateManager.Instance() != null)
         {
+            StateManager.Instance().currentTime= 0f;
             StateManager.Instance().voltNum = 0;
             StateManager.Instance().engineMaxVolume = 5;
             StateManager.Instance().engineCurrentVolume = 4;
@@ -262,7 +266,7 @@ public class GameManager : MonoBehaviourPun
             StateManager.Instance().factoryPrice = new Dictionary<string, List<int>>() { { "ProductionMachine", new List<int> { 1 } }, { "WaterTank", new List<int> { 1 } }, { "DynamiteMachine", new List<int> { 1 } } };
             StateManager.Instance().machineAddPrice = new Dictionary<string, int>() { { "ProductionMachine", 2 }, { "WaterTank", 2 }, { "DynamiteMachine", 2 } };
             StateManager.Instance().currentTime = 0.0f;
-            StateManager.Instance().fireTime = 20.0f;
+            StateManager.Instance().currentTime= 0f;
             
             StateManager.Instance().productionMachines.Clear();
             StateManager.Instance().dynamiteMachines.Clear();
@@ -299,7 +303,6 @@ public class GameManager : MonoBehaviourPun
         object[] data = new object[] { (int)gameState, time, TimeManager.Instance().finalTime };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
-        TimeManager.Instance().roundClearTimeList.Clear();
         
         //UIManager.Instance().Init();
         if (PhotonNetwork.IsMasterClient)
@@ -371,6 +374,8 @@ public class GameManager : MonoBehaviourPun
                 round++;
                 gameState = GameState.GameClear;
                 gameMode = GameMode.None;
+                StateManager.Instance().currentTime= 0f;
+                maxDederailmentCount = 0;
                 StartCoroutine(LoadSceneAsync(4));
             }
             if (_gameState.Equals(GameState.GameOver))
@@ -394,7 +399,7 @@ public class GameManager : MonoBehaviourPun
                     TimeManager.Instance().finalTime = (float)receivedData[2];
                 }
 
-                TimeManager.Instance().roundClearTimeList.Clear();
+                
             }
 
         }

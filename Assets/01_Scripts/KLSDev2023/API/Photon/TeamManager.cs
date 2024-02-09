@@ -43,14 +43,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (isPlus)
-            {
-                needReadyUserCount++;
-            }
-            else
-            {
-                needReadyUserCount--;
-            }
+            needReadyUserCount = PhotonNetwork.CurrentRoom.PlayerCount;
             pv.RPC("SyncNeedReadyUserCount", RpcTarget.Others, needReadyUserCount);
         }
     }
@@ -142,6 +135,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        needReadyUserCount = PhotonNetwork.CurrentRoom.PlayerCount;
         if (PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("SetReadyUserCount_Others", RpcTarget.Others, readyUserCount);
@@ -151,6 +145,7 @@ public class TeamManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void SetReadyUserCount_Others(int _count)
     {
+        needReadyUserCount = PhotonNetwork.CurrentRoom.PlayerCount;
         readyUserCount = _count;
     }
 
