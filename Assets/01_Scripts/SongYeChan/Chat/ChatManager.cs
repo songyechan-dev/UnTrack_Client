@@ -25,6 +25,7 @@ public class ChatManager : MonoBehaviourPun
     public void ChatBtnOnClick(string value)
     {
         string text = value;
+        player.transform.Find("Chat_Text").gameObject.SetActive(true);
         player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
 
         if (hideCoroutine != null)
@@ -43,6 +44,7 @@ public class ChatManager : MonoBehaviourPun
     public void ChatBtnOnClick()
     {
         string text = UIManager.Instance().chat.transform.Find("Chat_Text").GetComponent<InputField>().text;
+        player.transform.Find("Chat_Text").gameObject.SetActive(true);
         player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
 
         if (hideCoroutine != null)
@@ -59,8 +61,6 @@ public class ChatManager : MonoBehaviourPun
     }
 
 
-
-
     private IEnumerator WaitAndHideChat()
     {
         yield return new WaitForSeconds(hideTime);
@@ -70,6 +70,7 @@ public class ChatManager : MonoBehaviourPun
     public void HideChat()
     {
         player.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = "";
+        player.transform.Find("Chat_Text").gameObject.SetActive(false);
         object[] data = new object[] { player.GetComponent<PhotonView>().ViewID };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.CHAT_HIDE, data, raiseEventOptions, SendOptions.SendReliable);
@@ -84,6 +85,7 @@ public class ChatManager : MonoBehaviourPun
             int ViewID = (int)receivedData[1];
 
             GameObject _otherPlayer = PhotonView.Find(ViewID).gameObject;
+            _otherPlayer.transform.Find("Chat_Text").gameObject.SetActive(true);
             _otherPlayer.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = text;
         }
         if (photonEvent.Code == (int)SendDataInfo.Info.CHAT_HIDE)
@@ -92,6 +94,7 @@ public class ChatManager : MonoBehaviourPun
             int ViewID = (int)receivedData[0];
 
             GameObject _otherPlayer = PhotonView.Find(ViewID).gameObject;
+            _otherPlayer.transform.Find("Chat_Text").gameObject.SetActive(false);
             _otherPlayer.transform.Find("Chat_Text").GetComponent<TextMeshPro>().text = "";
         }
     }
