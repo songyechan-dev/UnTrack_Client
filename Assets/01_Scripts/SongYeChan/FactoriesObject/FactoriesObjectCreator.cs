@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static GameManager;
 
 public class FactoriesObjectCreator : MonoBehaviour
@@ -64,14 +65,18 @@ public class FactoriesObjectCreator : MonoBehaviour
             }
             else
             {
-                StartCoroutine(GameManager.Instance().SleepCoroutine(1f,Create));
+                StartCoroutine(SleepCoroutine(1f,Create));
             }
             
         }
         
     }
 
-
+    public IEnumerator SleepCoroutine(float seconds, Action _action)
+    {
+        yield return new WaitForSeconds(seconds);
+        _action();
+    }
 
     public void Create_Master()
     {
@@ -141,11 +146,18 @@ public class FactoriesObjectCreator : MonoBehaviour
     void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        count = 0;
     }
 
 

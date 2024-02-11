@@ -13,6 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine.Playables;
 using System;
 using System.Linq;
+using UnityEngine.Rendering;
 
 public enum closeBtnType
 {
@@ -668,6 +669,9 @@ public class UIManager : MonoBehaviour
 
             distance03 = rDVindex03.transform.Find("DistanceTxt").transform.Find("Distance").GetComponent<Text>();
             volt03 = rDVindex03.transform.Find("VoltTxt").transform.Find("Volt").GetComponent<Text>();
+            SetText(rDVindex03.transform.Find("RoomTxt").GetComponent<Text>(), PhotonNetwork.CurrentRoom.Name);
+            string _round = string.Format("{00}", GameManager.Instance().GetRound());
+            SetText(speedIndex03.transform.Find("SpeedTxt").transform.Find("Speed").GetComponent<Text>(), _round);
         }
 
 
@@ -762,7 +766,12 @@ public class UIManager : MonoBehaviour
             Debug.Log("게임오버 시간 :::"+ ((int)TimeManager.Instance().PrevTime).ToString());
             if (GameManager.Instance() != null)
             {
-                playerController = PhotonNetwork.Instantiate("Player", new Vector3(10, 2, 0), Quaternion.identity).GetComponent<PlayerController>();
+                playerController = PhotonNetwork.Instantiate("Player", new Vector3(0, 20, 0), Quaternion.identity).GetComponent<PlayerController>();
+            }
+            if (GameObject.Find("TeamManager") != null)
+            {
+                TeamManager teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
+                teamManager.SetNeedReadyUserCount(true);
             }
             
             GameManager.Instance().SetRound(1);
