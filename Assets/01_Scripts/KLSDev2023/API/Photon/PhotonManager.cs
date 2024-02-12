@@ -130,7 +130,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             UIManager.Instance().SetText(UIManager.Instance().roomIdText02, PhotonNetwork.CurrentRoom.Name);
 
             //TODO : 송예찬 수정해야됨
-            photonObjectCreator.Create("Player", new Vector3(0,20,0));
+            photonObjectCreator.Create("Player", new Vector3(25,20,0));
             teamManager.SetNeedReadyUserCount(true);
         }
         else

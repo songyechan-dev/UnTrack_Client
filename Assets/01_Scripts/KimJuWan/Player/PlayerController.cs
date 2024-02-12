@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private bool isReady = false;
     private bool isExit = false;
     private Dictionary<int,bool> isReady_Scene = new Dictionary<int,bool>();
+    public Material outlineMaterial;
 
     // 시작
 
@@ -179,6 +180,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     }
+
+   
 
     private void Update()
     {
