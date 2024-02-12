@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public int animLoopCnt = 3;
     public float currentTime = 0f;
     public float spaceTime = .2f;
-
+    public AudioSource playerAudio;
 
     public string playableButtonTagName = "PlayableButton";
     private PhotonView pv;
@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerManager = GetComponent<PlayerManager>();
         sensor = transform.Find("Sensor").transform;
         playerAnim = transform.Find("Duck").GetComponent<Animator>();
+        playerAudio = GetComponent<AudioSource>();
         if (pv != null && pv.IsMine)
         {
             if (GameObject.Find("ChatManager") != null)
@@ -139,6 +140,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     //UIManager_LeeYuJoung.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo_LeeYuJoung>().myInfo);
                     UIManager.Instance().PlayAbleButton_OnStay(hit.transform.GetComponent<PlayableButtonInfo>().myInfo);
+                    
                 }
                 if (isReady)
                 {
@@ -190,6 +192,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                         ChangePlayerState(playerState);
                         if (isWorking)
                         {
+                            AudioManager.Instnce().PlaySFX(playerAudio, SOUNDTYPE.DIG);
                             playerState = PLAYERSTATE.EQUIPMENTACTION;
                             ChangePlayerState(playerState);
                         }
@@ -198,6 +201,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     case PLAYERSTATE.WALK:
                         playerAnim.SetInteger("PLAYERSTATE", 1);
                         
+
                         ChangePlayerState(playerState);
                         if (isWorking)
                         {
@@ -227,6 +231,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                         break;
                     case PLAYERSTATE.PICKUP:
                         playerAnim.SetInteger("PLAYERSTATE", 2);
+                        ;
                         ChangePlayerState(playerState);
                         break;
                     case PLAYERSTATE.DROP:
@@ -244,6 +249,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                         break;
                     case PLAYERSTATE.EQUIPMENTACTION:
                         playerAnim.SetInteger("PLAYERSTATE", 4);
+                        
                         ChangePlayerState(playerState);
                         if (!isWorking)
                         {
@@ -299,6 +305,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     playerAnim.SetInteger("PLAYERSTATE", 0);
                     if (isWorking)
                     {
+                        AudioManager.Instnce().PlaySFX(playerAudio, SOUNDTYPE.DIG);
                         playerState = PLAYERSTATE.EQUIPMENTACTION;
                     }
                     if (isPick)
@@ -316,14 +323,30 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
+                    
                     if (isWorking)
                     {
                         playerState = PLAYERSTATE.EQUIPMENTACTION;
                     }
+                    if (Input.GetKeyDown(KeyCodeInfo.myActionKeyCode))
+                    {
+                        if (!isPick)
+                        {
+                            playerState = PLAYERSTATE.PICKUP;
+                            
+                        }
+
+                        else
+                        {
+                            playerState = PLAYERSTATE.DROP;
+                            
+                        }
+
+                    }
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
-                    
+                    AudioManager.Instnce().PlaySFX(playerAudio, SOUNDTYPE.PICKUP);
                     break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -338,6 +361,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.EQUIPMENTACTION:
                     playerAnim.SetInteger("PLAYERSTATE", 4);
+                    AudioManager.Instnce().PlaySFX(playerAudio, SOUNDTYPE.DIG);
                     if (!isWorking)
                     {
                         playerState = PLAYERSTATE.IDLE;
@@ -381,9 +405,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
                     break;
                 case PLAYERSTATE.WALK:
                     playerAnim.SetInteger("PLAYERSTATE", 1);
+                    
                     break;
                 case PLAYERSTATE.PICKUP:
                     playerAnim.SetInteger("PLAYERSTATE", 2);
+                    
                 break;
                 case PLAYERSTATE.DROP:
                     playerAnim.SetInteger("PLAYERSTATE", 3);
@@ -415,7 +441,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             transform.position += moveDirection;
             transform.rotation = Quaternion.LookRotation(moveDirection);
             playerState = PLAYERSTATE.WALK;
-            
+            AudioManager.Instnce().PlaySFX(playerAudio, 0);
         }
         else
         {

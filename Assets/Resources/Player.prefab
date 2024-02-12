@@ -432,6 +432,7 @@ MonoBehaviour:
   animLoopCnt: 3
   currentTime: 0
   spaceTime: 0.2
+  playerAudio: {fileID: 0}
   playableButtonTagName: PlayableButton
   teamManager: {fileID: 0}
   sensor: {fileID: 0}
@@ -548,8 +549,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 2f12ee885e37cee419c470b26574f938, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

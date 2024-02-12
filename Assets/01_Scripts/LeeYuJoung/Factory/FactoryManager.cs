@@ -100,12 +100,13 @@ public class FactoryManager : MonoBehaviourPun
         int loopNum = 0;
         isHeating = true;
         Debug.Log($":::: {gameObject.name}에 불이 났습니다 ::::");
+        AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.FACTORY_FIRE);
         transform.Find("Fire").gameObject.SetActive(true);
         while (true)
         {
             yield return new WaitForEndOfFrame();
             currentFireTime += Time.deltaTime;
-
+            
             if (currentFireTime > fireDeadTime)
             {
                 Debug.Log("::::: GAME OVER :::::");
@@ -128,6 +129,7 @@ public class FactoryManager : MonoBehaviourPun
         isHeating = false;
         currentFireTime = 0;
         transform.Find("Fire").gameObject.SetActive(false);
+        
         object[] data = new object[] { true,GetComponent<PhotonView>().ViewID };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.FACTORY_HEATING, data, raiseEventOptions, SendOptions.SendReliable);
@@ -153,18 +155,20 @@ public class FactoryManager : MonoBehaviourPun
     {
         int loopNum = 0;
         isWorking = true;
-
+        AudioManager.Instnce().PlaySFX(transform.GetComponent<AudioSource>(), SOUNDTYPE.FACTORY_WORK);
         while (true)
         {
             // 아이템 제작 효과 구현
             GetComponent<FactoryController>().MachineOperation();
             yield return new WaitForEndOfFrame();
             currentGenerateTime += Time.deltaTime;
-
+            
+            transform.Find("SmokePos").gameObject.SetActive(true);
             if (currentGenerateTime > generateTime)
             {
                 currentGenerateTime = 0;
                 isWorking = false;
+                transform.Find("SmokePos").gameObject.SetActive(false);
                 break;
             }
 
@@ -174,6 +178,7 @@ public class FactoryManager : MonoBehaviourPun
         }
 
         // 아이템 제작 완료
+        AudioManager.Instnce().PlaySFX(transform.GetComponent<AudioSource>(), SOUNDTYPE.UPGRADE);
         Debug.Log($"{gameObject.name} Generate ::: " + generateItem);
         ItemAdd();
         ItemProductionCheck();

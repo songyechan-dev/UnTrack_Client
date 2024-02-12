@@ -76,6 +76,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
         if (GameManager.Instance().gameState.Equals(GameManager.GameState.GameStart))
         {
             SensorDetect();
+            AudioManager.Instnce().PlaySFX(AudioManager.Instnce().sfxPlayer[7], SOUNDTYPE.TRAIN_START);
         }
     }
     /// <summary>
@@ -162,9 +163,12 @@ public class FactoriesObjectManager : MonoBehaviourPun
         //        }
         //    }
         //}
+        
         if (myState == MyState.MOVE)
         {
+            AudioManager.Instnce().PlaySFX(transform.GetComponent<AudioSource>(), SOUNDTYPE.TRAIN_MOVE);
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            
         }
     }
 
@@ -220,6 +224,7 @@ public class FactoriesObjectManager : MonoBehaviourPun
         int step = 0;
         float meter = GameManager.Instance().GetMeter();
         int round = GameManager.Instance().GetRound();
+        
         if (meter < 0.3f)
         {
             if (round == 1)

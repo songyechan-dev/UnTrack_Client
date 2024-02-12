@@ -52,10 +52,12 @@ public class FactoriesObjectCreator : MonoBehaviour
                     Debug.Log("FactoriesObject ½ÇÇà2::::");
                     if (count <= 0)
                     {
+                        
                         FirstCreate_Master();
                     }
                     else
                     {
+                        
                         Create_Master();
                         mapCreator.CreateOB();
                     }
