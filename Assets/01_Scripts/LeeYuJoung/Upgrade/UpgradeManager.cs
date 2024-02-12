@@ -29,6 +29,7 @@ public class UpgradeManager : MonoBehaviour
             if (StateManager.Instance().voltNum >= StateManager.Instance().engineUpgradePrice)
             {
                 Debug.Log(":::: 엔진 업그레이드 성공 ::::");
+                AudioManager.Instnce().PlaySFX(UIManager.Instance().GetComponent<AudioSource>(), SOUNDTYPE.UPGRADE);
                 StateManager.Instance().engineMaxVolume += 1;
                 StateManager.Instance().SetVolt(false, StateManager.Instance().engineUpgradePrice);
                 StateManager.Instance().engineUpgradePrice += 1;
@@ -51,6 +52,7 @@ public class UpgradeManager : MonoBehaviour
             if (StateManager.Instance().voltNum >= StateManager.Instance().storageUpgradePrice)
             {
                 Debug.Log(":::: 저장소 업그레이드 성공 ::::");
+                AudioManager.Instnce().PlaySFX(UIManager.Instance().GetComponent<AudioSource>(), SOUNDTYPE.UPGRADE);
                 StateManager.Instance().storageMaxVolume += 5;
                 StateManager.Instance().SetVolt(false, StateManager.Instance().storageUpgradePrice);
                 StateManager.Instance().storageUpgradePrice += 1;
@@ -75,6 +77,7 @@ public class UpgradeManager : MonoBehaviour
                 if (StateManager.Instance().factorys[_factoryType.ToString()].Count != 0)
                 {
                     Debug.Log($"::: 업그레이드 성공 ::: {StateManager.Instance().factorys[_factoryType.ToString()][_idx][1]}");
+                    AudioManager.Instnce().PlaySFX(UIManager.Instance().GetComponent<AudioSource>(), SOUNDTYPE.UPGRADE);
                     StateManager.Instance().factorys[_factoryType.ToString()][_idx][1] += 2;
                     StateManager.Instance().SetVolt(false, StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx]);
                     StateManager.Instance().factoryPrice[_factoryType.ToString()][_idx] += 1;
@@ -99,7 +102,7 @@ public class UpgradeManager : MonoBehaviour
             {
                 Debug.Log($":::: {_factoryType} 구매 완료 ::::");
                 Debug.Log(StateManager.Instance().factorys[_factoryType.ToString()].Count);
-
+                AudioManager.Instnce().PlaySFX(UIManager.Instance().GetComponent<AudioSource>(), SOUNDTYPE.UPGRADE);
                 StateManager.Instance().factorys[_factoryType.ToString()].Add(new int[] { 0, 5 });
                 StateManager.Instance().SetVolt(false, StateManager.Instance().machineAddPrice[_factoryType.ToString()]);
                 StateManager.Instance().machineAddPrice[_factoryType.ToString()] += 1;

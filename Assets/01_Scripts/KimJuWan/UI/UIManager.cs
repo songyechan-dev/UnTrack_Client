@@ -187,20 +187,24 @@ public class UIManager : MonoBehaviour
             case PlayableButtonInfo.Info.GAME_START_01:
                 Debug.Log("여기실행");
                 ActiveAndDeActive(loginPanel01, ground);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             case PlayableButtonInfo.Info.GAME_EXIT_01:
                 PlayerPrefs.Save();
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 Application.Quit();
                 break;
             case PlayableButtonInfo.Info.RANKING_01:
                 GameObject player = GameObject.FindWithTag("Player");
                 Destroy(player);
                 rankingPanel01.SetActive(true);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 if (GameObject.Find("RankingContent").transform.childCount <= 1)
                     StartCoroutine(WebServerManager.RankingPanelCoroutine());
                 break;
             case PlayableButtonInfo.Info.SETTING_01:
                 settingPanel01.SetActive(true);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 GameObject player_1 = GameObject.FindWithTag("Player");
                 Destroy(player_1);
                 
@@ -209,15 +213,18 @@ public class UIManager : MonoBehaviour
                 if (!playerController.GetIsReady())
                 {
                     playerController.SetIsReady(true);
+                    AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_GAZE);
                 }
                 break;
             case PlayableButtonInfo.Info.BACK_02:
                 LeaveRoomAndLoadScene(1);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             case PlayableButtonInfo.Info.FIND_ROOM_02:
                 tempPlayer = GameObject.FindWithTag("Player");
                 tempPlayer.GetComponent<BoxCollider>().enabled = false;
                 roomListPanel02.SetActive(true);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             case PlayableButtonInfo.Info.CONTINUE_04:
                 // 다음 라운드 게임 시작 
@@ -265,6 +272,7 @@ public class UIManager : MonoBehaviour
                     object[] data = new object[] { (int)_info, true };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                    AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 }
                 break;
             case PlayableButtonInfo.Info.DYNAMITEMACHINE_BUY_04:
@@ -276,6 +284,7 @@ public class UIManager : MonoBehaviour
                     object[] data = new object[] { (int)_info, true };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                    AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 }
                 break;
             case PlayableButtonInfo.Info.WATERTANK_BUY_04:
@@ -287,6 +296,7 @@ public class UIManager : MonoBehaviour
                     object[] data = new object[] { (int)_info, true };
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
                     PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.UI_INFO, data, raiseEventOptions, SendOptions.SendReliable);
+                    AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 }
                 break;
 
@@ -296,6 +306,7 @@ public class UIManager : MonoBehaviour
                 engineDesPanel04.SetActive(false);
                 storageDesPanel04.SetActive(false);
                 LeaveRoomAndLoadScene(2);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
 
             case PlayableButtonInfo.Info.REPLAY_05:
@@ -304,6 +315,7 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.BACKTOLOBBY_05:
                 LeaveRoomAndLoadScene(2);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             case PlayableButtonInfo.Info.REPLAY_06:
                 if (!playerController.GetIsReady())
@@ -311,9 +323,11 @@ public class UIManager : MonoBehaviour
                 break;
             case PlayableButtonInfo.Info.BACKTOMAIN_06:
                 LeaveRoomAndLoadScene(1);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             case PlayableButtonInfo.Info.BACKTOLOBBY_06:
                 LeaveRoomAndLoadScene(2);
+                AudioManager.Instnce().PlaySFX(GetComponent<AudioSource>(), SOUNDTYPE.UI_CLICK);
                 break;
             default:
                 break;
@@ -536,6 +550,8 @@ public class UIManager : MonoBehaviour
         settingPanel01.SetActive(false);
         GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
         PlayerPrefs.SetFloat("bgm_Volume", AudioManager.Instnce().bgmPlayer.volume);
+        for (int i = 0; i < AudioManager.Instnce().sfxPlayer.Length;i++)
+        PlayerPrefs.SetFloat("sfx_Volume", AudioManager.Instnce().sfxPlayer[i].volume);
 
         player.transform.position = new Vector3(0, 20, 0);
     }
@@ -624,6 +640,10 @@ public class UIManager : MonoBehaviour
             AudioManager.Instnce().bgmSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().SaveBGMVolume(); });
             AudioManager.Instnce().bgmSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().ChangeBGMVolume(); });
             AudioManager.Instnce().bgmSlider.value = PlayerPrefs.GetFloat("bgm_Volume");
+            AudioManager.Instnce().sfxSlider = settingPanel01.transform.Find("Setting").transform.Find("SFXSoundTxt").transform.Find("SoundSlider").GetComponent<Slider>();
+            AudioManager.Instnce().sfxSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().SaveSFXVolume(); });
+            AudioManager.Instnce().sfxSlider.onValueChanged.AddListener(delegate { AudioManager.Instnce().ChangeSFXVolume(); });
+            AudioManager.Instnce().sfxSlider.value = PlayerPrefs.GetFloat("sfx_Volume"); 
             PlayerPrefs.GetInt(keySet);
             
             keySettingText01.text = KeyCodeInfo.myActionKeyCode.ToString();

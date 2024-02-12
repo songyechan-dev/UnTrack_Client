@@ -60,13 +60,15 @@ public class FactoryController : MonoBehaviourPun
     {
         int loopNum = 0;
         smokeEffect.SetActive(true);
-
+        
         while (true)
         {
+            AudioManager.Instnce().PlaySFX(AudioManager.Instnce().sfxPlayer[6], SOUNDTYPE.FACTORY_WORK);
             if (currentTime >= factoryManager.generateTime)
             {
                 smokeEffect.SetActive(false);
                 currentTime = 0;
+                AudioManager.Instnce().StopSFX(AudioManager.Instnce().sfxPlayer[6], SOUNDTYPE.FACTORY_WORK);
                 break;
             }
 

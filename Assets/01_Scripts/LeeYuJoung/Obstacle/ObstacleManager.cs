@@ -5,6 +5,7 @@ using UnityEditor;
 using SimpleJSON;
 using System;
 using Photon.Pun;
+using DG.Tweening;
 
 
 public class ObstacleManager : MonoBehaviour
@@ -74,8 +75,8 @@ public class ObstacleManager : MonoBehaviour
     IEnumerator ObstacleDelete(PlayerController _player)
     {
         // 점점 작아지는 효과 구현하기
+        transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 6.0f);
 
- 
         int loopNum = 0;
 
         while (isWorking)

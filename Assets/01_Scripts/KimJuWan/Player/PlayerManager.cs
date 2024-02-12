@@ -67,6 +67,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     break;
                 case "Item":
                     //playerController.playerState = PlayerController.PLAYERSTATE.PICKUP;
+                    AudioManager.Instnce().PlaySFX(playerController.playerAudio, SOUNDTYPE.PICKUP);
                     photonView.RPC("PlayAnim", RpcTarget.AllBufferedViaServer, "PickUp");
                     if (hit.transform.GetComponent<PhotonView>() != null)
                     {
@@ -135,9 +136,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     FactoryManager _fm = hit.transform.GetComponent<FactoryManager>();
                     if (_fm.isHeating && inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.BUCKET))
                     {
+                        AudioManager.Instnce().PlaySFX(AudioManager.Instnce().sfxPlayer[5], SOUNDTYPE.WATER);
                         playerController.isPick = false;
                         castRange = 1f;
                         playerController.playerAnim.Play("PickUp, 0, 0.5f");
+                        
                         PhotonNetwork.Destroy(pickSlot.GetChild(0).gameObject);
                         inventoryManager.OutInventory();
                         _fm.FireSuppression();
@@ -169,7 +172,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                             Debug.Log("뭔가를 들고있다2" + inventoryManager.itemType.ToString());
                             playerController.isPick = false;
                             castRange = 1f;
-
+                            AudioManager.Instnce().PlaySFX(playerController.playerAudio, SOUNDTYPE.PICKUP);
                             for (int i = 0; i < pickSlot.transform.childCount; i++)
                             {
                                 PhotonNetwork.Destroy(pickSlot.transform.GetChild(i).gameObject);
@@ -267,7 +270,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                     photonView.RPC("PlayAnim", RpcTarget.All, "DROP");
                     if (playerController.isPick)
                     {
-                        
+                        AudioManager.Instnce().PlaySFX(playerController.playerAudio, SOUNDTYPE.PICKUP);
                         if (inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.WOOD) || inventoryManager.itemType.Equals(ItemManager.ITEMTYPE.STEEL))
                         {
                             playerController.isPick = false;

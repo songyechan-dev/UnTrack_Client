@@ -122,9 +122,17 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StopSFX()
+    public void StopSFX(AudioSource _audioSource, SOUNDTYPE _soundType)
     {
-
+        if (_audioSource.clip == sfxs[(int)_soundType])
+        {
+            
+            _audioSource.Stop();
+        }
+        else
+        {
+            Debug.Log("::: 해당 SFX 없음 :::");
+        }
     }
 
     public void ChangeSFXVolume()
