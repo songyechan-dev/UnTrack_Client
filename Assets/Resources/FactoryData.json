@@ -6,7 +6,7 @@
   "AMOUNT_1": 1,
   "INGREDIENT_2": "STEEL",
   "AMOUNT_2": 1,
-  "GENERATE_TIME": 10,
+  "GENERATE_TIME": 5,
   "GENERATE": "DroppedTrack"
  },
  {
@@ -16,7 +16,7 @@
   "AMOUNT_1": 1,
   "INGREDIENT_2": "STEEL",
   "AMOUNT_2": 1,
-  "GENERATE_TIME": 20,
+  "GENERATE_TIME": 10,
   "GENERATE": "Dynamite"
  },
  {
@@ -26,7 +26,7 @@
   "AMOUNT_1": 1,
   "INGREDIENT_2": "WOOD",
   "AMOUNT_2": 1,
-  "GENERATE_TIME": 10,
+  "GENERATE_TIME": 5,
   "GENERATE": "Bucket"
  }
 ]
