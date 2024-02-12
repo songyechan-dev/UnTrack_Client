@@ -950,7 +950,7 @@ MonoBehaviour:
   engineUpgradePrice: 3
   storageUpgradePrice: 2
   currentTime: 0
-  fireTime: 20
+  fireTime: 90
   storageText: {fileID: 0}
   woodText: {fileID: 0}
   steelText: {fileID: 0}

@@ -110,7 +110,7 @@ public class FactoryManager : MonoBehaviourPun
             if (currentFireTime > fireDeadTime)
             {
                 Debug.Log("::::: GAME OVER :::::");
-                //GameManager.Instance().GameOver();
+                GameManager.Instance().GameOver();
                 isHeating = false;
                 currentFireTime = 0;
                 break;

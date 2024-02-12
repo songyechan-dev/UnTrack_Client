@@ -1092,6 +1092,8 @@ MonoBehaviour:
   machineUpgradePanel04: {fileID: 0}
   engineDesPanel04: {fileID: 0}
   storageDesPanel04: {fileID: 0}
+  RDVIndex04: {fileID: 0}
+  speedIndex04: {fileID: 0}
   voltNumText04: {fileID: 0}
   enginePriceText04: {fileID: 0}
   engineDesText04: {fileID: 0}
