@@ -436,6 +436,7 @@ MonoBehaviour:
   playableButtonTagName: PlayableButton
   teamManager: {fileID: 0}
   sensor: {fileID: 0}
+  outlineMaterial: {fileID: 2100000, guid: 311313efa011949e98b6761d652ad13c, type: 2}
 --- !u!114 &9017414315893891907
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private bool isReady = false;
     private bool isExit = false;
     private Dictionary<int,bool> isReady_Scene = new Dictionary<int,bool>();
+    public Material outlineMaterial;
 
     // 시작
 
@@ -67,6 +68,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (GameObject.Find("ChatManager") != null)
             {
                 GameObject.Find("ChatManager").GetComponent<ChatManager>().player = gameObject;
+            }
+            if (GameObject.Find("UIManager") != null && GameObject.Find("UIManager").GetComponent<UIManager>().playerController == null)
+            {
+                GameObject.Find("UIManager").GetComponent<UIManager>().playerController = gameObject.GetComponent<PlayerController>();
             }
             sensor = transform.Find("Sensor").transform;
             playerManager = GetComponent<PlayerManager>();
@@ -177,6 +182,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
     }
+
+   
 
     private void Update()
     {

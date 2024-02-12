@@ -12,6 +12,8 @@ using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine.Playables;
 using System;
+using System.Linq;
+using UnityEngine.Rendering;
 
 public enum closeBtnType
 {
@@ -106,6 +108,8 @@ public class UIManager : MonoBehaviour
     public GameObject machineUpgradePanel04;
     public GameObject engineDesPanel04;
     public GameObject storageDesPanel04;
+    public GameObject RDVIndex04;
+    public GameObject speedIndex04;
     [Header("Text")]
     public Text voltNumText04;
     public TextMeshPro enginePriceText04;
@@ -541,7 +545,7 @@ public class UIManager : MonoBehaviour
 
         GameObject player = Instantiate(Resources.Load<GameObject>("Player_1"));
         
-        player.transform.position = new Vector3(0, 20, 0);
+        player.transform.position = new Vector3(25, 20, 0);
     }
     
 
@@ -553,7 +557,7 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < AudioManager.Instnce().sfxPlayer.Length;i++)
         PlayerPrefs.SetFloat("sfx_Volume", AudioManager.Instnce().sfxPlayer[i].volume);
 
-        player.transform.position = new Vector3(0, 20, 0);
+        player.transform.position = new Vector3(25, 20, 0);
     }
 
     public void KeySetRight()
@@ -687,6 +691,9 @@ public class UIManager : MonoBehaviour
 
             distance03 = rDVindex03.transform.Find("DistanceTxt").transform.Find("Distance").GetComponent<Text>();
             volt03 = rDVindex03.transform.Find("VoltTxt").transform.Find("Volt").GetComponent<Text>();
+            SetText(rDVindex03.transform.Find("RoomTxt").Find("RoomID").GetComponent<Text>(), PhotonNetwork.CurrentRoom.Name);
+            string _round = string.Format("{00}", GameManager.Instance().GetRound());
+            SetText(speedIndex03.transform.Find("SpeedTxt").transform.Find("Speed").GetComponent<Text>(), _round);
         }
 
 
@@ -710,6 +717,8 @@ public class UIManager : MonoBehaviour
             machineUpgradePanel04 = ground.transform.Find("MachineUpgradePanel").gameObject;
             engineDesPanel04 = playableButton_ENGINE_UPGRADE_04.transform.GetChild(3).gameObject;
             storageDesPanel04 = playableButton_STORAGE_UPGRADE_04.transform.GetChild(3).gameObject;
+
+
 
 
             playableButton_CONTINUE_04.AddComponent<PlayableButtonInfo>();
@@ -749,6 +758,14 @@ public class UIManager : MonoBehaviour
             storageDesText04.text = $"저장소 현재 용량\n {StateManager.Instance().storageMaxVolume}";
             engineDesText04.text = $"엔진 현재 용량 \n {StateManager.Instance().engineCurrentVolume} / {StateManager.Instance().engineMaxVolume}";
 
+            RDVIndex04 = canvas.transform.Find("RDVindex").gameObject;
+            speedIndex04 = canvas.transform.Find("SpeedIndex").gameObject;
+
+            SetText(RDVIndex04.transform.Find("RoomTxt").Find("RoomID").GetComponent<Text>(), PhotonNetwork.CurrentRoom.Name);
+            string _round = string.Format("{00}", GameManager.Instance().GetRound());
+            SetText(speedIndex04.transform.Find("SpeedTxt").transform.Find("Speed").GetComponent<Text>(), _round);
+            SetText(RDVIndex04.transform.Find("DistanceTxt").transform.Find("Distance").GetComponent<Text>(), ((int)GameManager.Instance().GetMeter())+"M");
+
             storagePriceText04.text = StateManager.Instance().storageUpgradePrice.ToString();
             enginePriceText04.text = StateManager.Instance().engineUpgradePrice.ToString();
             productionMachineBuyPriceText04.text = StateManager.Instance().machineAddPrice[FactoryManager.FACTORYTYPE.ProductionMachine.ToString()].ToString();
@@ -781,7 +798,12 @@ public class UIManager : MonoBehaviour
             Debug.Log("게임오버 시간 :::"+ ((int)TimeManager.Instance().PrevTime).ToString());
             if (GameManager.Instance() != null)
             {
-                playerController = PhotonNetwork.Instantiate("Player", new Vector3(10, 2, 0), Quaternion.identity).GetComponent<PlayerController>();
+                playerController = PhotonNetwork.Instantiate("Player", new Vector3(25, 20, 0), Quaternion.identity).GetComponent<PlayerController>();
+            }
+            if (GameObject.Find("TeamManager") != null)
+            {
+                TeamManager teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
+                teamManager.SetNeedReadyUserCount(true);
             }
             
             GameManager.Instance().SetRound(1);
@@ -817,13 +839,10 @@ public class UIManager : MonoBehaviour
             //TODO : 0208_김주완: 같은 방에 있는 플레이어의 userId를 리스트로 저장
             if (PhotonNetwork.IsMasterClient)
             {
-                List<string> playerNickNames = new List<string>();
-                for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-                {
-                    playerNickNames.Add(PhotonNetwork.CurrentRoom.GetPlayer(i).NickName);
-                }
-                StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1],TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], TimeManager.Instance().roundClearTimeList[4], playerNickNames));
+                List<string> playerNickNames = PhotonNetwork.PlayerList.Select(player => player.NickName).ToList();
+                StartCoroutine(WebServerManager.InsertDataCoroutine(PhotonNetwork.CurrentRoom.Name, TimeManager.Instance().finalTime, TimeManager.Instance().roundClearTimeList[0], TimeManager.Instance().roundClearTimeList[1], TimeManager.Instance().roundClearTimeList[2], TimeManager.Instance().roundClearTimeList[3], TimeManager.Instance().roundClearTimeList[4], playerNickNames));
             }
+
             SetText(clearTimeText06, formattedTime);
             SetText(storageLvText06, StateManager.Instance().storageMaxVolume.ToString());
             SetText(dynamiteLvText06, StateManager.Instance().dynamiteMachines.Count.ToString());
@@ -831,11 +850,11 @@ public class UIManager : MonoBehaviour
             SetText(watertankLvText06, StateManager.Instance().waterTanks.Count.ToString());
 
 
-
+            TimeManager.Instance().roundClearTimeList.Clear();
             TimeManager.Instance().finalTime = 0;
             GameManager.Instance().SetRound(1);
             GameManager.Instance().GameExit();
-            PhotonNetwork.Instantiate("Player", new Vector3(30, 20, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate("Player", new Vector3(25, 20, 0), Quaternion.identity);
 
         }
         #endregion
@@ -985,7 +1004,7 @@ public class UIManager : MonoBehaviour
     {
         if (type.Equals(closeBtnType.ROOMLIST01_CLOSE))
         {
-            tempPlayer.transform.position = new Vector3(0, 20, 0);
+            tempPlayer.transform.position = new Vector3(25, 20, 0);
             tempPlayer.GetComponent<BoxCollider>().enabled = true;
             tempPlayer = null;
             roomListPanel02.SetActive(false);
