@@ -220,7 +220,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5278378788793267665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -433,6 +433,7 @@ MonoBehaviour:
   playableButtonTagName: PlayableButton
   teamManager: {fileID: 0}
   sensor: {fileID: 0}
+  outlineMaterial: {fileID: 0}
 --- !u!114 &9017414315893891907
 MonoBehaviour:
   m_ObjectHideFlags: 0
