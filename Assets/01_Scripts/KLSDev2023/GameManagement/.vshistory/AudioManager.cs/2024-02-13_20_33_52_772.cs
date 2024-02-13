@@ -138,14 +138,8 @@ public class AudioManager : MonoBehaviour
     {
         if (_audioSource.clip == sfxs[(int)_soundType])
         {
-            if (_audioSource.GetComponent<PhotonView>() != null && _audioSource.GetComponent<PhotonView>().IsMine)
-            {
-                _audioSource.Stop();
-            }
-            else if (_audioSource.GetComponent<PhotonView>() == null)
-            {
-                _audioSource.Stop();
-            }
+            
+            _audioSource.Stop();
         }
         else
         {

@@ -387,7 +387,7 @@ public class GameManager : MonoBehaviourPun
             {
                 StateManager.Instance().currentTime = 0f;
                 TimeManager.Instance().roundClearTimeList.Clear();
-                //TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
+                TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
                 gameMode = GameMode.None;
                 gameState = GameState.GameOver;
             }

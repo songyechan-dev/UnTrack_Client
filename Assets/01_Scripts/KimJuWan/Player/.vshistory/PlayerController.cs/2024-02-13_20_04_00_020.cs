@@ -65,7 +65,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerAudio = GetComponent<AudioSource>();
         if (pv != null && pv.IsMine)
         {
-            playerAudio = GetComponent<AudioSource>();
             if (GameObject.Find("ChatManager") != null)
             {
                 GameObject.Find("ChatManager").GetComponent<ChatManager>().player = gameObject;

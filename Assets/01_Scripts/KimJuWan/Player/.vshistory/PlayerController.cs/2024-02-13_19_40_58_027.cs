@@ -65,7 +65,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerAudio = GetComponent<AudioSource>();
         if (pv != null && pv.IsMine)
         {
-            playerAudio = GetComponent<AudioSource>();
             if (GameObject.Find("ChatManager") != null)
             {
                 GameObject.Find("ChatManager").GetComponent<ChatManager>().player = gameObject;
@@ -425,6 +424,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (hit.transform.CompareTag("Item") || hit.transform.CompareTag("Plane") || hit.transform.CompareTag("DroppedSlot") || hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("DroppedTrack"))
             {
                 tempObject = hit.transform.gameObject;
+                Debug.Log("충돌됨");
                 if (tempObject.transform.childCount > 0)
                 {
                     MeshRenderer meshRenderer = hit.transform.GetChild(0)?.GetComponent<MeshRenderer>();

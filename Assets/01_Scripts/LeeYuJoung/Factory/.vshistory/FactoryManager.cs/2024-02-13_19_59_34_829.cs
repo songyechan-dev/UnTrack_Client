@@ -105,7 +105,7 @@ public class FactoryManager : MonoBehaviourPun
         while (true)
         {
             if (!isHeating)
-                break;
+                return;
             yield return new WaitForEndOfFrame();
             currentFireTime += Time.deltaTime;
             
