@@ -302,6 +302,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 Debug.Log("실행됨");
                 currentTime = 0;
             }
+            else if (GameManager.Instance().gameMode.Equals(GameManager.GameMode.Play))
+            {
+                ViewObject();
+            }
         }
 
         if (pv == null)
@@ -392,6 +396,62 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //    playerManager.ButtonClick();
         //}
     }
+
+    GameObject tempObject;
+    List<Material> prevMaterials = new List<Material>();
+    void ViewObject()
+    {
+        int layerMask = (-1) - (1 << LayerMask.NameToLayer("PickSlot"));
+        RaycastHit hit;
+        Ray ray = new Ray(sensor.position, -sensor.up);
+
+        if (Physics.Raycast(ray, out hit, 3f, layerMask))
+        {
+            if (tempObject != null)
+            {
+                MeshRenderer[] renderers = tempObject.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer renderer in renderers)
+                {
+                    Material[] materials = new Material[prevMaterials.Count];
+                    for (int i = 0; i < prevMaterials.Count; i++)
+                    {
+                        materials[i] = prevMaterials[i];
+                    }
+                    renderer.materials = materials;
+                }
+                tempObject = null;
+            }
+            if (hit.transform.CompareTag("Item") || hit.transform.CompareTag("Plane") || hit.transform.CompareTag("DroppedSlot") || hit.transform.CompareTag("Obstacle") || hit.transform.CompareTag("DroppedTrack"))
+            {
+                tempObject = hit.transform.gameObject;
+                Debug.Log("충돌됨");
+                if (tempObject.transform.childCount > 0)
+                {
+                    MeshRenderer meshRenderer = hit.transform.GetChild(0)?.GetComponent<MeshRenderer>();
+                    prevMaterials.Clear();
+                    for (int i = 0; i < meshRenderer.materials.Length; i++)
+                    {
+                        prevMaterials.Add(meshRenderer.materials[i]);
+                    }
+
+                    meshRenderer.materials = new Material[] { };
+
+                    // 새로운 메테리얼로 대체
+                    int materialCount = prevMaterials.Count;
+                    Material[] newMaterials = new Material[materialCount];
+                    for (int i = 0; i < materialCount; i++)
+                    {
+                        newMaterials[i] = outlineMaterial;
+                    }
+                    meshRenderer.materials = newMaterials;
+                }
+            }
+            
+        }
+    }
+
+
+
 
     private void ChangePlayerState(PLAYERSTATE newState)
     {

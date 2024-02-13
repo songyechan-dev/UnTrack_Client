@@ -30,5 +30,6 @@ public class SendDataInfo
         DERAILMENT_COUNT = 21,
         UPGRADE_INFO = 22,
         CHAT_HIDE = 23,
+        OB_ANIMATION = 24,
     }
 }

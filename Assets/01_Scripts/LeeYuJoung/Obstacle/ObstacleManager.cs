@@ -6,6 +6,10 @@ using SimpleJSON;
 using System;
 using Photon.Pun;
 using DG.Tweening;
+using ExitGames.Client.Photon;
+using static GameManager;
+using Unity.VisualScripting;
+using Photon.Realtime;
 
 
 public class ObstacleManager : MonoBehaviour
@@ -74,8 +78,10 @@ public class ObstacleManager : MonoBehaviour
     // Obstacle 제거
     IEnumerator ObstacleDelete(PlayerController _player)
     {
-        // 점점 작아지는 효과 구현하기
         transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 6.0f);
+        object[] data = new object[] { GetComponent<PhotonView>().ViewID };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.OB_ANIMATION, data, raiseEventOptions, SendOptions.SendReliable);
 
         int loopNum = 0;
 
@@ -132,5 +138,27 @@ public class ObstacleManager : MonoBehaviour
         equipmentType = jsonData[obstacleType]["EQUIPMENT_TYPE"];
         workTime = (int)jsonData[obstacleType]["WORK_TIME"];
         generateItem = jsonData[obstacleType]["GENERATE"];
+    }
+
+    void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == (int)SendDataInfo.Info.OB_ANIMATION)
+        {
+            // 다른 플레이어들이 호출한 RPC로 미터 값을 받음
+            object[] receivedData = (object[])photonEvent.CustomData;
+            int viewID = (int)receivedData[0];
+            GameObject go = PhotonView.Find(viewID).gameObject;
+            go.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 6.0f);
+        }
+    }
+
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 }

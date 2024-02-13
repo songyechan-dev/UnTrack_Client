@@ -45,7 +45,7 @@ namespace LeeYuJoung
 
         // TODO : 이유정 2024.01.23 StateManager.cs → TimeManager.cs 이동
         public float currentTime = 0;
-        public float fireTime = 20.0f;
+        public float fireTime = 90f;
 
         public Text storageText;
         public Text woodText;

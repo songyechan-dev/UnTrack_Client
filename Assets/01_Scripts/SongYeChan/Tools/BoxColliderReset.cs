@@ -2,8 +2,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BoxColliderReset : EditorWindow
+public class BoxColliderReset
+#if UNITY_EDITOR
+    : EditorWindow
+#endif
 {
+#if UNITY_EDITOR
     [MenuItem("Tools/Reset Box Colliders")]
     private static void ResetBoxColliders()
     {
@@ -25,4 +29,5 @@ public class BoxColliderReset : EditorWindow
         AssetDatabase.Refresh();
         Debug.Log("Box Colliders have been reset.");
     }
+#endif
 }
