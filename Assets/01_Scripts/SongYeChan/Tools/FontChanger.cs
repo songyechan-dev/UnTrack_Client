@@ -2,8 +2,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FontChanger : EditorWindow
+public class FontChanger
+#if UNITY_EDITOR
+    : EditorWindow 
+#endif
 {
+#if unity_editor
     private Font targetTTF;
 
     [MenuItem("Tools/Font Changer")]
@@ -48,4 +52,5 @@ public class FontChanger : EditorWindow
         AssetDatabase.Refresh();
         Debug.Log("ÆùÆ® º¯°æµÊ");
     }
+#endif
 }

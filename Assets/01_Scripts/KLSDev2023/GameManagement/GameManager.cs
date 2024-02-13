@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     public void GameStart()
     {
+        GameExit();
         if (round != 1)
         {
             StateManager.Instance().productionMachines.Clear();
@@ -158,10 +159,12 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     public void GameOver()
     {
+        StateManager.Instance().currentTime = 0f;
         gameMode = GameMode.None;
         gameState = GameState.GameOver;
         TimeManager.Instance().roundClearTimeList.Clear();
         TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
+        
         object[] data = new object[] { (int)gameState };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((int)SendDataInfo.Info.GAME_MODE, data, raiseEventOptions, SendOptions.SendReliable);
@@ -360,6 +363,7 @@ public class GameManager : MonoBehaviourPun
             if (_gameState.Equals(GameState.GameStart))
             {
                 SetGameMode(GameMode.Play,GameState.GameStart);
+                GameExit();
                 if (round != 1)
                 {
                     StateManager.Instance().productionMachines.Clear();
@@ -380,6 +384,7 @@ public class GameManager : MonoBehaviourPun
             }
             if (_gameState.Equals(GameState.GameOver))
             {
+                StateManager.Instance().currentTime = 0f;
                 TimeManager.Instance().roundClearTimeList.Clear();
                 TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
                 gameMode = GameMode.None;

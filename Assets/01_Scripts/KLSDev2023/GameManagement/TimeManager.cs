@@ -14,6 +14,8 @@ public class TimeManager : MonoBehaviour
     public List<float> roundClearTimeList;
     public float finalTime;
 
+    private Coroutine updateTimeCoroutine;
+
     // 읽기 전용 프로퍼티로 curTime을 정의
     public float CurTime
     {
@@ -54,11 +56,20 @@ public class TimeManager : MonoBehaviour
         ResetCurTime();
         if (scene.buildIndex != 3)
         {
-            StopCoroutine(UpdateCurTime());
+            if (updateTimeCoroutine != null)
+            {
+                StopCoroutine(updateTimeCoroutine);
+                updateTimeCoroutine = null;
+            }
         }
         else
         {
-            StartCoroutine(UpdateCurTime());
+            if (updateTimeCoroutine != null)
+            {
+                StopCoroutine(updateTimeCoroutine);
+                updateTimeCoroutine = null;
+            }
+            updateTimeCoroutine = StartCoroutine(UpdateCurTime());
         }
     }
 
