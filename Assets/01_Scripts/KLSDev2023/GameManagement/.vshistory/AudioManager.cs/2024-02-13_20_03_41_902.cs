@@ -1,4 +1,3 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -115,17 +114,9 @@ public class AudioManager : MonoBehaviour
         if (sfxs[(int)_soundType] != null)
         {
             _audioSource.clip = sfxs[(int)_soundType];
-            if (_audioSource.gameObject.activeSelf)
+            if (_audioSource.enabled)
             {
-                if (_audioSource.GetComponent<PhotonView>() != null && _audioSource.GetComponent<PhotonView>().IsMine)
-                {
-                    _audioSource.Play();
-                }
-                else if (_audioSource.GetComponent<PhotonView>() == null)
-                {
-                    _audioSource.Play();
-                }
-                
+                _audioSource.Play();
             }
         }
         else
@@ -138,14 +129,8 @@ public class AudioManager : MonoBehaviour
     {
         if (_audioSource.clip == sfxs[(int)_soundType])
         {
-            if (_audioSource.GetComponent<PhotonView>() != null && _audioSource.GetComponent<PhotonView>().IsMine)
-            {
-                _audioSource.Stop();
-            }
-            else if (_audioSource.GetComponent<PhotonView>() == null)
-            {
-                _audioSource.Stop();
-            }
+            
+            _audioSource.Stop();
         }
         else
         {

@@ -379,7 +379,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             if (go.transform.Find("PickSlot") != null)
             {
-                if (go.transform.Find("PickSlot").transform.childCount > 0)
+                if (go.transform.Find("PickSlot").transform.GetChild(0) != null)
                 {
                     go.transform.Find("PickSlot").transform.GetChild(0).SetParent(null);
                 }

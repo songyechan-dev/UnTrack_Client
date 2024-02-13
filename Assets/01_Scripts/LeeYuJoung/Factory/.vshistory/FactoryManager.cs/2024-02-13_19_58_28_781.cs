@@ -104,8 +104,6 @@ public class FactoryManager : MonoBehaviourPun
         transform.Find("Fire").gameObject.SetActive(true);
         while (true)
         {
-            if (!isHeating)
-                break;
             yield return new WaitForEndOfFrame();
             currentFireTime += Time.deltaTime;
             

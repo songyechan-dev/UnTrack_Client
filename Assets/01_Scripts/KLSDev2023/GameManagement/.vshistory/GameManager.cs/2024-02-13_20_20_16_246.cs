@@ -206,8 +206,8 @@ public class GameManager : MonoBehaviourPun
         {
             yield return null;
         }
-        PhotonNetwork.LoadLevel(4);
         GameInIt();
+        PhotonNetwork.LoadLevel(4);
     }
 
     public void GameInIt()
@@ -381,13 +381,13 @@ public class GameManager : MonoBehaviourPun
                 gameMode = GameMode.None;
                 StateManager.Instance().currentTime= 0f;
                 maxDederailmentCount = 0;
-                //StartCoroutine(LoadSceneAsync(4));
+                StartCoroutine(LoadSceneAsync(4));
             }
             if (_gameState.Equals(GameState.GameOver))
             {
                 StateManager.Instance().currentTime = 0f;
                 TimeManager.Instance().roundClearTimeList.Clear();
-                //TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
+                TimeManager.Instance().PrevTime = TimeManager.Instance().CurTime;
                 gameMode = GameMode.None;
                 gameState = GameState.GameOver;
             }

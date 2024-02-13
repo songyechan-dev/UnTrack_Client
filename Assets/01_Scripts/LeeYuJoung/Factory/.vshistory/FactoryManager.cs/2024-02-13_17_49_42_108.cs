@@ -104,17 +104,15 @@ public class FactoryManager : MonoBehaviourPun
         transform.Find("Fire").gameObject.SetActive(true);
         while (true)
         {
-            if (!isHeating)
-                break;
             yield return new WaitForEndOfFrame();
             currentFireTime += Time.deltaTime;
             
             if (currentFireTime > fireDeadTime)
             {
                 Debug.Log("::::: GAME OVER :::::");
+                GameManager.Instance().GameOver();
                 isHeating = false;
                 currentFireTime = 0;
-                GameManager.Instance().GameOver();
                 break;
             }
 
@@ -196,7 +194,7 @@ public class FactoryManager : MonoBehaviourPun
     // Machine의 아이템 사용 → Player.cs에서 Machien 내의 아이템을 가져가려 할 때 실행 
     public bool ItemUse()
     {
-        if(currentItemNum <= 0)
+        if(currentItemNum <= 0 && 1==2)
         {
             Debug.Log($"{gameObject.name} 아이템이 없습니다....");
             return false;
